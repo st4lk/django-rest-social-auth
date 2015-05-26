@@ -1,7 +1,7 @@
 Django REST social auth
 =======================
 
-[![Build Status](https://travis-ci.org/st4lk/django-rest-social-auth.png?branch=master)](https://travis-ci.org/st4lk/django-rest-social-auth) [![Coverage Status](https://coveralls.io/repos/st4lk/django-rest-social-auth/badge.png?branch=master)](https://coveralls.io/r/st4lk/django-rest-social-auth?branch=master) [![pypi](https://pypip.in/d/solid_i18n/badge.png)](https://crate.io/packages/solid_i18n/)
+[![Build Status](https://travis-ci.org/st4lk/django-rest-social-auth.png?branch=master)](https://travis-ci.org/st4lk/django-rest-social-auth) [![Coverage Status](https://coveralls.io/repos/st4lk/django-rest-social-auth/badge.png?branch=master)](https://coveralls.io/r/st4lk/django-rest-social-auth?branch=master)
 
 OAuth signin with django rest framework.
 
