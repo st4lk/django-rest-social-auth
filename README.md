@@ -80,7 +80,7 @@ Quick start
 
     3.1 session authentication
 
-    - /api/login/social/session/
+    - POST /api/login/social/session/
 
         input:
 
@@ -101,7 +101,7 @@ Quick start
 
     3.2 token authentication
 
-    - /api/login/social/token/
+    - POST /api/login/social/token/
 
         input:
 
@@ -116,7 +116,7 @@ Quick start
                 "token": "68ded41d89f6a28da050f882998b2ea1decebbe0"
             }
 
-    - /api/login/social/token_user/
+    - POST /api/login/social/token_user/
 
         input:
 
