@@ -1,0 +1,14 @@
+*.py[co]
+*.TODO
+*.sublime-project
+*.sublime-workspace
+.tox/
+*.egg-info
+dist/
+README.rst
+generate_rst.py
+build/
+.coverage
+htmlcov/
+*.sqlite3
+*.backup

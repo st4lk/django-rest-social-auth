@@ -1,0 +1,28 @@
+language: python
+
+python:
+  - "2.7"
+
+env:
+  - TOXENV=py34-16
+  - TOXENV=py34-17
+  - TOXENV=py34-18
+  - TOXENV=py26-16
+  - TOXENV=py27-16
+  - TOXENV=py27-17
+  - TOXENV=py27-18
+
+branches:
+    only:
+        - master
+
+install: pip install --quiet tox
+
+# command to run tests
+script: tox
+
+after_script:
+    - if [ $TOXENV == "py27-18" ]; then
+        pip install --quiet coveralls;
+        coveralls;
+      fi
