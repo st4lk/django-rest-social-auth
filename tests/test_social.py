@@ -1,10 +1,10 @@
 import json
 import logging
 try:
-    from urlparse import parse_qs
+    from urlparse import parse_qsl, urlparse
 except ImportError:
     # python 3
-    from urllib.parse import parse_qs
+    from urllib.parse import parse_qsl, urlparse
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
@@ -93,9 +93,8 @@ class TestSocialAuth(APITestCase, BaseFacebookAPITestCase):
         resp = self.client.post(reverse('login_social_session'),
             data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
         self.assertEqual(resp.status_code, 200)
-        url_params = parse_qs(HTTPretty.latest_requests[0].path)
-        l.info(url_params)
-        self.assertEqual('http://myproject.com/', url_params['redirect_uri'][0])
+        url_params = dict(parse_qsl(urlparse(HTTPretty.latest_requests[0].path).query))
+        self.assertEqual('http://myproject.com/', url_params['redirect_uri'])
 
 
 class TestSocialAuthError(APITestCase, BaseFacebookAPITestCase):
