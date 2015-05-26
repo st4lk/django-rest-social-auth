@@ -52,11 +52,21 @@ Quick start
             'rest_social_auth',
         )
 
+    python-social-auth settings, look [documentation](http://psa.matiasaguirre.net/docs/configuration/django.html) for more details
+
+        SOCIAL_AUTH_FACEBOOK_KEY = 'your app client id'
+        SOCIAL_AUTH_FACEBOOK_SECRET = 'your app client secret'
+        SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # optional
+        SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}  # optional
 
 
+        AUTHENTICATION_BACKENDS = (
+            'social.backends.facebook.FacebookOAuth2',
+            # and maybe some others ...
+            'django.contrib.auth.backends.ModelBackend',
+        )
 
-
-2. Include rest social urls
+3. Include rest social urls
 
     2.1 [session authentication](http://www.django-rest-framework.org/api-guide/authentication/#sessionauthentication)
 
@@ -66,7 +76,7 @@ Quick start
 
         url(r'^api/login/', include('rest_social_auth.urls_token')),
 
-3. You are ready to login users.
+4. You are ready to login users.
 
     3.1 session authentication
 
@@ -228,7 +238,7 @@ Checkout [example project](https://github.com/st4lk/django-rest-social-auth/tree
 
         git clone https://github.com/st4lk/django-rest-social-auth.git
 
-- step in  example_project/ and run development server:
+- step in example_project/
 
         cd django-rest-social-auth/example_project
 
@@ -242,8 +252,8 @@ Checkout [example project](https://github.com/st4lk/django-rest-social-auth/tree
 
 Example project already contains facebook app id and secret.
 This app is configured to work only with restsocialexample.com domain.
-So, to play with, define in you [hosts](http://en.wikipedia.org/wiki/Hosts_\(file\)) file to point this domain to your localhost:
+So, to play with it, define in you [hosts](http://en.wikipedia.org/wiki/Hosts_\(file\)) file this domain as localhost:
 
-        127.0.0.1       restsocialexample.com
+    127.0.0.1       restsocialexample.com
 
 And visit http://restsocialexample.com:8000/
