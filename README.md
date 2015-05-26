@@ -1,7 +1,8 @@
 Django REST social auth
 =======================
 
-[![Build Status](https://travis-ci.org/st4lk/django-rest-social-auth.png?branch=master)](https://travis-ci.org/st4lk/django-rest-social-auth) [![Coverage Status](https://coveralls.io/repos/st4lk/django-rest-social-auth/badge.png?branch=master)](https://coveralls.io/r/st4lk/django-rest-social-auth?branch=master)
+[![Build Status](https://travis-ci.org/st4lk/django-rest-social-auth.svg?branch=master)](https://travis-ci.org/st4lk/django-rest-social-auth) [![Coverage Status](https://coveralls.io/repos/st4lk/django-rest-social-auth/badge.svg?branch=master)](https://coveralls.io/r/st4lk/django-rest-social-auth?branch=master)
+
 
 OAuth signin with django rest framework.
 
@@ -27,9 +28,9 @@ take the oauth code from social provider (for example facebook)
 and return the authenticated user.
 That's it.
 
-I can't find such package for [django rest framework](http://www.django-rest-framework.org/).
+I can't find such util for [django rest framework](http://www.django-rest-framework.org/).
 There are packages, that take access_token, not the code.
-Also, i've used to work with awesome package [python-social-auth](https://github.com/omab/python-social-auth),
+Also, i've used to work with awesome library [python-social-auth](https://github.com/omab/python-social-auth),
 so it will be nice to use it again. In fact, most of the work is done by this package.
 Current util brings a little help to integrate djangorestframework and python-social-auth.
 
@@ -65,6 +66,8 @@ Quick start
             # and maybe some others ...
             'django.contrib.auth.backends.ModelBackend',
         )
+
+    Also look [optional settings](#settings) avaliable.
 
 3. Include rest social urls
 
@@ -137,6 +140,39 @@ Quick start
     User model is taken from [`settings.AUTH_USER_MODEL`](https://docs.djangoproject.com/en/dev/topics/auth/customizing/#substituting-a-custom-user-model).
 
 
+OAuth 2.0 workflow with rest-social-auth
+-----------------------------------------
+1. Front-end need to know follwoing params for each social provider:
+    - client_id  _# id of registered application on social service provider_
+    - redirect_uri  _# to this url social provider will redirect with code_
+    - scope=your_scope  _# for example email_
+    - response_type=code  _# same for all oauth2.0 providers_
+
+2. Front-end redirect user to social authorize url with params from previous point + optional random `state` string.
+
+3. User confirms.
+
+4. Social provider redirects back to `redirect_uri` with param `code` and possibly `state`, if it was given at point 2. Front-end better check, that state is the same.
+
+5. Front-end now ready to login the user. To do it, send POST request with all params from point 4 + provider name:
+
+        POST /api/login/social/session/
+
+    with data (form data or json)
+
+        provider=facebook&code=AQBPBBTjbdnehj51
+
+    Backend will either signin the user, either signup, either return error.
+
+
+rest-social-auth purpose
+------------------------
+
+As we can see, our backend must implement resource for signin the user (point 5).
+
+Django REST social auth provides means to easily implement these resource.
+
+
 List of oauth providers
 -----------------------
 
@@ -163,37 +199,30 @@ Github    | github
 Yandex    | yandex-oauth2
 
 
-OAuth 2.0 workflow with rest-social-auth
------------------------------------------
-1. Front-end need to know follwoing params for each social provider:
-    - client_id  _# id of registered application on social service provider_
-    - redirect_uri  _# to this url social provider will redirect with code_
-    - scope=your_scope  _# for example email_
-    - response_type=code  _# same for all oauth2.0 providers_
+Settings
+--------
 
-2. Front-end redirect user to social authorize url with params from previous point.
+- `REST_SOCIAL_OAUTH_REDIRECT_URI`
 
-3. User confirms.
+    Defines redirect_uri. This redirect must be the same in both authorize request (made by front-end) and access token request (made by back-end) to OAuth provider.
 
-4. Social provider redirects back to `redirect_uri` with param `code` and possibly `state`, if it was given at point 2. Front-end better check, that state is the same (generate random state at every request in point 2).
+    By default is the root relative path:
 
-5. Front-end now ready to login the user. For this, send POST request with all params from point 3. + provider name:
+        '/'
 
-        POST /api/login/social/session/
+    To override the relative path (url path or url name are both supported):
 
-    with data (form data or json)
+        REST_SOCIAL_OAUTH_REDIRECT_URI = '/oauth/redirect/path/'
+        # or url name
+        REST_SOCIAL_OAUTH_REDIRECT_URI = 'redirect_url_name'
 
-        provider=facebook&code=AQBPBBTjbdnehj51
+- `REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI`
 
-    Backend will either signin the user, either signup, either return error.
+    Sometime project's front-end and back-end are run on different domains.
+    For example frontend at 'myproject.com', and backend at 'api.myproject.com'.
+    To handle this, it is possible to define absolute redirect_uri:
 
-
-rest-social-auth purpose
-------------------------
-
-As we can see, our backend must implement resource for signin the user (point 5).
-
-Django REST social auth provides means to easily implement these resource.
+        REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI = 'http://myproject.com/'
 
 
 
@@ -223,7 +252,7 @@ To do it
                 model = get_user_model()
                 exclude = ('password', 'user_permissions', 'groups')
 
-- finally define view
+- define view
 
         class SocialSessionAuthView(BaseSocialAuthView):
             serializer_class_out = MyUserSerializer
