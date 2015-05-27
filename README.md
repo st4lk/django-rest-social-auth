@@ -176,7 +176,7 @@ rest-social-auth purpose
 
 As we can see, our backend must implement resource for signin the user (point 5).
 
-Django REST social auth provides means to easily implement these resource.
+Django REST social auth provides means to easily implement such resource.
 
 
 List of oauth providers
@@ -238,7 +238,7 @@ Settings
 Customization
 -------------
 
-First of all, all customization provided by python-social-auth is also avaliable.
+First of all, customization provided by python-social-auth is also avaliable.
 For example, use nice mechanism of [pipeline](http://psa.matiasaguirre.net/docs/pipeline.html) to do any action you need during login/signin.
 
 Second, you can override any method from current package.
@@ -265,7 +265,7 @@ To do it
 
         from rest_social_auth.views import SocialSessionAuthView
 
-        class SocialSessionAuthView(SocialSessionAuthView):
+        class MySocialView(SocialSessionAuthView):
             serializer_class_out = MyUserSerializer
 
 Check the code of the lib, there is not much of it.
