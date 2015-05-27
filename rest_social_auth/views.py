@@ -37,7 +37,7 @@ def register_by_auth_token(request, backend, *args, **kwargs):
     # store the state before making a call to oauth provider
     # so server can save it in session and consequently check it before
     # sending request to acquire access token.
-    # In case of token authentication we need a way to store a anonymous
+    # In case of token authentication we need a way to store an anonymous
     # session to do it.
     request.backend.REDIRECT_STATE = False
     request.backend.STATE_PARAMETER = False

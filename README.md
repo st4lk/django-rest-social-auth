@@ -238,11 +238,11 @@ Settings
 Customization
 -------------
 
-First of all, all customization avaliable by python-social-auth is also avaliable.
-For example, use nice concept of [pipeline](http://psa.matiasaguirre.net/docs/pipeline.html) to do any action you need during login/signin.
+First of all, all customization provided by python-social-auth is also avaliable.
+For example, use nice mechanism of [pipeline](http://psa.matiasaguirre.net/docs/pipeline.html) to do any action you need during login/signin.
 
 Second, you can override any method from current package.
-You can specify serializer for each view or by subclassing the view.
+Specify serializer for each view by subclassing the view.
 
 To do it
 
@@ -263,14 +263,18 @@ To do it
 
 - define view
 
-        class SocialSessionAuthView(BaseSocialAuthView):
+        from rest_social_auth.views import SocialSessionAuthView
+
+        class SocialSessionAuthView(SocialSessionAuthView):
             serializer_class_out = MyUserSerializer
+
+Check the code of the lib, there is not much of it.
 
 
 Example
 -------
 
-Checkout [example project](https://github.com/st4lk/django-rest-social-auth/tree/master/example_project).
+There is an [example project](https://github.com/st4lk/django-rest-social-auth/tree/master/example_project).
 
 - download it
 
@@ -288,8 +292,8 @@ Checkout [example project](https://github.com/st4lk/django-rest-social-auth/tree
 
         python manage.py runserver
 
-Example project already contains facebook app id and secret.
-This app is configured to work only with restsocialexample.com domain.
+Example project already contains facebook and google app id and secret.
+These apps are configured to work only with restsocialexample.com domain.
 So, to play with it, define in you [hosts](http://en.wikipedia.org/wiki/Hosts_\(file\)) file this domain as localhost:
 
     127.0.0.1       restsocialexample.com
