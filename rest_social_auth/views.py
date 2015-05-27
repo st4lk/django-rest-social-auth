@@ -26,10 +26,9 @@ def load_strategy(request=None):
 @psa(REDIRECT_URI, load_strategy=load_strategy)
 def register_by_auth_token(request, backend, *args, **kwargs):
     user = request.user
-    absolute_redirect_uri = getattr(settings,
-        'REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI', None)
-    if absolute_redirect_uri:
-        request.backend.redirect_uri = absolute_redirect_uri
+    redirect_uri = kwargs.pop('manual_redirect_uri', None)
+    if redirect_uri:
+        request.backend.redirect_uri = redirect_uri
     is_authenticated = user_is_authenticated(user)
     user = is_authenticated and user or None
     # skip checking state by setting following params to False
@@ -73,8 +72,11 @@ class BaseSocialAuthView(APIView):
         serializer_in.is_valid(raise_exception=True)
         self.set_input_data(request, serializer_in.validated_data.copy())
         provider = request.auth_data.pop('provider')
+        manual_redirect_uri = request.auth_data.pop('redirect_uri', None)
+        manual_redirect_uri = self.get_redirect_uri(manual_redirect_uri)
         try:
-            user = register_by_auth_token(request, provider)
+            user = register_by_auth_token(request, provider,
+                manual_redirect_uri=manual_redirect_uri)
         except AuthException as e:
             return self.respond_error(e, provider)
         resp_data = self.get_serializer_class_out()(instance=user)
@@ -93,6 +95,12 @@ class BaseSocialAuthView(APIView):
         auth_data will be used used as request_data in strategy
         """
         request.auth_data = auth_data
+
+    def get_redirect_uri(self, manual_redirect_uri):
+        if not manual_redirect_uri:
+            manual_redirect_uri = getattr(settings,
+                'REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI', None)
+        return manual_redirect_uri
 
     def respond_error(self, error, provider):
         return Response(status=status.HTTP_400_BAD_REQUEST)

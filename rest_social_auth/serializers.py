@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 class SocialAuthInputSerializer(serializers.Serializer):
     provider = serializers.CharField()
     code = serializers.CharField()
+    redirect_uri = serializers.URLField(required=False)
 
 
 class UserSerializer(serializers.ModelSerializer):

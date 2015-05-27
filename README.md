@@ -139,6 +139,12 @@ Quick start
 
     User model is taken from [`settings.AUTH_USER_MODEL`](https://docs.djangoproject.com/en/dev/topics/auth/customizing/#substituting-a-custom-user-model).
 
+    At input there is also non-required field `redirect_uri`.
+    If given, server will use this redirect uri in requests, instead of uri
+    got from settings.
+    This redirect_uri must be equal in front-end request and in back-end request.
+    Back-end will not do any redirect in fact.
+
 
 OAuth 2.0 workflow with rest-social-auth
 -----------------------------------------
@@ -223,6 +229,9 @@ Settings
     To handle this, it is possible to define absolute redirect_uri:
 
         REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI = 'http://myproject.com/'
+
+    This settings has higher priority than `REST_SOCIAL_OAUTH_REDIRECT_URI`.
+    Also, `redirect_uri` from request has higher priority than any setting.
 
 
 

@@ -50,6 +50,7 @@ class BaseFacebookAPITestCase(FacebookOAuth2Test):
 
     def tearDown(self):
         HTTPretty.disable()
+        HTTPretty.reset()
         self.backend = None
         self.strategy = None
         self.name = None
@@ -95,6 +96,15 @@ class TestSocialAuth(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(resp.status_code, 200)
         url_params = dict(parse_qsl(urlparse(HTTPretty.latest_requests[0].path).query))
         self.assertEqual('http://myproject.com/', url_params['redirect_uri'])
+
+    @override_settings(REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI='http://myproject.com/')
+    def test_login_manual_redirect(self):
+        resp = self.client.post(reverse('login_social_session'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw',
+                'redirect_uri': 'http://manualdomain.com/'})
+        self.assertEqual(resp.status_code, 200)
+        url_params = dict(parse_qsl(urlparse(HTTPretty.latest_requests[0].path).query))
+        self.assertEqual('http://manualdomain.com/', url_params['redirect_uri'])
 
 
 class TestSocialAuthError(APITestCase, BaseFacebookAPITestCase):
