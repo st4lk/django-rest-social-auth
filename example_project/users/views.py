@@ -18,7 +18,6 @@ class HomeView(TemplateView):
 
 class LogoutSessionView(APIView):
 
-    @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)

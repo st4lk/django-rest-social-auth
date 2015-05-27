@@ -113,16 +113,24 @@ REST_FRAMEWORK = {
 }
 
 # social auth settings
-SOCIAL_AUTH_FACEBOOK_KEY = '295137440610143'  # valid redirect domain for this app: restsocialexample.com
+# valid redirect domain for all apps: http://restsocialexample.com:8000/
+SOCIAL_AUTH_FACEBOOK_KEY = '295137440610143'
 SOCIAL_AUTH_FACEBOOK_SECRET = '4b4aef291799a7b9aaf016689339e97f'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'JaiLLvY1BK97TSy5_xcGWDhp'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', ]
+
+
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_PIPELINE = (
+    'users.social_pipeline.auto_logout',  # custom action
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',
     'social.pipeline.social_auth.auth_allowed',

@@ -10,12 +10,14 @@
     <h1>Django-rest-framework and OAuth 2.0 (facebook) example</h1>
     <div>
         <h4>rest_framework.authentication.SessionAuthentication</h4>
-        <div><button id="login_session">Login facebook</button></div>
+        <div><button id="login_session_facebook">Login facebook</button></div>
+        <div><button id="login_session_google">Login google</button></div>
         <div><button id="logout_session">Logout</button></div>
     </div>
     <div>
         <h4>rest_framework.authentication.TokenAuthentication</h4>
-        <div><button id="login_token">Login facebook</button></div>
+        <div><button id="login_token_facebook">Login facebook</button></div>
+        <div><button id="login_token_google">Login google</button></div>
         <div><button id="logout_token">Logout</button></div>
     </div>
     <div>
@@ -42,7 +44,6 @@
         }
         return cookieValue;
     }
-    var csrftoken = getCookie('csrftoken');
 
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
@@ -51,7 +52,7 @@
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
             }
         }
     });
@@ -79,17 +80,40 @@
         $("#user_data_header").html("User data");
     }
 
-    $('#login_session').click(function(){
+    function loginUserSession(network, oauth_code){
+        $.ajax({
+            method: "POST",
+            url: "{% url 'login_social_session' %}",
+            data: {provider: network, code: oauth_code},
+        }).done(function( data ) {
+            showUser(data, 'session');
+        }).fail(function(error){
+            blankUser(''.concat('(', error.status, ', ', error.statusText, ')'));
+        });
+    }
+
+    function loginUserToken(network, oauth_code){
+        $.ajax({
+            method: "POST",
+            url: "{% url 'login_social_token_user' %}",
+            data: {provider: network, code: oauth_code},
+        }).done(function( data ) {
+            showUser(data, 'token');
+            localStorage.setItem('token', data.token);
+        });
+    }
+
+    $('#login_session_facebook').click(function(){
         hello('facebook').login().then(function(auth) {
-            $.ajax({
-                method: "POST",
-                url: "{% url 'login_social_session' %}",
-                data: {provider: auth.network, code: auth.authResponse.code},
-            }).done(function( data ) {
-                showUser(data, 'session');
-            }).fail(function(error){
-                blankUser(''.concat('(', error.status, ', ', error.statusText, ')'));
-            });
+            loginUserSession('facebook', auth.authResponse.code);
+        }, function(e) {
+            alert('Signin error: ' + e.error.message);
+        });
+    });
+
+    $('#login_session_google').click(function(){
+        hello('google').login().then(function(auth) {
+            loginUserSession('google-oauth2', auth.authResponse.code);
         }, function(e) {
             alert('Signin error: ' + e.error.message);
         });
@@ -103,16 +127,17 @@
         });
     });
 
-    $('#login_token').click(function(){
+    $('#login_token_facebook').click(function(){
         hello('facebook').login().then(function(auth) {
-            $.ajax({
-                method: "POST",
-                url: "{% url 'login_social_token_user' %}",
-                data: {provider: auth.network, code: auth.authResponse.code},
-            }).done(function( data ) {
-                showUser(data, 'token');
-                localStorage.setItem('token', data.token);
-            });
+            loginUserToken('facebook', auth.authResponse.code);
+        }, function(e) {
+            alert('Signin error: ' + e.error.message);
+        });
+    });
+
+    $('#login_token_google').click(function(){
+        hello('google').login().then(function(auth) {
+            loginUserToken('google-oauth2', auth.authResponse.code);
         }, function(e) {
             alert('Signin error: ' + e.error.message);
         });
@@ -151,6 +176,7 @@
     hello.init(
         {
             facebook: 295137440610143,
+            google: '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com',
         },
         {
             redirect_uri: 'http://restsocialexample.com:8000/',
