@@ -69,19 +69,24 @@ Quick start
 
     Also look [optional settings](#settings) avaliable.
 
-3. Include rest social urls
+3. Make sure everything up do date
 
-    2.1 [session authentication](http://www.django-rest-framework.org/api-guide/authentication/#sessionauthentication)
+        python manage.py syncdb
+
+
+4. Include rest social urls
+
+    4.1 [session authentication](http://www.django-rest-framework.org/api-guide/authentication/#sessionauthentication)
 
         url(r'^api/login/', include('rest_social_auth.urls_session')),
 
-    2.2 [token authentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication)
+    4.2 [token authentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication)
 
         url(r'^api/login/', include('rest_social_auth.urls_token')),
 
-4. You are ready to login users.
+5. You are ready to login users.
 
-    3.1 session authentication
+    5.1 session authentication
 
     - POST /api/login/social/session/
 
@@ -102,7 +107,7 @@ Quick start
 
             + session id in cookies
 
-    3.2 token authentication
+    5.2 token authentication
 
     - POST /api/login/social/token/
 
