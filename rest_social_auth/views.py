@@ -46,37 +46,55 @@ def register_by_auth_token(request, backend, *args, **kwargs):
 
 
 class BaseSocialAuthView(GenericAPIView):
+    """
+    View will login or signin (create) the user from social oauth2.0 provider.
 
-    serializer_class = SocialAuthInputSerializer
-    serializer_class_out = None
+    **Input** (default serializer_class_in):
 
-    def get_serializer_class_out(self):
-        assert self.serializer_class_out is not None, (
-            "'%s' should either include a `serializer_class_out` attribute, "
+        {
+            "provider": "facebook",
+            "code": "AQBPBBTjbdnehj51"
+        }
+
+    + optional
+
+        "redirect_uri": "/relative/or/absolute/redirect/uri"
+
+    **Output**:
+
+    user data in serializer_class format
+    """
+
+    serializer_class_in = SocialAuthInputSerializer
+    serializer_class = None
+
+    def get_serializer_class_in(self):
+        assert self.serializer_class_in is not None, (
+            "'%s' should either include a `serializer_class_in` attribute, "
             "or override the `get_serializer_class()` method."
             % self.__class__.__name__
         )
-        return self.serializer_class_out
+        return self.serializer_class_in
 
-    def get_serializer_out(self, *args, **kwargs):
+    def get_serializer_in(self, *args, **kwargs):
         """
         Return the serializer instance that should be used for validating and
         deserializing input, and for serializing output.
         """
-        serializer_class = self.get_serializer_class_out()
+        serializer_class = self.get_serializer_class_in()
         kwargs['context'] = self.get_serializer_context()
         return serializer_class(*args, **kwargs)
 
     @method_decorator(never_cache)
     def post(self, request, *args, **kwargs):
-        serializer_in = self.get_serializer(data=request.data)
+        serializer_in = self.get_serializer_in(data=request.data)
         serializer_in.is_valid(raise_exception=True)
         self.set_input_data(request, serializer_in.validated_data.copy())
         try:
             user = self.get_object()
         except AuthException as e:
             return self.respond_error(e)
-        resp_data = self.get_serializer_out(instance=user)
+        resp_data = self.get_serializer(instance=user)
         self.do_login(request.backend, user)
         return Response(resp_data.data)
 
@@ -111,7 +129,7 @@ class BaseSocialAuthView(GenericAPIView):
 
 
 class SocialSessionAuthView(BaseSocialAuthView):
-    serializer_class_out = UserSerializer
+    serializer_class = UserSerializer
 
     def do_login(self, backend, user):
         social_auth_login(backend, user, user.social_user)
@@ -122,8 +140,8 @@ class SocialSessionAuthView(BaseSocialAuthView):
 
 
 class SocialTokenOnlyAuthView(BaseSocialAuthView):
-    serializer_class_out = TokenSerializer
+    serializer_class = TokenSerializer
 
 
 class SocialTokenUserAuthView(BaseSocialAuthView):
-    serializer_class_out = UserTokenSerializer
+    serializer_class = UserTokenSerializer
