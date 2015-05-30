@@ -69,7 +69,7 @@ Quick start
 
     Also look [optional settings](#settings) avaliable.
 
-3. Make sure everything up do date
+3. Make sure everything is up do date
 
         python manage.py syncdb
 
@@ -195,8 +195,8 @@ particular backed class in python-social-auth.
 For example for [facebook backend](https://github.com/omab/python-social-auth/blob/master/social/backends/facebook.py#L19)
 we see:
 
-        class FacebookOAuth2(BaseOAuth2):
-            name = 'facebook'
+    class FacebookOAuth2(BaseOAuth2):
+        name = 'facebook'
 
 Here are some provider names:
 
