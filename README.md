@@ -269,9 +269,10 @@ To do it
 - define view
 
         from rest_social_auth.views import SocialSessionAuthView
+        from .serializers import MyUserSerializer
 
         class MySocialView(SocialSessionAuthView):
-            serializer_class_out = MyUserSerializer
+            serializer_class = MyUserSerializer
 
 Check the code of the lib, there is not much of it.
 
