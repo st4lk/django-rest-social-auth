@@ -8,7 +8,7 @@ from social.strategies.utils import get_strategy
 from social.utils import user_is_authenticated
 from social.apps.django_app.views import _do_login as social_auth_login
 from social.exceptions import AuthException
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -45,18 +45,10 @@ def register_by_auth_token(request, backend, *args, **kwargs):
     return user
 
 
-class BaseSocialAuthView(APIView):
+class BaseSocialAuthView(GenericAPIView):
 
     serializer_class = SocialAuthInputSerializer
     serializer_class_out = None
-
-    def get_serializer_class(self):
-        assert self.serializer_class is not None, (
-            "'%s' should either include a `serializer_class` attribute, "
-            "or override the `get_serializer_class()` method."
-            % self.__class__.__name__
-        )
-        return self.serializer_class
 
     def get_serializer_class_out(self):
         assert self.serializer_class_out is not None, (
@@ -66,22 +58,34 @@ class BaseSocialAuthView(APIView):
         )
         return self.serializer_class_out
 
+    def get_serializer_out(self, *args, **kwargs):
+        """
+        Return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        """
+        serializer_class = self.get_serializer_class_out()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
+
     @method_decorator(never_cache)
     def post(self, request, *args, **kwargs):
-        serializer_in = self.get_serializer_class()(data=request.data)
+        serializer_in = self.get_serializer(data=request.data)
         serializer_in.is_valid(raise_exception=True)
         self.set_input_data(request, serializer_in.validated_data.copy())
-        provider = request.auth_data.pop('provider')
-        manual_redirect_uri = request.auth_data.pop('redirect_uri', None)
-        manual_redirect_uri = self.get_redirect_uri(manual_redirect_uri)
         try:
-            user = register_by_auth_token(request, provider,
-                manual_redirect_uri=manual_redirect_uri)
+            user = self.get_object()
         except AuthException as e:
-            return self.respond_error(e, provider)
-        resp_data = self.get_serializer_class_out()(instance=user)
+            return self.respond_error(e)
+        resp_data = self.get_serializer_out(instance=user)
         self.do_login(request.backend, user)
         return Response(resp_data.data)
+
+    def get_object(self):
+        provider = self.request.auth_data.pop('provider')
+        manual_redirect_uri = self.request.auth_data.pop('redirect_uri', None)
+        manual_redirect_uri = self.get_redirect_uri(manual_redirect_uri)
+        return register_by_auth_token(self.request, provider,
+            manual_redirect_uri=manual_redirect_uri)
 
     def do_login(self, backend, user):
         """
@@ -102,7 +106,7 @@ class BaseSocialAuthView(APIView):
                 'REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI', None)
         return manual_redirect_uri
 
-    def respond_error(self, error, provider):
+    def respond_error(self, error):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
