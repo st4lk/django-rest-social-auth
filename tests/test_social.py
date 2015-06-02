@@ -114,3 +114,12 @@ class TestSocialAuthError(APITestCase, BaseFacebookAPITestCase):
         resp = self.client.post(reverse('login_social_session'),
             data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
         self.assertEqual(resp.status_code, 400)
+
+
+class TestSocialHTTPError(APITestCase, BaseFacebookAPITestCase):
+    access_token_status = 401
+
+    def test_login_oauth_provider_http_error(self):
+        resp = self.client.post(reverse('login_social_session'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+        self.assertEqual(resp.status_code, 400)

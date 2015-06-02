@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
@@ -11,9 +12,12 @@ from social.exceptions import AuthException
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from requests.exceptions import HTTPError
 
 from .serializers import (SocialAuthInputSerializer, UserSerializer,
     TokenSerializer, UserTokenSerializer)
+
+l = logging.getLogger(__name__)
 
 
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
@@ -92,7 +96,8 @@ class BaseSocialAuthView(GenericAPIView):
         self.set_input_data(request, serializer_in.validated_data.copy())
         try:
             user = self.get_object()
-        except AuthException as e:
+        except (AuthException, HTTPError) as e:
+            l.exception(e)
             return self.respond_error(e)
         resp_data = self.get_serializer(instance=user)
         self.do_login(request.backend, user)

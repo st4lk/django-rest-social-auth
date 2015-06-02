@@ -142,3 +142,20 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.user_details',
     'users.social_pipeline.save_avatar',  # custom action
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'rest_social_auth': {
+            'handlers': ['console', ],
+            'level': "DEBUG",
+        },
+    }
+}
