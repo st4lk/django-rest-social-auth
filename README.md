@@ -29,7 +29,7 @@ and return the authenticated user.
 That's it.
 
 I can't find such util for [django rest framework](http://www.django-rest-framework.org/).
-There are packages, that take access_token, not the code.
+There are packages (for example [django-rest-auth](https://github.com/Tivix/django-rest-auth)), that take access_token, not the code.
 Also, i've used to work with awesome library [python-social-auth](https://github.com/omab/python-social-auth),
 so it will be nice to use it again. In fact, most of the work is done by this package.
 Current util brings a little help to integrate djangorestframework and python-social-auth.
@@ -282,7 +282,11 @@ Example
 
 There is an [example project](https://github.com/st4lk/django-rest-social-auth/tree/master/example_project).
 
-- download it
+- make sure you have rest-social-auth installed
+
+        pip install rest-social-auth
+
+- clone repo
 
         git clone https://github.com/st4lk/django-rest-social-auth.git
 
@@ -298,9 +302,9 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
 
         python manage.py runserver
 
-Example project already contains facebook and google app id and secret.
-These apps are configured to work only with restsocialexample.com domain.
-So, to play with it, define in you [hosts](http://en.wikipedia.org/wiki/Hosts_\(file\)) file this domain as localhost:
+Example project already contains facebook and google app ids and secrets.
+These apps are configured to work only with restsocialexample.com domain (localhost is not supported by some providers).
+So, to play with it, define in your [hosts](http://en.wikipedia.org/wiki/Hosts_\(file\)) file this domain as localhost:
 
     127.0.0.1       restsocialexample.com
 
