@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import logging
+from urlparse import urlparse
 from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
+from django.utils.encoding import iri_to_uri
+from django.utils.six.moves.urllib.parse import urljoin
 from social.apps.django_app.utils import psa, STORAGE
 from social.strategies.utils import get_strategy
 from social.utils import user_is_authenticated
@@ -21,6 +24,7 @@ l = logging.getLogger(__name__)
 
 
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
+DOMAIN_FROM_ORIGIN = getattr(settings, 'REST_SOCIAL_DOMAIN_FROM_ORIGIN', True)
 
 
 def load_strategy(request=None):
@@ -33,6 +37,14 @@ def register_by_auth_token(request, backend, *args, **kwargs):
     redirect_uri = kwargs.pop('manual_redirect_uri', None)
     if redirect_uri:
         request.backend.redirect_uri = redirect_uri
+    elif DOMAIN_FROM_ORIGIN:
+        origin = request.strategy.request.META.get('HTTP_ORIGIN')
+        if origin:
+            relative_path = urlparse(request.backend.redirect_uri).path
+            url = urlparse(origin)
+            origin_scheme_host = "%s://%s" % (url.scheme, url.netloc)
+            location = urljoin(origin_scheme_host, relative_path)
+            request.backend.redirect_uri = iri_to_uri(location)
     is_authenticated = user_is_authenticated(user)
     user = is_authenticated and user or None
     # skip checking state by setting following params to False

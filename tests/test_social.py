@@ -89,6 +89,14 @@ class TestSocialAuth(APITestCase, BaseFacebookAPITestCase):
         # check user is created
         self.assertEqual(token.user.email, self.email)
 
+    def test_login_social_http_origin(self):
+        resp = self.client.post(reverse('login_social_session'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            HTTP_ORIGIN="http://frontend.com")
+        self.assertEqual(resp.status_code, 200)
+        url_params = dict(parse_qsl(urlparse(HTTPretty.latest_requests[0].path).query))
+        self.assertEqual(url_params['redirect_uri'], "http://frontend.com/")
+
     @override_settings(REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI='http://myproject.com/')
     def test_login_absolute_redirect(self):
         resp = self.client.post(reverse('login_social_session'),

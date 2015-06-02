@@ -215,11 +215,9 @@ Settings
 
 - `REST_SOCIAL_OAUTH_REDIRECT_URI`
 
+    Default: `'/'`
+
     Defines redirect_uri. This redirect must be the same in both authorize request (made by front-end) and access token request (made by back-end) to OAuth provider.
-
-    By default is the root relative path:
-
-        '/'
 
     To override the relative path (url path or url name are both supported):
 
@@ -227,16 +225,31 @@ Settings
         # or url name
         REST_SOCIAL_OAUTH_REDIRECT_URI = 'redirect_url_name'
 
+    Note, in case of url name, backend name will be provided to url resolver as argument.
+
+- `REST_SOCIAL_DOMAIN_FROM_ORIGIN`
+
+    Default: `True`
+
+    Sometimes front-end and back-end are run on different domains.
+    For example frontend at 'myproject.com', and backend at 'api.myproject.com'.
+
+    If True, domain will be taken from request origin, if origin is defined.
+    Next, this domain will be joined with path from `REST_SOCIAL_OAUTH_REDIRECT_URI` settings.
+
+    Look also at [django-cors-headers](https://github.com/ottoyiu/django-cors-headers) if such architecture is your case.
+
 - `REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI`
 
-    Sometime project's front-end and back-end are run on different domains.
-    For example frontend at 'myproject.com', and backend at 'api.myproject.com'.
-    To handle this, it is possible to define absolute redirect_uri:
+    Default: `None`
+
+    Full redirect uri (domain and path) can be hardcoded
 
         REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI = 'http://myproject.com/'
 
-    This settings has higher priority than `REST_SOCIAL_OAUTH_REDIRECT_URI`.
-    Also, `redirect_uri` from request has higher priority than any setting.
+    This settings has higher priority than `REST_SOCIAL_OAUTH_REDIRECT_URI` and `REST_SOCIAL_DOMAIN_FROM_ORIGIN`.
+    I.e. if this settings is defined, other will be ignored.
+    But `redirect_uri` param from request has higher priority than any setting.
 
 
 
