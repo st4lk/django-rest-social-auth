@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
-from urlparse import urlparse
+try:
+    from urlparse import urlparse
+except ImportError:
+    # python 3
+    from urllib.parse import urlparse
 from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
