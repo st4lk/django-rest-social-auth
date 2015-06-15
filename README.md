@@ -32,7 +32,7 @@ I can't find such util for [django rest framework](http://www.django-rest-framew
 There are packages (for example [django-rest-auth](https://github.com/Tivix/django-rest-auth)), that take access_token, not the code.
 Also, i've used to work with awesome library [python-social-auth](https://github.com/omab/python-social-auth),
 so it will be nice to use it again. In fact, most of the work is done by this package.
-Current util brings a little help to integrate djangorestframework and python-social-auth.
+Current util brings a little help to integrate django-rest-framework and python-social-auth.
 
 Quick start
 -----------
