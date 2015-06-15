@@ -47,10 +47,10 @@ Quick start
 
         INSTALLED_APPS = (
             ...
-            'social.apps.django_app.default',  # python social auth
             'rest_framework',
             'rest_framework.authtoken',  # only if you use token authentication
-            'rest_social_auth',
+            'social.apps.django_app.default',  # python social auth
+            'rest_social_auth',  # this package
         )
 
     python-social-auth settings, look [documentation](http://psa.matiasaguirre.net/docs/configuration/django.html) for more details
