@@ -235,9 +235,29 @@ Settings
     For example frontend at 'myproject.com', and backend at 'api.myproject.com'.
 
     If True, domain will be taken from request origin, if origin is defined.
+    So in current example domain will be 'myproject.com', not 'api.myproject.com'.
     Next, this domain will be joined with path from `REST_SOCIAL_OAUTH_REDIRECT_URI` settings.
 
-    Look also at [django-cors-headers](https://github.com/ottoyiu/django-cors-headers) if such architecture is your case.
+    To be clear, suppose we have following settings (defaults):
+
+        REST_SOCIAL_OAUTH_REDIRECT_URI = '/'
+        REST_SOCIAL_DOMAIN_FROM_ORIGIN = True
+
+    Front-end is running on domain 'myproject.com', back-end - on 'api.myproject.com'.
+    Back-end will use following redirect_uri:
+
+        myproject.com/
+
+    And with following settings:
+
+        REST_SOCIAL_OAUTH_REDIRECT_URI = '/'
+        REST_SOCIAL_DOMAIN_FROM_ORIGIN = False
+
+    redirect_uri will be:
+
+        api.myproject.com/
+
+    Also look at [django-cors-headers](https://github.com/ottoyiu/django-cors-headers) if such architecture is your case.
 
 - `REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI`
 
