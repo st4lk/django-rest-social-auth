@@ -159,11 +159,11 @@ OAuth 2.0 workflow with rest-social-auth
     - scope=your_scope  _# for example email_
     - response_type=code  _# same for all oauth2.0 providers_
 
-2. Front-end redirect user to social authorize url with params from previous point + optional random `state` string.
+2. Front-end redirect user to social authorize url with params from previous point.
 
 3. User confirms.
 
-4. Social provider redirects back to `redirect_uri` with param `code` and possibly `state` (if it was given at point 2). Front-end better check, that state is the same.
+4. Social provider redirects back to `redirect_uri` with param `code`.
 
 5. Front-end now ready to login the user. To do it, send POST request with provider name and code:
 
