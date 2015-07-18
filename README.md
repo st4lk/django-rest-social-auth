@@ -93,7 +93,7 @@ Quick start
         input:
 
             {
-                "provider": "faceboook",
+                "provider": "facebook",
                 "code": "AQBPBBTjbdnehj51"
             }
 
@@ -114,7 +114,7 @@ Quick start
         input:
 
             {
-                "provider": "faceboook",
+                "provider": "facebook",
                 "code": "AQBPBBTjbdnehj51"
             }
 
@@ -129,7 +129,7 @@ Quick start
         input:
 
             {
-                "provider": "faceboook",
+                "provider": "facebook",
                 "code": "AQBPBBTjbdnehj51"
             }
 
