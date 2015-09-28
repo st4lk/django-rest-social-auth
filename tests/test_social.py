@@ -22,8 +22,8 @@ l = logging.getLogger(__name__)
 
 
 # don't run third party tests
-delattr(FacebookOAuth2Test, 'test_login')
-delattr(FacebookOAuth2Test, 'test_partial_pipeline')
+for attr in (attr for attr in dir(FacebookOAuth2Test) if attr.startswith('test_')):
+    delattr(FacebookOAuth2Test, attr)
 
 
 class BaseFacebookAPITestCase(FacebookOAuth2Test):
