@@ -105,9 +105,16 @@ class BaseSocialAuthView(GenericAPIView):
         kwargs['context'] = self.get_serializer_context()
         return serializer_class(*args, **kwargs)
 
+    def get_serializer_data(self):
+        """
+        Compile the incoming data into a form fit for the serializer_in class.
+        :return: Data for serializer in the form of a dictionary with 'provider' and 'code' keys.
+        """
+        return self.request.data
+
     @method_decorator(never_cache)
     def post(self, request, *args, **kwargs):
-        serializer_in = self.get_serializer_in(data=request.data)
+        serializer_in = self.get_serializer_in(data=self.get_serializer_data())
         serializer_in.is_valid(raise_exception=True)
         self.set_input_data(request, serializer_in.validated_data.copy())
         try:
