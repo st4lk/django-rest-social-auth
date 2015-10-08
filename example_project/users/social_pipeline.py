@@ -18,7 +18,7 @@ def save_avatar(strategy, details, user=None, *args, **kwargs):
                     "type=normal").format(response['id'])
         else:
             social_thumb = "http://www.gravatar.com/avatar/"
-            social_thumb += hashlib.md5(user.email.lower()).hexdigest()
+            social_thumb += hashlib.md5(user.email.lower().encode('utf8')).hexdigest()
             social_thumb += "?size=100"
         if social_thumb and user.social_thumb != social_thumb:
             user.social_thumb = social_thumb
