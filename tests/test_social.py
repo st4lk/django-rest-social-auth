@@ -12,9 +12,10 @@ from django.test.utils import override_settings
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from httpretty import HTTPretty
-from social.utils import module_member
+from social.utils import module_member, parse_qs
 from social.backends.utils import load_backends
 from social.tests.backends.test_facebook import FacebookOAuth2Test
+from social.tests.backends.test_twitter import TwitterOAuth1Test
 
 from rest_social_auth.views import load_strategy
 
@@ -24,10 +25,11 @@ l = logging.getLogger(__name__)
 # don't run third party tests
 for attr in (attr for attr in dir(FacebookOAuth2Test) if attr.startswith('test_')):
     delattr(FacebookOAuth2Test, attr)
+for attr in (attr for attr in dir(TwitterOAuth1Test) if attr.startswith('test_')):
+    delattr(TwitterOAuth1Test, attr)
 
 
-class BaseFacebookAPITestCase(FacebookOAuth2Test):
-
+class RestSocialMixin(object):
     def setUp(self):
         HTTPretty.enable()
         Backend = module_member(self.backend_path)
@@ -45,8 +47,7 @@ class BaseFacebookAPITestCase(FacebookOAuth2Test):
         user_data_body['email'] = self.email
         self.user_data_body = json.dumps(user_data_body)
 
-        start_url = self.backend.start().url
-        self.auth_handlers(start_url)
+        self.do_rest_login()
 
     def tearDown(self):
         HTTPretty.disable()
@@ -57,7 +58,36 @@ class BaseFacebookAPITestCase(FacebookOAuth2Test):
         self.complete_url = None
 
 
-class TestSocialAuth(APITestCase, BaseFacebookAPITestCase):
+class BaseFacebookAPITestCase(RestSocialMixin, FacebookOAuth2Test):
+
+    def do_rest_login(self):
+        start_url = self.backend.start().url
+        self.auth_handlers(start_url)
+
+
+class BaseTiwtterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
+
+    def do_rest_login(self):
+        self.request_token_handler()
+        start_url = self.backend.start().url
+        self.auth_handlers(start_url)
+
+
+class TestSocialAuth1(APITestCase, BaseTiwtterApiTestCase):
+    def test_login_social_oauth1_session(self):
+        resp = self.client.post(reverse('login_social_session'),
+            data={'provider': 'twitter'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data, parse_qs(self.request_token_body))
+        resp = self.client.post(reverse('login_social_session'), data={
+            'provider': 'twitter',
+            'oauth_token': 'foobar',
+            'oauth_verifier': 'overifier'
+        })
+        self.assertEqual(resp.status_code, 200)
+
+
+class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
 
     def test_login_social_session(self):
         resp = self.client.post(reverse('login_social_session'),
@@ -115,7 +145,7 @@ class TestSocialAuth(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual('http://manualdomain.com/', url_params['redirect_uri'])
 
 
-class TestSocialAuthError(APITestCase, BaseFacebookAPITestCase):
+class TestSocialAuth2Error(APITestCase, BaseFacebookAPITestCase):
     access_token_status = 400
 
     def test_login_oauth_provider_error(self):
@@ -124,7 +154,7 @@ class TestSocialAuthError(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(resp.status_code, 400)
 
 
-class TestSocialHTTPError(APITestCase, BaseFacebookAPITestCase):
+class TestSocialAuth2HTTPError(APITestCase, BaseFacebookAPITestCase):
     access_token_status = 401
 
     def test_login_oauth_provider_http_error(self):

@@ -122,10 +122,14 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'JaiLLvY1BK97TSy5_xcGWDhp'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', ]
 
+SOCIAL_AUTH_TWITTER_KEY = 'twi-key'
+SOCIAL_AUTH_TWITTER_SECRET = 'twi-secret'
+
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',  # OAuth1.0
     'django.contrib.auth.backends.ModelBackend',
 )
 
