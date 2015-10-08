@@ -12,8 +12,9 @@ from django.views.decorators.csrf import csrf_protect
 from django.utils.encoding import iri_to_uri
 from django.utils.six.moves.urllib.parse import urljoin
 from social.apps.django_app.utils import psa, STORAGE
+from social.backends.oauth import BaseOAuth1
 from social.strategies.utils import get_strategy
-from social.utils import user_is_authenticated
+from social.utils import user_is_authenticated, parse_qs
 from social.apps.django_app.views import _do_login as social_auth_login
 from social.exceptions import AuthException
 from rest_framework.generics import GenericAPIView
@@ -21,7 +22,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from requests.exceptions import HTTPError
 
-from .serializers import (SocialAuthInputSerializer, UserSerializer,
+from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
     TokenSerializer, UserTokenSerializer)
 
 l = logging.getLogger(__name__)
@@ -36,33 +37,8 @@ def load_strategy(request=None):
 
 
 @psa(REDIRECT_URI, load_strategy=load_strategy)
-def register_by_auth_token(request, backend, *args, **kwargs):
-    user = request.user
-    redirect_uri = kwargs.pop('manual_redirect_uri', None)
-    if redirect_uri:
-        request.backend.redirect_uri = redirect_uri
-    elif DOMAIN_FROM_ORIGIN:
-        origin = request.strategy.request.META.get('HTTP_ORIGIN')
-        if origin:
-            relative_path = urlparse(request.backend.redirect_uri).path
-            url = urlparse(origin)
-            origin_scheme_host = "%s://%s" % (url.scheme, url.netloc)
-            location = urljoin(origin_scheme_host, relative_path)
-            request.backend.redirect_uri = iri_to_uri(location)
-    is_authenticated = user_is_authenticated(user)
-    user = is_authenticated and user or None
-    # skip checking state by setting following params to False
-    # it is responsibility of front-end to check state
-    # TODO: maybe create an additional resource, where front-end will
-    # store the state before making a call to oauth provider
-    # so server can save it in session and consequently check it before
-    # sending request to acquire access token.
-    # In case of token authentication we need a way to store an anonymous
-    # session to do it.
-    request.backend.REDIRECT_STATE = False
-    request.backend.STATE_PARAMETER = False
-    user = request.backend.complete(user=user, *args, **kwargs)
-    return user
+def decorate_request(request, backend):
+    pass
 
 
 class BaseSocialAuthView(GenericAPIView):
@@ -85,16 +61,16 @@ class BaseSocialAuthView(GenericAPIView):
     user data in serializer_class format
     """
 
-    serializer_class_in = SocialAuthInputSerializer
+    oauth1_serializer_class_in = OAuth1InputSerializer
+    oauth2_serializer_class_in = OAuth2InputSerializer
     serializer_class = None
 
+    def oauth_v1(self):
+        assert hasattr(self.request, 'backend'), 'Don\'t call this method before decorate_request'
+        return isinstance(self.request.backend, BaseOAuth1)
+
     def get_serializer_class_in(self):
-        assert self.serializer_class_in is not None, (
-            "'%s' should either include a `serializer_class_in` attribute, "
-            "or override the `get_serializer_class()` method."
-            % self.__class__.__name__
-        )
-        return self.serializer_class_in
+        return self.oauth1_serializer_class_in if self.oauth_v1() else self.oauth2_serializer_class_in
 
     def get_serializer_in(self, *args, **kwargs):
         """
@@ -114,9 +90,16 @@ class BaseSocialAuthView(GenericAPIView):
 
     @method_decorator(never_cache)
     def post(self, request, *args, **kwargs):
-        serializer_in = self.get_serializer_in(data=self.get_serializer_in_data())
+        input_data = self.get_serializer_in_data()
+        self.set_input_data(request, input_data)
+        decorate_request(request, input_data['provider'])
+        serializer_in = self.get_serializer_in(data=input_data)
+        if (isinstance(serializer_in, OAuth1InputSerializer) and
+                request.backend.OAUTH_TOKEN_PARAMETER_NAME not in input_data):
+            # If this is oauth1 and first stage (1st is get request_token, 2nd is get access_token)
+            request_token = parse_qs(request.backend.set_unauthorized_token())
+            return Response(request_token)
         serializer_in.is_valid(raise_exception=True)
-        self.set_input_data(request, serializer_in.validated_data.copy())
         try:
             user = self.get_object()
         except (AuthException, HTTPError) as e:
@@ -127,11 +110,33 @@ class BaseSocialAuthView(GenericAPIView):
         return Response(resp_data.data)
 
     def get_object(self):
-        provider = self.request.auth_data.pop('provider')
+        user = self.request.user
         manual_redirect_uri = self.request.auth_data.pop('redirect_uri', None)
         manual_redirect_uri = self.get_redirect_uri(manual_redirect_uri)
-        return register_by_auth_token(self.request, provider,
-            manual_redirect_uri=manual_redirect_uri)
+        if manual_redirect_uri:
+            self.request.backend.redirect_uri = manual_redirect_uri
+        elif DOMAIN_FROM_ORIGIN:
+            origin = self.request.strategy.request.META.get('HTTP_ORIGIN')
+            if origin:
+                relative_path = urlparse(self.request.backend.redirect_uri).path
+                url = urlparse(origin)
+                origin_scheme_host = "%s://%s" % (url.scheme, url.netloc)
+                location = urljoin(origin_scheme_host, relative_path)
+                self.request.backend.redirect_uri = iri_to_uri(location)
+        is_authenticated = user_is_authenticated(user)
+        user = is_authenticated and user or None
+        # skip checking state by setting following params to False
+        # it is responsibility of front-end to check state
+        # TODO: maybe create an additional resource, where front-end will
+        # store the state before making a call to oauth provider
+        # so server can save it in session and consequently check it before
+        # sending request to acquire access token.
+        # In case of token authentication we need a way to store an anonymous
+        # session to do it.
+        self.request.backend.REDIRECT_STATE = False
+        self.request.backend.STATE_PARAMETER = False
+        user = self.request.backend.complete(user=user)
+        return user
 
     def do_login(self, backend, user):
         """

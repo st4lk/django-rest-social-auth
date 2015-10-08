@@ -4,10 +4,17 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 
 
-class SocialAuthInputSerializer(serializers.Serializer):
+class OAuth2InputSerializer(serializers.Serializer):
     provider = serializers.CharField()
     code = serializers.CharField()
     redirect_uri = serializers.CharField(required=False)
+
+
+class OAuth1InputSerializer(serializers.Serializer):
+
+    provider = serializers.CharField()
+    oauth_token = serializers.CharField()
+    oauth_verifier = serializers.CharField()
 
 
 class UserSerializer(serializers.ModelSerializer):
