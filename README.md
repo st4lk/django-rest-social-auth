@@ -174,6 +174,36 @@ OAuth 2.0 workflow with rest-social-auth
         provider=facebook&code=AQBPBBTjbdnehj51
 
     Backend will either signin the user, either signup, either return error.
+    
+OAuth 1.0a workflow with rest-social-auth
+-----------------------------------------
+1. Front-end needs to make a POST request to your backend with the provider name ONLY:
+        
+        POST /api/login/social/
+        
+    with data (form data or json):
+    
+        provider=twitter
+
+2. The backend will return a short-lived `oauth_token` request token in the response.  This can be used by the front-end to perform authentication with the provider.
+
+3. User confirms.  In the case of Twitter, they will then return the following data to your front-end:
+
+        {
+          "redirect_state":  "...bHrz2x0wy43",
+          "oauth_token"   :  "...AAAAAAAhD5u",
+          "oauth_verifier":  "...wDBdTR7CYdR"
+        }
+
+4. Front-end now ready to login the user. To do it, send POST request again with provider name and the `oauth_token` and `oauth_verifier` you got from the provider:
+
+        POST /api/login/social/
+
+    with data (form data or json)
+
+        provider=twitter&oauth_token=AQBPBBTjbdnehj51&oauth_verifier=wDBdTR7CYdR
+
+    Backend will either signin the user, or signup, or return an error.
 
 
 rest-social-auth purpose
@@ -187,7 +217,7 @@ Django REST social auth provides means to easily implement such resource.
 List of oauth providers
 -----------------------
 
-Currently only OAuth 2.0 providers are supported.
+Currently only OAuth 2.0 providers are supported. Experimental support for OAuth1.0a providers, for example Twitter, was added in version 0.3.
 Look [python-social-auth](https://github.com/omab/python-social-auth#user-content-auth-providers) for full list.
 Name of provider is taken from corresponding `backend.name` property of
 particular backed class in python-social-auth.
