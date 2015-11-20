@@ -1,6 +1,11 @@
 rest_social_auth release notes
 ==============================
 
+v0.3.0
+------
+- Add support for Oauth1
+- Add ability to override request parsing
+
 v0.2.0
 ------
 - Get domain from HTTP Origin
