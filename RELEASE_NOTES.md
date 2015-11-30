@@ -5,6 +5,10 @@ v0.3.0
 ------
 - Add support for Oauth1
 - Add ability to override request parsing
+- Allow to specify provider in url
+- Drop Python 2.6 and Django 1.6 support
+
+Issues: #2, #3, #5
 
 v0.2.0
 ------
