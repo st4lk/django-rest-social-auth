@@ -372,3 +372,10 @@ So, to play with it, define in your [hosts](http://en.wikipedia.org/wiki/Hosts_\
     127.0.0.1       restsocialexample.com
 
 And visit http://restsocialexample.com:8000/
+
+
+Contributors
+------------
+
+- Alexey Evseev, [st4lk](https://github.com/st4lk)
+- James Keys, [skolsuper](https://github.com/skolsuper)
