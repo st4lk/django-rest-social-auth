@@ -97,8 +97,7 @@ class BaseSocialAuthView(GenericAPIView):
         self.set_input_data(request, input_data)
         decorate_request(request, provider_name)
         serializer_in = self.get_serializer_in(data=input_data)
-        if (isinstance(serializer_in, OAuth1InputSerializer) and
-                request.backend.OAUTH_TOKEN_PARAMETER_NAME not in input_data):
+        if self.oauth_v1() and request.backend.OAUTH_TOKEN_PARAMETER_NAME not in input_data:
             # oauth1 first stage (1st is get request_token, 2nd is get access_token)
             request_token = parse_qs(request.backend.set_unauthorized_token())
             return Response(request_token)
