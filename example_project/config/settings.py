@@ -105,12 +105,6 @@ STATICFILES_DIRS = (
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # DRF settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    )
-}
 
 # social auth settings
 # valid redirect domain for all apps: http://restsocialexample.com:8000/

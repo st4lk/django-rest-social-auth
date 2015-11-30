@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div ng-app="SessionApp">
+        <div ng-controller="LoginCtrl as ctrl">
+            <div>
+                <h4>rest_framework.authentication.SessionAuthentication</h4>
+                <div><button ng-click="authenticate('facebook')">Login facebook (OAuth 2.0)</button></div>
+                <div><button ng-click="authenticate('google')">Login google (OAuth 2.0)</button></div>
+                <div><button ng-click="logout()">Logout session</button></div>
+            </div>
+            <div>
+                <h2>Session user data</h2>
+                <div>
+                    {% verbatim %}
+                    <img ng-src='{{ctrl.user.thumb}}' />
+                    {% endverbatim %}
+                </div>
+                <div>
+                    <span>First name:</span>
+                    <span ng-bind="ctrl.user.first_name"></span>
+                </div>
+                <div>
+                    <span>Last name:</span>
+                    <span ng-bind="ctrl.user.last_name"></span>
+                </div>
+                <div>
+                    <span>Email:</span>
+                    <span ng-bind="ctrl.user.email"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+
+        function set_user(response){
+            var source;
+            if (response){
+                source = response.data;
+            } else {
+                source = {
+                    'username': null,
+                    'first_name': null,
+                    'last_name': null,
+                    'email': null,
+                    'social_thumb': '{% static "anonymous.png" %}'
+                };
+            }
+            self.user.username = source.username;
+            self.user.first_name = source.first_name;
+            self.user.last_name = source.last_name;
+            self.user.email = source.email;
+            self.user.thumb = source.social_thumb;
+        };
+
+        angular.module('SessionApp', ['satellizer'])
+          .config(function($authProvider) {
+            $authProvider.facebook({
+              url: "{% url 'login_social_session' provider='facebook' %}",
+              clientId: '295137440610143'
+            });
+            $authProvider.google({
+              url: "{% url 'login_social_session' provider='google-oauth2' %}",
+              clientId: '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com',
+              redirectUri: window.location.origin + '/'
+            });
+          }).config(function($httpProvider) {
+              $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+              $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+          }).controller('LoginCtrl', function($scope, $auth, $http) {
+            self = this;
+
+            self.user = {};
+            set_user();
+
+            var req = {
+                method: "GET",
+                url: '{% url "current_user_session" %}',
+                skipAuthorization: true  // in case of session auth don't send token header
+            }
+            $http(req).then(function(response){
+                console.log("Got user from session cookies");
+                set_user(response);
+            });
+
+            $scope.authenticate = function(provider) {
+                $auth.authenticate(provider).then(set_user);
+            };
+
+            $scope.logout = function(){
+                var req = {
+                    method: "POST",
+                    url: '{% url "logout_session" %}',
+                    skipAuthorization: true  // in case of session auth don't send token header
+                }
+                $http(req).then(function(response){
+                    set_user();
+                });
+
+            };
+
+            $scope.authenticate_token = function(provider) {
+                $auth.authenticate(provider).then(function(response){
+                    set_user(response);
+                    localStorage.setItem('token', response.data.token);
+                });
+            };
+
+            $scope.logout_token = function(){
+                set_user();
+            };
+        });
+    </script>
+{% endblock scripts %}
