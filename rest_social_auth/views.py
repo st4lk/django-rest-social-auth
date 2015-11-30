@@ -91,8 +91,11 @@ class BaseSocialAuthView(GenericAPIView):
     @method_decorator(never_cache)
     def post(self, request, *args, **kwargs):
         input_data = self.get_serializer_in_data()
+        provider_name = self.get_provider_name(input_data)
+        if not provider_name:
+            return self.respond_error("Provider is not specified")
         self.set_input_data(request, input_data)
-        decorate_request(request, input_data['provider'])
+        decorate_request(request, provider_name)
         serializer_in = self.get_serializer_in(data=input_data)
         if (isinstance(serializer_in, OAuth1InputSerializer) and
                 request.backend.OAUTH_TOKEN_PARAMETER_NAME not in input_data):
@@ -156,6 +159,12 @@ class BaseSocialAuthView(GenericAPIView):
             manual_redirect_uri = getattr(settings,
                 'REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI', None)
         return manual_redirect_uri
+
+    def get_provider_name(self, input_data):
+        if 'provider' in input_data:
+            return input_data['provider']
+        elif 'provider' in self.kwargs:
+            return self.kwargs.get('provider')
 
     def respond_error(self, error):
         return Response(status=status.HTTP_400_BAD_REQUEST)

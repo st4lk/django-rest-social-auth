@@ -5,14 +5,14 @@ from django.contrib.auth import get_user_model
 
 
 class OAuth2InputSerializer(serializers.Serializer):
-    provider = serializers.CharField()
+    provider = serializers.CharField(required=False)
     code = serializers.CharField()
     redirect_uri = serializers.CharField(required=False)
 
 
 class OAuth1InputSerializer(serializers.Serializer):
 
-    provider = serializers.CharField()
+    provider = serializers.CharField(required=False)
     oauth_token = serializers.CharField()
     oauth_verifier = serializers.CharField()
 
