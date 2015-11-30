@@ -89,9 +89,8 @@ class TestSocialAuth1(APITestCase, BaseTiwtterApiTestCase):
 
 class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
 
-    def test_login_social_session(self):
-        resp = self.client.post(reverse('login_social_session'),
-            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+    def _check_login_social_session(self, url, data):
+        resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['email'], self.email)
         # check cookies are set
@@ -100,9 +99,8 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         self.assertTrue(
             get_user_model().objects.filter(email=self.email).exists())
 
-    def test_login_social_token_user(self):
-        resp = self.client.post(reverse('login_social_token_user'),
-            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+    def _check_login_social_token_user(self, url, data):
+        resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['email'], self.email)
         # check token exists
@@ -110,14 +108,55 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         # check user is created
         self.assertEqual(token.user.email, self.email)
 
-    def test_login_social_token_only(self):
-        resp = self.client.post(reverse('login_social_token'),
-            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+    def _check_login_social_token_only(self, url, data):
+        resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         # check token exists
         token = Token.objects.get(key=resp.data['token'])
         # check user is created
         self.assertEqual(token.user.email, self.email)
+
+    def test_login_social_session(self):
+        self._check_login_social_session(
+            reverse('login_social_session'),
+            {'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_session_provider_in_url(self):
+        self._check_login_social_session(
+            reverse('login_social_session', kwargs={'provider': 'facebook'}),
+            {'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_token_user(self):
+        self._check_login_social_token_user(
+            reverse('login_social_token_user'),
+            {'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_token_user_provider_in_url(self):
+        self._check_login_social_token_user(
+            reverse('login_social_token_user', kwargs={'provider': 'facebook'}),
+            {'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_token_only(self):
+        self._check_login_social_token_only(
+            reverse('login_social_token'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_token_only_provider_in_url(self):
+        self._check_login_social_token_only(
+            reverse('login_social_token', kwargs={'provider': 'facebook'}),
+            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_no_provider_session(self):
+        resp = self.client.post(
+            reverse('login_social_session'),
+            {'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+        self.assertEqual(resp.status_code, 400)
+
+    def test_unknown_provider_session(self):
+        resp = self.client.post(
+            reverse('login_social_session', kwargs={'provider': 'unknown'}),
+            {'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+        self.assertEqual(resp.status_code, 404)
 
     def test_login_social_http_origin(self):
         resp = self.client.post(reverse('login_social_session'),
