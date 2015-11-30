@@ -163,7 +163,7 @@ class BaseSocialAuthView(GenericAPIView):
     def get_provider_name(self, input_data):
         if 'provider' in input_data:
             return input_data['provider']
-        elif 'provider' in self.kwargs:
+        else:
             return self.kwargs.get('provider')
 
     def respond_error(self, error):
