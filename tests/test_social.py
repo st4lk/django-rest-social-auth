@@ -18,6 +18,7 @@ from social.tests.backends.test_facebook import FacebookOAuth2Test
 from social.tests.backends.test_twitter import TwitterOAuth1Test
 
 from rest_social_auth.views import load_strategy
+from .utils import modify_settings
 
 l = logging.getLogger(__name__)
 
@@ -74,12 +75,30 @@ class BaseTiwtterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
 
 
 class TestSocialAuth1(APITestCase, BaseTiwtterApiTestCase):
+
     def test_login_social_oauth1_session(self):
         resp = self.client.post(reverse('login_social_session'),
             data={'provider': 'twitter'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data, parse_qs(self.request_token_body))
         resp = self.client.post(reverse('login_social_session'), data={
+            'provider': 'twitter',
+            'oauth_token': 'foobar',
+            'oauth_verifier': 'overifier'
+        })
+        self.assertEqual(resp.status_code, 200)
+
+    def test_login_social_oauth1_token(self):
+        """
+        Currently oauth1 works only if session is enabled.
+        Probably it is possible to make it work without session, but
+        it will be needed to change the logic in python-social-auth.
+        """
+        resp = self.client.post(reverse('login_social_token_user'),
+            data={'provider': 'twitter'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data, parse_qs(self.request_token_body))
+        resp = self.client.post(reverse('login_social_token_user'), data={
             'provider': 'twitter',
             'oauth_token': 'foobar',
             'oauth_verifier': 'overifier'
@@ -99,6 +118,18 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         self.assertTrue(
             get_user_model().objects.filter(email=self.email).exists())
 
+    @modify_settings(INSTALLED_APPS={
+        'remove': [
+            'django.contrib.sessions'
+        ]
+    },
+        MIDDLEWARE_CLASSES={
+        'remove': [
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+        ],
+    })
     def _check_login_social_token_user(self, url, data):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
@@ -108,6 +139,18 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         # check user is created
         self.assertEqual(token.user.email, self.email)
 
+    @modify_settings(INSTALLED_APPS={
+        'remove': [
+            'django.contrib.sessions'
+        ]
+    },
+        MIDDLEWARE_CLASSES={
+        'remove': [
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+        ],
+    })
     def _check_login_social_token_only(self, url, data):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)

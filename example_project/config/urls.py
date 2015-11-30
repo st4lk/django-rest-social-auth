@@ -4,7 +4,9 @@ from django.contrib import admin
 from users import views
 
 urlpatterns = [
-    url(r'^(?P<auth_type>(?:session|token)?)/?$', views.HomeView.as_view(), name='home'),
+    url(r'^$', views.HomeSessionView.as_view(), name='home'),
+    url(r'^session/$', views.HomeSessionView.as_view(), name='home_session'),
+    url(r'^token/$', views.HomeTokenView.as_view(), name='home_token'),
 
     url(r'^api/login/', include('rest_social_auth.urls_session')),
     url(r'^api/login/', include('rest_social_auth.urls_token')),

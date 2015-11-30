@@ -8,7 +8,11 @@
                 <h4>rest_framework.authentication.TokenAuthentication</h4>
                 <div><button ng-click="authenticate('facebook')">Login facebook (OAuth 2.0)</button></div>
                 <div><button ng-click="authenticate('google')">Login google (OAuth 2.0)</button></div>
+                <div><button ng-click="authenticate('twitter')">Login twitter (OAuth 1.0)*</button></div>
                 <div><button ng-click="logout()">Logout token</button></div>
+            </div>
+            <div>
+                (*) Currently in case of OAuth 1.0 you still need to have session enabled, as python-social-auth will store some data in session between requests. Maybe in future versions of rest-social-auth this will be solved.
             </div>
             <div>
                 <h2>Token user data</h2>
@@ -70,10 +74,10 @@
               clientId: '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com',
               redirectUri: window.location.origin + '/'
             });
+            $authProvider.twitter({
+              url: "{% url 'login_social_token_user' provider='twitter' %}",
+            });
             $authProvider.authToken = 'Token';
-          }).config(function($httpProvider) {
-              $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-              $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
           }).controller('LoginTokenCtrl', function($scope, $auth, $http) {
             self = this;
 

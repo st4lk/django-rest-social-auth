@@ -5,8 +5,8 @@
 </head>
 <body>
     <h1>Django-rest-framework and OAuth example</h1>
-    <a href="{% url 'home' auth_type='session' %}">Session auth</a>
-    <a href="{% url 'home' auth_type='token' %}">Token auth</a>
+    <a href="{% url 'home_session' %}">Session auth</a>
+    <a href="{% url 'home_token' %}">Token auth</a>
 
     {% block content %}
 

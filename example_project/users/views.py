@@ -10,17 +10,17 @@ from rest_social_auth.serializers import UserSerializer
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 
-class HomeView(TemplateView):
+class HomeSessionView(TemplateView):
+    template_name = 'home_session.html'
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
-        return super(HomeView, self).get(request, *args, **kwargs)
+        return super(HomeSessionView, self).get(request, *args, **kwargs)
 
-    def get_template_names(self):
-        if self.kwargs.get('auth_type') == 'token':
-            return ['home_token.html']
-        else:
-            return ['home_session.html']
+
+class HomeTokenView(TemplateView):
+    template_name = 'home_token.html'
+
 
 class LogoutSessionView(APIView):
 

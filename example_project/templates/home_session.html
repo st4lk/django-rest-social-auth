@@ -8,6 +8,7 @@
                 <h4>rest_framework.authentication.SessionAuthentication</h4>
                 <div><button ng-click="authenticate('facebook')">Login facebook (OAuth 2.0)</button></div>
                 <div><button ng-click="authenticate('google')">Login google (OAuth 2.0)</button></div>
+                <div><button ng-click="authenticate('twitter')">Login twitter (OAuth 1.0)</button></div>
                 <div><button ng-click="logout()">Logout session</button></div>
             </div>
             <div>
@@ -68,6 +69,9 @@
               url: "{% url 'login_social_session' provider='google-oauth2' %}",
               clientId: '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com',
               redirectUri: window.location.origin + '/'
+            });
+            $authProvider.twitter({
+              url: "{% url 'login_social_session' provider='twitter' %}",
             });
           }).config(function($httpProvider) {
               $httpProvider.defaults.xsrfCookieName = 'csrftoken';
