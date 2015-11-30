@@ -84,7 +84,7 @@ Quick start
 
         url(r'^api/login/', include('rest_social_auth.urls_token')),
 
-5. You are ready to login users.
+5. You are ready to login users (following examples are for OAuth 2.0).
 
     5.1 session authentication
 
@@ -150,11 +150,22 @@ Quick start
     This redirect_uri must be equal in front-end request and in back-end request.
     Back-end will not do any redirect in fact.
 
+    It is also possible to specify provider in url, not in request body.
+    Just append it to the url:
+
+        POST /api/login/social/session/facebook/
+
+    Don't need to specify it in body now:
+
+        {
+            "code": "AQBPBBTjbdnehj51"
+        }
+
 
 OAuth 2.0 workflow with rest-social-auth
 -----------------------------------------
 1. Front-end need to know follwoing params for each social provider:
-    - client_id  _# id of registered application on social service provider_
+    - client_id  _# only in case of OAuth 2.0, id of registered application on social service provider_
     - redirect_uri  _# to this url social provider will redirect with code_
     - scope=your_scope  _# for example email_
     - response_type=code  _# same for all oauth2.0 providers_
@@ -174,6 +185,17 @@ OAuth 2.0 workflow with rest-social-auth
         provider=facebook&code=AQBPBBTjbdnehj51
 
     Backend will either signin the user, either signup, either return error.
+
+    Sometimes it is more suitable to specify provider in url, not in request body.
+    It is possible, rest-social-auth will understand that.
+    Following request is the same as above:
+
+        POST /api/login/social/session/facebook/
+
+    with data (form data or json)
+
+        code=AQBPBBTjbdnehj51
+
     
 OAuth 1.0a workflow with rest-social-auth
 -----------------------------------------
@@ -184,6 +206,10 @@ OAuth 1.0a workflow with rest-social-auth
     with data (form data or json):
     
         provider=twitter
+
+    Or specify provider in url, in that case data will be empty:
+
+        POST /api/login/social/twitter
 
 2. The backend will return a short-lived `oauth_token` request token in the response.  This can be used by the front-end to perform authentication with the provider.
 
@@ -204,12 +230,21 @@ OAuth 1.0a workflow with rest-social-auth
         provider=twitter&oauth_token=AQBPBBTjbdnehj51&oauth_verifier=wDBdTR7CYdR
 
     Backend will either signin the user, or signup, or return an error.
+    Same as in OAuth 2.0, you can specify provider in url, not in body:
+
+        POST /api/login/social/twitter
+
+This flow is the same as described in [satellizer](https://github.com/sahat/satellizer#-login-with-oauth-10). This angularjs module is used in example project.
+
+#### Note
+If you use token authentication and OAuth 1.0, then you still need 'django.contrib.sessions' app (it is not required for OAuth 2.0 and token authentication).
+This is because python-social-auth will store some data in session between requests to OAuth 1.0 provider.
 
 
 rest-social-auth purpose
 ------------------------
 
-As we can see, our backend must implement resource for signin the user (point 5).
+As we can see, our backend must implement resource for signin the user.
 
 Django REST social auth provides means to easily implement such resource.
 
@@ -217,7 +252,8 @@ Django REST social auth provides means to easily implement such resource.
 List of oauth providers
 -----------------------
 
-Currently only OAuth 2.0 providers are supported. Experimental support for OAuth1.0a providers, for example Twitter, was added in version 0.3.
+OAuth 1.0 and OAuth 2.0 providers are supported.
+
 Look [python-social-auth](https://github.com/omab/python-social-auth#user-content-auth-providers) for full list.
 Name of provider is taken from corresponding `backend.name` property of
 particular backed class in python-social-auth.
@@ -238,6 +274,7 @@ Vkontakte | vk-oauth2
 Instagram | instagram
 Github    | github
 Yandex    | yandex-oauth2
+Twitter   | twitter
 
 
 Settings
@@ -365,13 +402,15 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
 
         python manage.py runserver
 
-Example project already contains facebook and google app ids and secrets.
+Example project already contains facebook, google and twitter app ids and secrets.
 These apps are configured to work only with restsocialexample.com domain (localhost is not supported by some providers).
 So, to play with it, define in your [hosts](http://en.wikipedia.org/wiki/Hosts_\(file\)) file this domain as localhost:
 
     127.0.0.1       restsocialexample.com
 
 And visit http://restsocialexample.com:8000/
+
+Example project uses [satellizer](https://github.com/sahat/satellizer) angularjs module.
 
 
 Contributors
