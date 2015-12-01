@@ -6,6 +6,7 @@
 *.egg-info
 dist/
 README.rst
+RELEASE_NOTES.rst
 generate_rst.py
 build/
 .coverage

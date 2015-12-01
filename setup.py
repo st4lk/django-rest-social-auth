@@ -1,4 +1,5 @@
 import os
+import sys
 from setuptools import setup, find_packages
 from rest_social_auth import __author__, __version__
 
@@ -9,6 +10,24 @@ def __read(fname):
     except IOError:
         return ''
 
+if sys.argv[-1] == 'publish':
+    os.system('pandoc --from=markdown --to=rst --output=README.rst README.md')
+    os.system('pandoc --from=markdown --to=rst --output=RELEASE_NOTES.rst RELEASE_NOTES.md')
+    os.system('python setup.py sdist upload')
+    os.system('python setup.py bdist_wheel upload')
+    sys.exit()
+
+if sys.argv[-1] == 'generate_rst':
+    os.system('pandoc --from=markdown --to=rst --output=README.rst README.md')
+    os.system('pandoc --from=markdown --to=rst --output=RELEASE_NOTES.rst RELEASE_NOTES.md')
+    sys.exit()
+
+if sys.argv[-1] == 'tag':
+    print("Tagging the version on github:")
+    os.system("git tag -a v%s -m 'version %s'" % (__version__, __version__))
+    os.system("git push --tags")
+    sys.exit()
+
 
 install_requires = __read('requirements.txt').split()
 
@@ -18,7 +37,7 @@ setup(
     author_email='alexevseev@gmail.com',
     version=__version__,
     description='Django rest framework resources for social auth',
-    long_description=__read('README.rst'),
+    long_description=__read('README.rst') + '\n\n' + __read('RELEASE_NOTES.rst'),
     platforms=('Any'),
     packages=find_packages(),
     install_requires=install_requires,
