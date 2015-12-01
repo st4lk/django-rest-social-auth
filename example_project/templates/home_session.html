@@ -108,16 +108,6 @@
 
             };
 
-            $scope.authenticate_token = function(provider) {
-                $auth.authenticate(provider).then(function(response){
-                    set_user(response);
-                    localStorage.setItem('token', response.data.token);
-                });
-            };
-
-            $scope.logout_token = function(){
-                set_user();
-            };
         });
     </script>
 {% endblock scripts %}
