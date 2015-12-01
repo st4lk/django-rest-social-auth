@@ -20,6 +20,7 @@ from social.exceptions import AuthException
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 from requests.exceptions import HTTPError
 
 from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
@@ -182,7 +183,9 @@ class SocialSessionAuthView(BaseSocialAuthView):
 
 class SocialTokenOnlyAuthView(BaseSocialAuthView):
     serializer_class = TokenSerializer
+    authentication_classes = (TokenAuthentication, )
 
 
 class SocialTokenUserAuthView(BaseSocialAuthView):
     serializer_class = UserTokenSerializer
+    authentication_classes = (TokenAuthentication, )
