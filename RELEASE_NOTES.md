@@ -1,6 +1,10 @@
 rest_social_auth release notes
 ==============================
 
+v0.3.1
+------
+- Explicitly set token authentication for token views
+
 v0.3.0
 ------
 - Add support for Oauth1
