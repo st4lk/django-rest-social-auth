@@ -44,7 +44,7 @@ class JWTSerializer(TokenSerializer):
         try:
             from rest_framework_jwt.settings import api_settings
         except ImportError:
-            l.debug("djangorestframework-jwt required for JWT authentication")
+            l.warning("djangorestframework-jwt required for JWT authentication")
             raise
 
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
