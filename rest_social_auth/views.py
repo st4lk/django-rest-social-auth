@@ -201,6 +201,6 @@ class SocialJWTOnlyAuthView(BaseSocialAuthView):
     authentication_classes = (JSONWebTokenAuthentication, )
 
 
-class SocialTokenUserAuthView(BaseSocialAuthView):
+class SocialJWTUserAuthView(BaseSocialAuthView):
     serializer_class = UserJWTSerializer
     authentication_classes = (JSONWebTokenAuthentication, )
