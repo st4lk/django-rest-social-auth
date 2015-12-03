@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_social_auth.serializers import UserSerializer
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 
 class HomeSessionView(TemplateView):
@@ -20,6 +21,10 @@ class HomeSessionView(TemplateView):
 
 class HomeTokenView(TemplateView):
     template_name = 'home_token.html'
+
+
+class HomeJWTView(TemplateView):
+    template_name = 'home_jwt.html'
 
 
 class LogoutSessionView(APIView):
@@ -44,3 +49,7 @@ class UserSessionDetailView(BaseDeatilView):
 
 class UserTokenDetailView(BaseDeatilView):
     authentication_classes = (TokenAuthentication, )
+
+
+class UserJWTDetailView(BaseDeatilView):
+    authentication_classes = (JSONWebTokenAuthentication, )

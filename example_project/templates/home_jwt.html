@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div ng-app="JWTApp">
+        <div ng-controller="LoginJWTCtrl as ctrl">
+            <div>
+                <h4>rest_framework_jwt.authentication.JSONWebTokenAuthentication</h4>
+                <div><button ng-click="authenticate('facebook')">Login facebook (OAuth 2.0)</button></div>
+                <div><button ng-click="authenticate('google')">Login google (OAuth 2.0)</button></div>
+                <div><button ng-click="authenticate('twitter')">Login twitter (OAuth 1.0)*</button></div>
+                <div><button ng-click="logout()">Logout jwt</button></div>
+            </div>
+            <div>
+                (*) Currently in case of OAuth 1.0 you still need to have session enabled, as python-social-auth will store some data in session between requests. Maybe in future versions of rest-social-auth this will be solved.
+            </div>
+            <div>
+                <h2>JWT user data</h2>
+                <div>
+                    {% verbatim %}
+                    <img ng-src='{{ctrl.user.thumb}}' />
+                    {% endverbatim %}
+                </div>
+                <div>
+                    <span>First name:</span>
+                    <span ng-bind="ctrl.user.first_name"></span>
+                </div>
+                <div>
+                    <span>Last name:</span>
+                    <span ng-bind="ctrl.user.last_name"></span>
+                </div>
+                <div>
+                    <span>Email:</span>
+                    <span ng-bind="ctrl.user.email"></span>
+                </div>
+                <h2>Raw JWT payload</h2>
+                <div>
+                    <pre>{% verbatim %}{{ ctrl.jwtPayload | json }}{% endverbatim %}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+
+        function set_user(response){
+            var source;
+            if (response){
+                source = response.data;
+            } else {
+                source = {
+                    'username': null,
+                    'first_name': null,
+                    'last_name': null,
+                    'email': null,
+                    'social_thumb': '{% static "anonymous.png" %}'
+                };
+            }
+            self.user.username = source.username;
+            self.user.first_name = source.first_name;
+            self.user.last_name = source.last_name;
+            self.user.email = source.email;
+            self.user.thumb = source.social_thumb;
+        };
+
+        angular.module('JWTApp', ['satellizer'])
+          .config(function($authProvider) {
+            $authProvider.facebook({
+              url: "{% url 'login_social_jwt_user' provider='facebook' %}",
+              clientId: '295137440610143'
+            });
+            $authProvider.google({
+              url: "{% url 'login_social_jwt_user' provider='google-oauth2' %}",
+              clientId: '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com',
+              redirectUri: window.location.origin + '/'
+            });
+            $authProvider.twitter({
+              url: "{% url 'login_social_jwt_user' provider='twitter' %}",
+            });
+          }).controller('LoginJWTCtrl', function($scope, $auth, $http) {
+            self = this;
+
+            self.user = {};
+            set_user();
+            if ($auth.getToken()){
+                $http.get('{% url "current_user_jwt" %}').then(function(response){
+                    set_user(response);
+                });
+            }
+
+            self.jwtPayload = $auth.getPayload();
+
+            $scope.authenticate = function(provider) {
+                $auth.authenticate(provider).then(function(response){
+                    $auth.setToken(response.data.token);
+                    set_user(response);
+                    self.jwtPayload = $auth.getPayload();
+                });
+            };
+
+            $scope.logout = function(){
+                $auth.removeToken();
+                set_user();
+            };
+        });
+
+    </script>
+{% endblock scripts %}
