@@ -81,6 +81,7 @@
             $authProvider.twitter({
               url: "{% url 'login_social_jwt_user' provider='twitter' %}",
             });
+            $authProvider.authToken = 'JWT';
           }).controller('LoginJWTCtrl', function($scope, $auth, $http) {
             self = this;
 
@@ -105,6 +106,7 @@
             $scope.logout = function(){
                 $auth.removeToken();
                 set_user();
+                self.jwtPayload = $auth.getPayload();
             };
         });
 
