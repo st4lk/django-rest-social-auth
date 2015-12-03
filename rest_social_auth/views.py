@@ -21,10 +21,11 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from requests.exceptions import HTTPError
 
 from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
-    TokenSerializer, UserTokenSerializer)
+    TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer)
 
 l = logging.getLogger(__name__)
 
@@ -189,3 +190,13 @@ class SocialTokenOnlyAuthView(BaseSocialAuthView):
 class SocialTokenUserAuthView(BaseSocialAuthView):
     serializer_class = UserTokenSerializer
     authentication_classes = (TokenAuthentication, )
+
+
+class SocialJWTOnlyAuthView(BaseSocialAuthView):
+    serializer_class = JWTSerializer
+    authentication_classes = (JSONWebTokenAuthentication, )
+
+
+class SocialTokenUserAuthView(BaseSocialAuthView):
+    serializer_class = UserJWTSerializer
+    authentication_classes = (JSONWebTokenAuthentication, )

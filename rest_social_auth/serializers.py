@@ -35,3 +35,18 @@ class TokenSerializer(serializers.Serializer):
 
 class UserTokenSerializer(TokenSerializer, UserSerializer):
     pass
+
+
+class JWTSerializer(TokenSerializer):
+    def get_token(self, obj):
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+        
+        payload = jwt_payload_handler(obj)  # obj is the user instance
+        token = jwt_encode_handler(payload)
+
+        return token
+
+
+class UserJWTSerializer(JWTSerializer, UserSerializer):
+    pass
