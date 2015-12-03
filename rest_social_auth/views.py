@@ -21,7 +21,11 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+try:
+    from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+except ImportError:
+    # this is only needed for JWT auth
+    pass
 from requests.exceptions import HTTPError
 
 from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,

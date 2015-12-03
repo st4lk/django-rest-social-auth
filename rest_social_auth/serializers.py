@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import logging
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 
+l = logging.getLogger(__name__)
 
 class OAuth2InputSerializer(serializers.Serializer):
     provider = serializers.CharField(required=False)
@@ -39,6 +41,12 @@ class UserTokenSerializer(TokenSerializer, UserSerializer):
 
 class JWTSerializer(TokenSerializer):
     def get_token(self, obj):
+        try:
+            from rest_framework_jwt.settings import api_settings
+        except ImportError:
+            l.debug("djangorestframework-jwt required for JWT authentication")
+            raise
+
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
         
