@@ -2,6 +2,7 @@
 {% load staticfiles %}
 
 {% block content %}
+    <h3>Note! <a href="http://getblimp.github.io/django-rest-framework-jwt/">djangorestframework-jwt</a> must be installed for this method</h3>
     <div ng-app="JWTApp">
         <div ng-controller="LoginJWTCtrl as ctrl">
             <div>
@@ -82,6 +83,7 @@
               url: "{% url 'login_social_jwt_user' provider='twitter' %}",
             });
             $authProvider.authToken = 'JWT';
+            $authProvider.tokenPrefix = 'satellizer_jwt';  // to not collide with regular token auth
           }).controller('LoginJWTCtrl', function($scope, $auth, $http) {
             self = this;
 
