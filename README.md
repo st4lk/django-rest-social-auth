@@ -15,6 +15,7 @@ Requirements
 - python (2.7, 3.4)
 - django (1.7, 1.8)
 - djangorestframework (>= 3.1)
+- [optional] djangorestframework-jwt (>=1.7.2)
 
 Release notes
 -------------
@@ -76,7 +77,7 @@ Quick start
         python manage.py syncdb
 
 
-4. Include rest social urls
+4. Include rest social urls (choose at least one)
 
     4.1 [session authentication](http://www.django-rest-framework.org/api-guide/authentication/#sessionauthentication)
 
@@ -86,7 +87,13 @@ Quick start
 
         url(r'^api/login/', include('rest_social_auth.urls_token')),
 
-5. You are ready to login users (following examples are for OAuth 2.0).
+    4.3 [jwt authentication](http://getblimp.github.io/django-rest-framework-jwt/)
+
+        url(r'^api/login/', include('rest_social_auth.urls_jwt')),
+
+5. You are ready to login users
+
+    Following examples are for OAuth 2.0.
 
     5.1 session authentication
 
@@ -143,6 +150,17 @@ Quick start
                 // other user data
                 "token": "68ded41d89f6a28da050f882998b2ea1decebbe0"
             }
+
+    5.3 jwt authentication
+
+    - POST /api/login/social/jwt/
+    - POST /api/login/social/jwt_user/
+
+        Similar to token authentication, but token is JSON Web Token.
+
+        See [JWT.io](http://jwt.io/) for details.
+
+        To use it, [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt) must be installed.
 
     User model is taken from [`settings.AUTH_USER_MODEL`](https://docs.djangoproject.com/en/dev/topics/auth/customizing/#substituting-a-custom-user-model).
 
@@ -239,7 +257,7 @@ OAuth 1.0a workflow with rest-social-auth
 This flow is the same as described in [satellizer](https://github.com/sahat/satellizer#-login-with-oauth-10). This angularjs module is used in example project.
 
 #### Note
-If you use token authentication and OAuth 1.0, then you still need 'django.contrib.sessions' app (it is not required for OAuth 2.0 and token authentication).
+If you use token (or jwt) authentication and OAuth 1.0, then you still need 'django.contrib.sessions' app (it is not required for OAuth 2.0 and token authentication).
 This is because python-social-auth will store some data in session between requests to OAuth 1.0 provider.
 
 
@@ -420,3 +438,4 @@ Contributors
 
 - Alexey Evseev, [st4lk](https://github.com/st4lk)
 - James Keys, [skolsuper](https://github.com/skolsuper)
+- Aaron Abbott, [aabmass](https://github.com/aabmass)
