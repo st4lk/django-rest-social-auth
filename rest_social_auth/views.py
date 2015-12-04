@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import warnings
 try:
     from urlparse import urlparse
 except ImportError:
@@ -27,12 +28,6 @@ from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSeri
     TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer)
 
 l = logging.getLogger(__name__)
-
-try:
-    from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-except ImportError:
-    # this is only needed for JWT auth
-    l.warning("djangorestframework-jwt required for JWT autthentication")
 
 
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
@@ -197,11 +192,20 @@ class SocialTokenUserAuthView(BaseSocialAuthView):
     authentication_classes = (TokenAuthentication, )
 
 
-class SocialJWTOnlyAuthView(BaseSocialAuthView):
+class JWTAuthMixin(object):
+    def get_authenticators(self):
+        try:
+            from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+        except ImportError:
+            warnings.warn('djangorestframework-jwt must be installed for JWT autthentication', ImportWarning)
+            raise
+
+        return [JSONWebTokenAuthentication()]
+
+
+class SocialJWTOnlyAuthView(JWTAuthMixin, BaseSocialAuthView):
     serializer_class = JWTSerializer
-    authentication_classes = (JSONWebTokenAuthentication, )
 
 
-class SocialJWTUserAuthView(BaseSocialAuthView):
+class SocialJWTUserAuthView(JWTAuthMixin, BaseSocialAuthView):
     serializer_class = UserJWTSerializer
-    authentication_classes = (JSONWebTokenAuthentication, )

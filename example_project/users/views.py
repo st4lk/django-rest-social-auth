@@ -6,9 +6,9 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_social_auth.serializers import UserSerializer
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_social_auth.serializers import UserSerializer
+from rest_social_auth.views import JWTAuthMixin
 
 
 class HomeSessionView(TemplateView):
@@ -51,5 +51,5 @@ class UserTokenDetailView(BaseDeatilView):
     authentication_classes = (TokenAuthentication, )
 
 
-class UserJWTDetailView(BaseDeatilView):
-    authentication_classes = (JSONWebTokenAuthentication, )
+class UserJWTDetailView(JWTAuthMixin, BaseDeatilView):
+    pass

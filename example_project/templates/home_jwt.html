@@ -100,6 +100,11 @@
                     $auth.setToken(response.data.token);
                     set_user(response);
                     self.jwtPayload = $auth.getPayload();
+                }).catch(function(data) {
+                    var err_msg = "Something went wrong, maybe you haven't installed 'djangorestframework-jwt'?";
+                    console.log(data)
+                    console.log(err_msg);
+                    alert(err_msg);
                 });
             };
 

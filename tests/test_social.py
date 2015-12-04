@@ -30,6 +30,47 @@ for attr in (attr for attr in dir(TwitterOAuth1Test) if attr.startswith('test_')
     delattr(TwitterOAuth1Test, attr)
 
 
+session_modify_settings = dict(
+    INSTALLED_APPS={
+        'remove': [
+            'rest_framework.authtoken',
+        ]
+    },
+)
+
+
+token_modify_settings = dict(
+    INSTALLED_APPS={
+        'remove': [
+            'django.contrib.sessions'
+        ]
+    },
+    MIDDLEWARE_CLASSES={
+        'remove': [
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+        ],
+    }
+)
+
+
+jwt_modify_settings = dict(
+    INSTALLED_APPS={
+        'remove': [
+            'django.contrib.sessions',
+            'rest_framework.authtoken',
+        ]
+    },
+    MIDDLEWARE_CLASSES={
+        'remove': [
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+        ],
+    }
+)
+
 class RestSocialMixin(object):
     def setUp(self):
         HTTPretty.enable()
@@ -76,6 +117,7 @@ class BaseTiwtterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
 
 class TestSocialAuth1(APITestCase, BaseTiwtterApiTestCase):
 
+    @modify_settings(**session_modify_settings)
     def test_login_social_oauth1_session(self):
         resp = self.client.post(reverse('login_social_session'),
             data={'provider': 'twitter'})
@@ -105,9 +147,33 @@ class TestSocialAuth1(APITestCase, BaseTiwtterApiTestCase):
         })
         self.assertEqual(resp.status_code, 200)
 
+    @modify_settings(INSTALLED_APPS={'remove': ['rest_framework.authtoken', ]})
+    def test_login_social_oauth1_jwt(self):
+        """
+        Currently oauth1 works only if session is enabled.
+        Probably it is possible to make it work without session, but
+        it will be needed to change the logic in python-social-auth.
+        """
+        try:
+            import rest_framework_jwt
+        except ImportError:
+            return
+        assert rest_framework_jwt is not None
+        resp = self.client.post(reverse('login_social_jwt_user'),
+            data={'provider': 'twitter'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data, parse_qs(self.request_token_body))
+        resp = self.client.post(reverse('login_social_token_user'), data={
+            'provider': 'twitter',
+            'oauth_token': 'foobar',
+            'oauth_verifier': 'overifier'
+        })
+        self.assertEqual(resp.status_code, 200)
+
 
 class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
 
+    @modify_settings(**session_modify_settings)
     def _check_login_social_session(self, url, data):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
@@ -118,18 +184,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         self.assertTrue(
             get_user_model().objects.filter(email=self.email).exists())
 
-    @modify_settings(INSTALLED_APPS={
-        'remove': [
-            'django.contrib.sessions'
-        ]
-    },
-        MIDDLEWARE_CLASSES={
-        'remove': [
-            'django.contrib.sessions.middleware.SessionMiddleware',
-            'django.contrib.auth.middleware.AuthenticationMiddleware',
-            'django.contrib.messages.middleware.MessageMiddleware',
-        ],
-    })
+    @modify_settings(**token_modify_settings)
     def _check_login_social_token_user(self, url, data):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
@@ -139,18 +194,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         # check user is created
         self.assertEqual(token.user.email, self.email)
 
-    @modify_settings(INSTALLED_APPS={
-        'remove': [
-            'django.contrib.sessions'
-        ]
-    },
-        MIDDLEWARE_CLASSES={
-        'remove': [
-            'django.contrib.sessions.middleware.SessionMiddleware',
-            'django.contrib.auth.middleware.AuthenticationMiddleware',
-            'django.contrib.messages.middleware.MessageMiddleware',
-        ],
-    })
+    @modify_settings(**token_modify_settings)
     def _check_login_social_token_only(self, url, data):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
@@ -158,6 +202,33 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         token = Token.objects.get(key=resp.data['token'])
         # check user is created
         self.assertEqual(token.user.email, self.email)
+
+    @modify_settings(**jwt_modify_settings)
+    def _check_login_social_jwt_only(self, url, data):
+        try:
+            from rest_framework_jwt.settings import api_settings
+        except ImportError:
+            return
+        jwt_decode_handler = api_settings.JWT_DECODE_HANDLER
+        resp = self.client.post(url, data)
+        self.assertEqual(resp.status_code, 200)
+        # check token valid
+        jwt_data = jwt_decode_handler(resp.data['token'])
+        self.assertEqual(jwt_data['email'], self.email)
+
+    @modify_settings(**jwt_modify_settings)
+    def _check_login_social_jwt_user(self, url, data):
+        try:
+            from rest_framework_jwt.settings import api_settings
+        except ImportError:
+            return
+        jwt_decode_handler = api_settings.JWT_DECODE_HANDLER
+        resp = self.client.post(url, data)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['email'], self.email)
+        # check token valid
+        jwt_data = jwt_decode_handler(resp.data['token'])
+        self.assertEqual(jwt_data['email'], self.email)
 
     def test_login_social_session(self):
         self._check_login_social_session(
@@ -187,6 +258,26 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
     def test_login_social_token_only_provider_in_url(self):
         self._check_login_social_token_only(
             reverse('login_social_token', kwargs={'provider': 'facebook'}),
+            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_jwt_only(self):
+        self._check_login_social_jwt_only(
+            reverse('login_social_jwt'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_jwt_only_provider_in_url(self):
+        self._check_login_social_jwt_only(
+            reverse('login_social_jwt', kwargs={'provider': 'facebook'}),
+            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_jwt_user(self):
+        self._check_login_social_jwt_user(
+            reverse('login_social_jwt_user'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+
+    def test_login_social_jwt_user_provider_in_url(self):
+        self._check_login_social_jwt_user(
+            reverse('login_social_jwt_user', kwargs={'provider': 'facebook'}),
             data={'code': '3D52VoM1uiw94a1ETnGvYlCw'})
 
     def test_no_provider_session(self):
