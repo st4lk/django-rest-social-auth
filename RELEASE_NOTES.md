@@ -1,6 +1,13 @@
 rest_social_auth release notes
 ==============================
 
+v0.4.0
+------
+- Add [JSON Web Tokens](http://jwt.io/) using [djangorestframework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt)
+- Add Python 3.5 and Django 1.9 support
+
+Issues: #6
+
 v0.3.1
 ------
 - Explicitly set token authentication for token views
