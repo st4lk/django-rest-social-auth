@@ -1,6 +1,10 @@
 rest_social_auth release notes
 ==============================
 
+v0.4.1
+------
+- Fix requirements.txt: allow django==1.9
+
 v0.4.0
 ------
 - Add [JSON Web Tokens](http://jwt.io/) using [djangorestframework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt)
