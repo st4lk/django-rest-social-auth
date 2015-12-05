@@ -2,8 +2,6 @@ language: python
 
 python:
   - 2.7
-  - 3.4
-  - 3.5
 
 env:
   - TOXENV=py34-17
@@ -29,3 +27,10 @@ after_script:
         pip install --quiet coveralls;
         coveralls;
       fi
+
+addons:
+  apt:
+    sources:
+      - deadsnakes
+    packages:
+      - python3.5
