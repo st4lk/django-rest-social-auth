@@ -1,13 +1,15 @@
-# -*- coding: utf-8 -*-
 import logging
 import warnings
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 
+
 l = logging.getLogger(__name__)
 
+
 class OAuth2InputSerializer(serializers.Serializer):
+
     provider = serializers.CharField(required=False)
     code = serializers.CharField()
     redirect_uri = serializers.CharField(required=False)
@@ -25,10 +27,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         exclude = ('is_staff', 'is_active', 'date_joined', 'password',
-            'last_login', 'user_permissions', 'groups', 'is_superuser')
+                   'last_login', 'user_permissions', 'groups', 'is_superuser',)
 
 
 class TokenSerializer(serializers.Serializer):
+
     token = serializers.SerializerMethodField()
 
     def get_token(self, obj):
@@ -41,11 +44,13 @@ class UserTokenSerializer(TokenSerializer, UserSerializer):
 
 
 class JWTSerializer(TokenSerializer):
+
     def get_token(self, obj):
         try:
             from rest_framework_jwt.settings import api_settings
         except ImportError:
-            warnings.warn('djangorestframework-jwt must be installed for JWT autthentication', ImportWarning)
+            warnings.warn('djangorestframework-jwt must be installed for JWT authentication',
+                          ImportWarning)
             raise
 
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
