@@ -438,7 +438,7 @@ Example project uses [satellizer](https://github.com/sahat/satellizer) angularjs
 Contributors
 ------------
 
-- Alexey Evseev, @st4lk
-- James Keys, @skolsuper
-- Aaron Abbott, @aabmass
-- Grigorii Eremeev, @Budulianin
+- Alexey Evseev, [st4lk](https://github.com/st4lk)
+- James Keys, [skolsuper](https://github.com/skolsuper)
+- Aaron Abbott, [aabmass](https://github.com/aabmass)
+- Grigorii Eremeev, [Budulianin](https://github.com/Budulianin)
