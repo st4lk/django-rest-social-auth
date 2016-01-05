@@ -296,6 +296,7 @@ Instagram | instagram
 Github    | github
 Yandex    | yandex-oauth2
 Twitter   | twitter
+[Others](https://github.com/omab/python-social-auth#user-content-auth-providers) | ...
 
 
 Settings
