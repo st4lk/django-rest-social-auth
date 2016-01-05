@@ -20,6 +20,7 @@ from social.tests.backends.test_twitter import TwitterOAuth1Test
 from rest_social_auth.views import load_strategy
 from .utils import modify_settings
 
+
 l = logging.getLogger(__name__)
 
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 import warnings
 try:
@@ -26,6 +25,7 @@ from requests.exceptions import HTTPError
 
 from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
     TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer)
+
 
 l = logging.getLogger(__name__)
 
@@ -197,7 +197,8 @@ class JWTAuthMixin(object):
         try:
             from rest_framework_jwt.authentication import JSONWebTokenAuthentication
         except ImportError:
-            warnings.warn('djangorestframework-jwt must be installed for JWT autthentication', ImportWarning)
+            warnings.warn('djangorestframework-jwt must be installed for JWT authentication',
+                          ImportWarning)
             raise
 
         return [JSONWebTokenAuthentication()]
