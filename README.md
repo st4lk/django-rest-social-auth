@@ -185,7 +185,7 @@ Quick start
 
 OAuth 2.0 workflow with rest-social-auth
 -----------------------------------------
-1. Front-end need to know follwoing params for each social provider:
+1. Front-end need to know following params for each social provider:
     - client_id  _# only in case of OAuth 2.0, id of registered application on social service provider_
     - redirect_uri  _# to this url social provider will redirect with code_
     - scope=your_scope  _# for example email_
