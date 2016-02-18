@@ -114,8 +114,9 @@ class BaseSocialAuthView(GenericAPIView):
         return Response(resp_data.data)
 
     def get_object(self):
+        auth_data = self.request.auth_data.copy()
         user = self.request.user
-        manual_redirect_uri = self.request.auth_data.pop('redirect_uri', None)
+        manual_redirect_uri = auth_data.pop('redirect_uri', None)
         manual_redirect_uri = self.get_redirect_uri(manual_redirect_uri)
         if manual_redirect_uri:
             self.request.backend.redirect_uri = manual_redirect_uri
