@@ -88,7 +88,7 @@ class BaseSocialAuthView(GenericAPIView):
         Compile the incoming data into a form fit for the serializer_in class.
         :return: Data for serializer in the form of a dictionary with 'provider' and 'code' keys.
         """
-        return self.request.data
+        return self.request.data.copy()
 
     @method_decorator(never_cache)
     def post(self, request, *args, **kwargs):
