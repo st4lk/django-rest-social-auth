@@ -1,6 +1,15 @@
 rest_social_auth release notes
 ==============================
 
+v0.4.2
+------
+- Remove django.conf.urls.patterns from code
+- Exclude modifing immutable data
+- refactor tests
+- minor typo fixes
+
+Issues: #11, #17, #14
+
 v0.4.1
 ------
 - Fix requirements.txt: allow django==1.9
