@@ -34,7 +34,7 @@ class LogoutSessionView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class BaseDeatilView(generics.RetrieveAPIView):
+class BaseDetailView(generics.RetrieveAPIView):
     permission_classes = IsAuthenticated,
     serializer_class = UserSerializer
     model = get_user_model()
@@ -43,13 +43,13 @@ class BaseDeatilView(generics.RetrieveAPIView):
         return self.request.user
 
 
-class UserSessionDetailView(BaseDeatilView):
+class UserSessionDetailView(BaseDetailView):
     authentication_classes = (SessionAuthentication, )
 
 
-class UserTokenDetailView(BaseDeatilView):
+class UserTokenDetailView(BaseDetailView):
     authentication_classes = (TokenAuthentication, )
 
 
-class UserJWTDetailView(JWTAuthMixin, BaseDeatilView):
+class UserJWTDetailView(JWTAuthMixin, BaseDetailView):
     pass
