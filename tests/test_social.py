@@ -6,18 +6,20 @@ except ImportError:
     # python 3
     from urllib.parse import parse_qsl, urlparse
 
+from mock import patch
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.test.utils import override_settings
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from httpretty import HTTPretty
 from social.utils import module_member, parse_qs
 from social.backends.utils import load_backends
 from social.tests.backends.test_facebook import FacebookOAuth2Test
 from social.tests.backends.test_twitter import TwitterOAuth1Test
 
-from rest_social_auth.views import load_strategy
+from rest_social_auth import views
 from .utils import modify_settings
 
 
@@ -72,11 +74,12 @@ jwt_modify_settings = dict(
     }
 )
 
+
 class RestSocialMixin(object):
     def setUp(self):
         HTTPretty.enable()
         Backend = module_member(self.backend_path)
-        self.strategy = load_strategy()
+        self.strategy = views.load_strategy()
         self.backend = Backend(self.strategy, redirect_uri=self.complete_url)
         self.name = self.backend.name.upper().replace('-', '_')
         self.complete_url = self.strategy.build_absolute_uri(
@@ -317,6 +320,13 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(resp.status_code, 200)
         url_params = dict(parse_qsl(urlparse(HTTPretty.latest_requests[0].path).query))
         self.assertEqual('http://manualdomain.com/', url_params['redirect_uri'])
+
+    @patch('rest_framework.views.APIView.permission_classes')
+    def test_login_social_session_model_permission(self, m_permission_classes):
+        setattr(m_permission_classes, '__get__', lambda *args, **kwargs: (DjangoModelPermissionsOrAnonReadOnly, ))
+        self._check_login_social_session(
+            reverse('login_social_session'),
+            {'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
 
 
 class TestSocialAuth2Error(APITestCase, BaseFacebookAPITestCase):

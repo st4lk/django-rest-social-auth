@@ -14,3 +14,4 @@ htmlcov/
 *.sqlite3
 *.backup
 .cache/
+.idea/

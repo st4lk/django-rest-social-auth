@@ -21,6 +21,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny
 from requests.exceptions import HTTPError
 
 from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
@@ -66,6 +67,7 @@ class BaseSocialAuthView(GenericAPIView):
     oauth1_serializer_class_in = OAuth1InputSerializer
     oauth2_serializer_class_in = OAuth2InputSerializer
     serializer_class = None
+    permission_classes = (AllowAny, )
 
     def oauth_v1(self):
         assert hasattr(self.request, 'backend'), 'Don\'t call this method before decorate_request'
