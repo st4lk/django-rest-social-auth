@@ -111,7 +111,7 @@ class BaseFacebookAPITestCase(RestSocialMixin, FacebookOAuth2Test):
         self.auth_handlers(start_url)
 
 
-class BaseTiwtterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
+class BaseTwitterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
 
     def do_rest_login(self):
         self.request_token_handler()
@@ -119,7 +119,7 @@ class BaseTiwtterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
         self.auth_handlers(start_url)
 
 
-class TestSocialAuth1(APITestCase, BaseTiwtterApiTestCase):
+class TestSocialAuth1(APITestCase, BaseTwitterApiTestCase):
 
     @modify_settings(**session_modify_settings)
     def test_login_social_oauth1_session(self):
