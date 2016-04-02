@@ -1,6 +1,13 @@
 rest_social_auth release notes
 ==============================
 
+v0.4.3
+------
+- Fix queryset assert error
+- minor typo fixes
+
+Issues: #20
+
 v0.4.2
 ------
 - Remove django.conf.urls.patterns from code

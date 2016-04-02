@@ -75,7 +75,7 @@ Quick start
 
 3. Make sure everything is up do date
 
-        python manage.py syncdb
+        python manage.py migrate
 
 
 4. Include rest social urls (choose at least one)
