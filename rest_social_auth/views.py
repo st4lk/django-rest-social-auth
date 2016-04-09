@@ -109,7 +109,6 @@ class BaseSocialAuthView(GenericAPIView):
         try:
             user = self.get_object()
         except (AuthException, HTTPError) as e:
-            l.exception(e)
             return self.respond_error(e)
         resp_data = self.get_serializer(instance=user)
         self.do_login(request.backend, user)
@@ -170,7 +169,23 @@ class BaseSocialAuthView(GenericAPIView):
             return self.kwargs.get('provider')
 
     def respond_error(self, error):
+        if isinstance(error, Exception):
+            self.log_exception(error)
+        else:
+            l.error(error)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def log_exception(self, error):
+        err_msg = error.args[0] if error.args else ''
+        if getattr(error, 'response', None) is not None:
+            try:
+                err_data = error.response.json()
+            except (ValueError, AttributeError):
+                l.error(u'%s; %s', error, err_msg)
+            else:
+                l.error(u'%s; %s; %s', error, err_msg, err_data)
+        else:
+            l.exception(u'%s; %s', error, err_msg)
 
 
 class SocialSessionAuthView(BaseSocialAuthView):
