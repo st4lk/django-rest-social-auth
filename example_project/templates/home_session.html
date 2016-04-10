@@ -63,7 +63,8 @@
           .config(function($authProvider) {
             $authProvider.facebook({
               url: "{% url 'login_social_session' provider='facebook' %}",
-              clientId: '295137440610143'
+              clientId: '295137440610143',
+              scope: ['email', 'user_birthday'],
             });
             $authProvider.google({
               url: "{% url 'login_social_session' provider='google-oauth2' %}",
