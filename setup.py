@@ -1,6 +1,6 @@
 import os
 import sys
-from setuptools import setup, find_packages
+from setuptools import setup
 from rest_social_auth import __author__, __version__
 
 
@@ -39,7 +39,7 @@ setup(
     description='Django rest framework resources for social auth',
     long_description=__read('README.rst') + '\n\n' + __read('RELEASE_NOTES.rst'),
     platforms=('Any'),
-    packages=find_packages(),
+    packages=['rest_social_auth'],
     install_requires=install_requires,
     keywords='django social auth rest login signin signup oauth'.split(),
     include_package_data=True,
