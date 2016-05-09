@@ -1,6 +1,13 @@
 rest_social_auth release notes
 ==============================
 
+v0.4.4
+------
+- Log exceptions from python-social-auth
+- Don't use find_packages from setuptools
+
+Issues: #22, #25
+
 v0.4.3
 ------
 - Fix queryset assert error
