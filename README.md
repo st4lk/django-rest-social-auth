@@ -217,15 +217,15 @@ OAuth 2.0 workflow with rest-social-auth
 
         code=AQBPBBTjbdnehj51
 
-    
+
 OAuth 1.0a workflow with rest-social-auth
 -----------------------------------------
 1. Front-end needs to make a POST request to your backend with the provider name ONLY:
-        
+
         POST /api/login/social/
-        
+
     with data (form data or json):
-    
+
         provider=twitter
 
     Or specify provider in url, in that case data will be empty:
@@ -444,3 +444,5 @@ Contributors
 - Grigorii Eremeev, [Budulianin](https://github.com/Budulianin)
 - shubham, [shubh3794](https://github.com/shubh3794)
 - Deshraj Yadav, [DESHRAJ](https://github.com/DESHRAJ)
+- georgewhewell, [georgewhewell](https://github.com/georgewhewell)
+- Ahmed Sa3d, [zee93](https://github.com/zee93)

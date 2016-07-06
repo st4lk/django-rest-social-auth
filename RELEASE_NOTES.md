@@ -1,6 +1,12 @@
 rest_social_auth release notes
 ==============================
 
+v0.5.0
+------
+- Handle HttpResponses returned by the pipeline
+
+Issues: #28
+
 v0.4.4
 ------
 - Log exceptions from python-social-auth
