@@ -16,6 +16,7 @@ from social.backends.oauth import BaseOAuth1
 from social.strategies.utils import get_strategy
 from social.utils import user_is_authenticated, parse_qs
 from social.apps.django_app.views import _do_login as social_auth_login
+from django.http import HttpResponse
 from social.exceptions import AuthException
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -23,7 +24,6 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny
 from requests.exceptions import HTTPError
-
 from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
     TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer)
 
@@ -110,6 +110,8 @@ class BaseSocialAuthView(GenericAPIView):
             user = self.get_object()
         except (AuthException, HTTPError) as e:
             return self.respond_error(e)
+        if isinstance(user, HttpResponse):  # An error happened and pipeline returned HttpResponse instead of user
+            return user
         resp_data = self.get_serializer(instance=user)
         self.do_login(request.backend, user)
         return Response(resp_data.data)
