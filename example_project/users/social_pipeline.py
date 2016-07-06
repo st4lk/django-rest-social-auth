@@ -1,4 +1,5 @@
 import hashlib
+from rest_framework.response import Response
 
 
 def auto_logout(*args, **kwargs):
@@ -27,3 +28,8 @@ def save_avatar(strategy, details, user=None, *args, **kwargs):
         if social_thumb and user.social_thumb != social_thumb:
             user.social_thumb = social_thumb
             strategy.storage.user.changed(user)
+
+
+def check_for_email(backend, uid, user=None, *args, **kwargs):
+    if not kwargs['details'].get('email'):
+        return Response({'error': "Email wasn't provided by facebook"}, status=400)

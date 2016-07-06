@@ -328,6 +328,17 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
             reverse('login_social_session'),
             {'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
 
+    def test_user_login_with_no_email(self):
+        user_data_body = json.loads(self.user_data_body)
+        user_data_body['email'] = ''
+        self.user_data_body = json.dumps(user_data_body)
+        self.do_rest_login()
+        resp = self.client.post(
+            reverse('login_social_token'), data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'}
+        )
+        self.assertEqual(resp.status_code, 400)
+        self.assertIn('error', resp.data)
+
 
 class TestSocialAuth2Error(APITestCase, BaseFacebookAPITestCase):
     access_token_status = 400
