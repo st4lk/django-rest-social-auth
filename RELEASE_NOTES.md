@@ -1,5 +1,11 @@
 rest_social_auth release notes
 ==============================
+master
+------
+- Add Django 1.10 support
+- Drop Django 1.7 support
+
+Issues: #33
 
 v0.5.0
 ------
