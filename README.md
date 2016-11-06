@@ -13,7 +13,7 @@ Requirements
 -----------
 
 - python (2.7, 3.4, 3.5)
-- django (1.7, 1.8, 1.9)
+- django (1.8, 1.9, 1.10)
 - djangorestframework (>= 3.1)
 - python-social-auth (>=0.2.9)
 - [optional] djangorestframework-jwt (>=1.7.2)
@@ -446,3 +446,4 @@ Contributors
 - Deshraj Yadav, [DESHRAJ](https://github.com/DESHRAJ)
 - georgewhewell, [georgewhewell](https://github.com/georgewhewell)
 - Ahmed Sa3d, [zee93](https://github.com/zee93)
+- Olle Vidner, [ovidner](https://github.com/ovidner)

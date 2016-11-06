@@ -4,14 +4,15 @@ python:
   - 2.7
 
 env:
-  - TOXENV=py34-django17
   - TOXENV=py34-django18
   - TOXENV=py34-django19
+  - TOXENV=py34-django110
   - TOXENV=py35-django18
   - TOXENV=py35-django19
-  - TOXENV=py27-django17
+  - TOXENV=py35-django110
   - TOXENV=py27-django18
   - TOXENV=py27-django19
+  - TOXENV=py27-django110
 
 branches:
     only:
@@ -23,7 +24,7 @@ install: pip install --quiet tox
 script: tox
 
 after_script:
-    - if [ $TOXENV == "py27-django19" ]; then
+    - if [ $TOXENV == "py27-django110" ]; then
         pip install --quiet coveralls;
         coveralls;
       fi
