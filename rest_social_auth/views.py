@@ -5,27 +5,30 @@ try:
 except ImportError:
     # python 3
     from urllib.parse import urlparse
+
 from django.conf import settings
-from django.views.decorators.cache import never_cache
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
 from django.utils.encoding import iri_to_uri
 from django.utils.six.moves.urllib.parse import urljoin
-from social.apps.django_app.utils import psa, STORAGE
-from social.backends.oauth import BaseOAuth1
-from social.strategies.utils import get_strategy
-from social.utils import user_is_authenticated, parse_qs
-from social.apps.django_app.views import _do_login as social_auth_login
-from django.http import HttpResponse
-from social.exceptions import AuthException
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from social_django.utils import psa, STORAGE
+from social_django.views import _do_login as social_auth_login
+from social_core.backends.oauth import BaseOAuth1
+from social_core.utils import get_strategy, parse_qs, user_is_authenticated
+from social_core.exceptions import AuthException
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny
 from requests.exceptions import HTTPError
-from .serializers import (OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
-    TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer)
+
+from .serializers import (
+    OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
+    TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer
+)
 
 
 l = logging.getLogger(__name__)
@@ -160,8 +163,8 @@ class BaseSocialAuthView(GenericAPIView):
 
     def get_redirect_uri(self, manual_redirect_uri):
         if not manual_redirect_uri:
-            manual_redirect_uri = getattr(settings,
-                'REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI', None)
+            manual_redirect_uri = getattr(
+                settings, 'REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI', None)
         return manual_redirect_uri
 
     def get_provider_name(self, input_data):

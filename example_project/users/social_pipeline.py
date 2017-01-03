@@ -15,16 +15,17 @@ def save_avatar(strategy, details, user=None, *args, **kwargs):
         social_thumb = None
         if 'facebook' in backend_name:
             if 'id' in response:
-                social_thumb = ("http://graph.facebook.com/{0}/picture?"
-                    "type=normal").format(response['id'])
+                social_thumb = (
+                    'http://graph.facebook.com/{0}/picture?type=normal'
+                ).format(response['id'])
         elif 'twitter' in backend_name and response.get('profile_image_url'):
             social_thumb = response['profile_image_url']
         elif 'googleoauth2' in backend_name and response.get('image', {}).get('url'):
             social_thumb = response['image']['url'].split('?')[0]
         else:
-            social_thumb = "http://www.gravatar.com/avatar/"
+            social_thumb = 'http://www.gravatar.com/avatar/'
             social_thumb += hashlib.md5(user.email.lower().encode('utf8')).hexdigest()
-            social_thumb += "?size=100"
+            social_thumb += '?size=100'
         if social_thumb and user.social_thumb != social_thumb:
             user.social_thumb = social_thumb
             strategy.storage.user.changed(user)

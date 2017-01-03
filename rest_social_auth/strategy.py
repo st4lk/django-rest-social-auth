@@ -1,4 +1,4 @@
-from social.strategies.django_strategy import DjangoStrategy
+from social_django.strategy import DjangoStrategy
 
 
 class DRFStrategy(DjangoStrategy):
