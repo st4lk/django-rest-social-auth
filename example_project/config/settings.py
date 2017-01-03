@@ -130,6 +130,15 @@ AUTH_USER_MODEL = 'users.CustomUser'
 SOCIAL_AUTH_FACEBOOK_KEY = '295137440610143'
 SOCIAL_AUTH_FACEBOOK_SECRET = '4b4aef291799a7b9aaf016689339e97f'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': ','.join([
+        # public_profile
+        'id', 'cover', 'name', 'first_name', 'last_name', 'age_range', 'link',
+        'gender', 'locale', 'picture', 'timezone', 'updated_time', 'verified',
+        # extra fields
+        'email',
+    ]),
+}
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'JaiLLvY1BK97TSy5_xcGWDhp'
