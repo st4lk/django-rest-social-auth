@@ -1,4 +1,4 @@
 django>=1.6,<1.11
 djangorestframework<4.0
-social-auth-core==0.2.1
-social-auth-app-django==0.1.0
+social-auth-core<1.0
+social-auth-app-django<1.0

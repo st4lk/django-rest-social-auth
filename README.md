@@ -14,8 +14,9 @@ Requirements
 
 - python (2.7, 3.4, 3.5)
 - django (1.8, 1.9, 1.10)
-- djangorestframework (>= 3.1)
-- python-social-auth (>=0.2.9)
+- djangorestframework (>=3.1, <4.0)
+- social-auth-core (>=0.2.1, <1.0)
+- social-auth-app-django (>=0.1.0, <1.0)
 - [optional] djangorestframework-jwt (>=1.7.2)
 
 Release notes
