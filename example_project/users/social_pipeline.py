@@ -33,4 +33,4 @@ def save_avatar(strategy, details, user=None, *args, **kwargs):
 
 def check_for_email(backend, uid, user=None, *args, **kwargs):
     if not kwargs['details'].get('email'):
-        return Response({'error': "Email wasn't provided by facebook"}, status=400)
+        return Response({'error': "Email wasn't provided by oauth provider"}, status=400)
