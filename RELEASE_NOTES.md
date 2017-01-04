@@ -1,11 +1,14 @@
 rest_social_auth release notes
 ==============================
-master
+
+v1.0.0
 ------
 - Add Django 1.10 support
 - Drop Django 1.7 support
+- Add social-auth-core, social-auth-app-django dependencies
+- Drop python-social-auth dependency
 
-Issues: #33
+Issues: #33, #35, #37, #38
 
 v0.5.0
 ------
