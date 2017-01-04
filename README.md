@@ -54,7 +54,7 @@ Quick start
             ...
             'rest_framework',
             'rest_framework.authtoken',  # only if you use token authentication
-            'social.apps.django_app.default',  # python social auth
+            'social_django',  # django social auth
             'rest_social_auth',  # this package
         )
 
@@ -67,7 +67,7 @@ Quick start
 
 
         AUTHENTICATION_BACKENDS = (
-            'social.backends.facebook.FacebookOAuth2',
+            'social_core.backends.facebook.FacebookOAuth2',
             # and maybe some others ...
             'django.contrib.auth.backends.ModelBackend',
         )

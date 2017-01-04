@@ -1,6 +1,10 @@
 rest_social_auth release notes
 ==============================
 
+master
+------
+- Update docs
+
 v1.0.0
 ------
 - Add Django 1.10 support
