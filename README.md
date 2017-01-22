@@ -58,7 +58,7 @@ Quick start
             'rest_social_auth',  # this package
         )
 
-    python-social-auth settings, look [documentation](http://psa.matiasaguirre.net/docs/configuration/django.html) for more details
+    social auth settings, look [documentation](http://python-social-auth.readthedocs.io/en/latest/configuration/django.html) for more details
 
         SOCIAL_AUTH_FACEBOOK_KEY = 'your app client id'
         SOCIAL_AUTH_FACEBOOK_SECRET = 'your app client secret'
@@ -276,11 +276,11 @@ List of oauth providers
 
 OAuth 1.0 and OAuth 2.0 providers are supported.
 
-Look [python-social-auth](https://github.com/omab/python-social-auth#user-content-auth-providers) for full list.
+Look [python-social-auth](http://python-social-auth.readthedocs.io/en/latest/backends/index.html#social-backends) for full list.
 Name of provider is taken from corresponding `backend.name` property of
 particular backed class in python-social-auth.
 
-For example for [facebook backend](https://github.com/omab/python-social-auth/blob/master/social/backends/facebook.py#L19)
+For example for [facebook backend](https://github.com/python-social-auth/social-core/blob/master/social_core/backends/facebook.py#L22)
 we see:
 
     class FacebookOAuth2(BaseOAuth2):
@@ -367,7 +367,7 @@ Customization
 -------------
 
 First of all, customization provided by python-social-auth is also avaliable.
-For example, use nice mechanism of [pipeline](http://psa.matiasaguirre.net/docs/pipeline.html) to do any action you need during login/signin.
+For example, use nice mechanism of [pipeline](http://python-social-auth.readthedocs.io/en/latest/pipeline.html) to do any action you need during login/signin.
 
 Second, you can override any method from current package.
 Specify serializer for each view by subclassing the view.
