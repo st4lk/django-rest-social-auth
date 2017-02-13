@@ -361,6 +361,11 @@ Settings
     I.e. if this settings is defined, other will be ignored.
     But `redirect_uri` param from request has higher priority than any setting.
 
+- `REST_SOCIAL_LOG_AUTH_EXCEPTIONS`
+
+    Default: `True`
+
+    When `False` will not log social auth authentication exceptions.
 
 
 Customization
