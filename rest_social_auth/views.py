@@ -36,6 +36,7 @@ l = logging.getLogger(__name__)
 
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
 DOMAIN_FROM_ORIGIN = getattr(settings, 'REST_SOCIAL_DOMAIN_FROM_ORIGIN', True)
+LOG_AUTH_EXCEPTIONS = getattr(settings, 'REST_SOCIAL_LOG_AUTH_EXCEPTIONS', True)
 
 
 def load_strategy(request=None):
@@ -175,7 +176,8 @@ class BaseSocialAuthView(GenericAPIView):
 
     def respond_error(self, error):
         if isinstance(error, Exception):
-            self.log_exception(error)
+            if not isinstance(error, AuthException) or LOG_AUTH_EXCEPTIONS:
+                self.log_exception(error)
         else:
             l.error(error)
         return Response(status=status.HTTP_400_BAD_REQUEST)
