@@ -3,7 +3,14 @@ rest_social_auth release notes
 
 master
 ------
+
+
+v1.1.0
+------
 - Update docs
+- Add new setting `REST_SOCIAL_LOG_AUTH_EXCEPTIONS`
+
+Issues #42
 
 v1.0.0
 ------
