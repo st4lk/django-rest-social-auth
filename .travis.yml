@@ -7,12 +7,16 @@ env:
   - TOXENV=py34-django18
   - TOXENV=py34-django19
   - TOXENV=py34-django110
+  - TOXENV=py34-django111
   - TOXENV=py35-django18
   - TOXENV=py35-django19
   - TOXENV=py35-django110
+  - TOXENV=py35-django111
+  - TOXENV=py36-django111
   - TOXENV=py27-django18
   - TOXENV=py27-django19
   - TOXENV=py27-django110
+  - TOXENV=py27-django111
 
 install: pip install --quiet tox
 
@@ -31,3 +35,4 @@ addons:
       - deadsnakes
     packages:
       - python3.5
+      - python3.6
