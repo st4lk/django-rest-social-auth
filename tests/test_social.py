@@ -7,7 +7,10 @@ except ImportError:
     from urllib.parse import parse_qsl, urlparse
 
 from mock import patch
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse  # Django < 2.x
 from django.contrib.auth import get_user_model
 from django.test.utils import override_settings
 from rest_framework.test import APITestCase

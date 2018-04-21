@@ -1,3 +1,4 @@
+import django
 from django.conf.urls import include, url
 from django.contrib import admin
 
@@ -17,5 +18,8 @@ urlpatterns = [
     url(r'^api/user/session/', views.UserSessionDetailView.as_view(), name="current_user_session"),
     url(r'^api/user/token/', views.UserTokenDetailView.as_view(), name="current_user_token"),
     url(r'^api/user/jwt/', views.UserJWTDetailView.as_view(), name="current_user_jwt"),
-    url(r'^admin/', include(admin.site.urls)),
 ]
+if django.VERSION >= (2, 0, 0):
+    urlpatterns.append(url(r'^admin/', admin.site.urls))
+else:
+    urlpatterns.append(url(r'^admin/', include(admin.site.urls)))

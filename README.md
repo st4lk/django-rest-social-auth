@@ -13,10 +13,10 @@ Requirements
 -----------
 
 - python (2.7, 3.4, 3.5, 3.6)
-- django (1.8, 1.9, 1.10, 1.10)
+- django (1.10, 1.11, 2.0)
 - djangorestframework (>=3.1, <4.0)
-- social-auth-core (>=0.2.1, <2.0)
-- social-auth-app-django (>=0.1.0, <2.0)
+- social-auth-core (>=1.7.0, <2.0)
+- social-auth-app-django (>=2.1, <3.0)
 - [optional] djangorestframework-jwt (>=1.7.2)
 
 Release notes
@@ -424,7 +424,7 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
 
 - create database (sqlite3)
 
-        python manage.py syncdb
+        python manage.py migrate
 
 - run development server
 

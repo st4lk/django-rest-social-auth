@@ -16,3 +16,5 @@ htmlcov/
 .cache/
 .idea/
 .DS_Store
+.pytest_cache/
+settings_local.py

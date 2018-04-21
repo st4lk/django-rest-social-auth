@@ -4,6 +4,13 @@ rest_social_auth release notes
 master
 ------
 
+v1.3.0
+------
+- Add Django 2.0 support
+- Drop Django 1.8, 1.9 support
+
+Issues: #58
+
 v1.2.0
 ------
 - Add Python 3.6 and Django 1.11 support
