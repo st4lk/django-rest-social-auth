@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_social_auth.serializers import UserSerializer
-from rest_social_auth.views import JWTAuthMixin
+from rest_social_auth.views import JWTAuthMixin, KnoxAuthMixin
 
 
 class HomeSessionView(TemplateView):
@@ -25,6 +25,10 @@ class HomeTokenView(TemplateView):
 
 class HomeJWTView(TemplateView):
     template_name = 'home_jwt.html'
+
+
+class HomeKnoxView(TemplateView):
+    template_name = 'home_knox.html'
 
 
 class LogoutSessionView(APIView):
@@ -52,4 +56,8 @@ class UserTokenDetailView(BaseDetailView):
 
 
 class UserJWTDetailView(JWTAuthMixin, BaseDetailView):
+    pass
+
+
+class UserKnoxDetailView(KnoxAuthMixin, BaseDetailView):
     pass

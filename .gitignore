@@ -18,3 +18,5 @@ htmlcov/
 .DS_Store
 .pytest_cache/
 settings_local.py
+.direnv/
+.envrc

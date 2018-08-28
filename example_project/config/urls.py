@@ -9,15 +9,18 @@ urlpatterns = [
     url(r'^session/$', views.HomeSessionView.as_view(), name='home_session'),
     url(r'^token/$', views.HomeTokenView.as_view(), name='home_token'),
     url(r'^jwt/$', views.HomeJWTView.as_view(), name='home_jwt'),
+    url(r'^knox/$', views.HomeKnoxView.as_view(), name='home_knox'),
 
     url(r'^api/login/', include('rest_social_auth.urls_session')),
     url(r'^api/login/', include('rest_social_auth.urls_token')),
     url(r'^api/login/', include('rest_social_auth.urls_jwt')),
+    url(r'^api/login/', include('rest_social_auth.urls_knox')),
 
     url(r'^api/logout/session/$', views.LogoutSessionView.as_view(), name='logout_session'),
     url(r'^api/user/session/', views.UserSessionDetailView.as_view(), name="current_user_session"),
     url(r'^api/user/token/', views.UserTokenDetailView.as_view(), name="current_user_token"),
     url(r'^api/user/jwt/', views.UserJWTDetailView.as_view(), name="current_user_jwt"),
+    url(r'^api/user/knox/', views.UserKnoxDetailView.as_view(), name="current_user_knox"),
 ]
 if django.VERSION >= (2, 0, 0):
     urlpatterns.append(url(r'^admin/', admin.site.urls))

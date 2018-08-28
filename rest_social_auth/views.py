@@ -1,5 +1,6 @@
 import logging
 import warnings
+
 try:
     from urlparse import urlparse
 except ImportError:
@@ -27,7 +28,8 @@ from requests.exceptions import HTTPError
 
 from .serializers import (
     OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
-    TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer
+    TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer,
+    KnoxSerializer, UserKnoxSerializer
 )
 
 
@@ -234,3 +236,22 @@ class SocialJWTOnlyAuthView(JWTAuthMixin, BaseSocialAuthView):
 
 class SocialJWTUserAuthView(JWTAuthMixin, BaseSocialAuthView):
     serializer_class = UserJWTSerializer
+
+
+class KnoxAuthMixin(object):
+    def get_authenticators(self):
+        try:
+            from knox.auth import TokenAuthentication
+        except ImportError:
+            warnings.warn('django-rest-knox must be installed for Knox authentication', ImportWarning)
+            raise
+
+        return [TokenAuthentication()]
+
+
+class SocialKnoxOnlyAuthView(KnoxAuthMixin, BaseSocialAuthView):
+    serializer_class = KnoxSerializer
+
+
+class SocialKnoxUserAuthView(KnoxAuthMixin, BaseSocialAuthView):
+    serializer_class = UserKnoxSerializer
