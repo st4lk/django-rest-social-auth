@@ -82,7 +82,7 @@ class KnoxSerializer(TokenSerializer):
             raise
 
         token = AuthToken.objects.create(obj)
-        return token.digest
+        return token
 
 
 class UserKnoxSerializer(KnoxSerializer, UserSerializer):

@@ -3,8 +3,8 @@
 
 {% block content %}
     <h3>Note! <a href="https://github.com/James1345/django-rest-knox/">django-rest-knox</a> must be installed for this method</h3>
-    <div ng-app="JWTApp">
-        <div ng-controller="LoginJWTCtrl as ctrl">
+    <div ng-app="KnoxApp">
+        <div ng-controller="LoginKnoxCtrl as ctrl">
             <div>
                 <h4>knox.auth.TokenAuthentication</h4>
                 <div><button ng-click="authenticate('facebook')">Login facebook (OAuth 2.0)</button></div>
@@ -36,7 +36,7 @@
                 </div>
                 <h2>Raw knox payload</h2>
                 <div>
-                    <pre>{% verbatim %}{{ ctrl.jwtPayload | json }}{% endverbatim %}</pre>
+                    <pre>{% verbatim %}{{ ctrl.knoxPayload | json }}{% endverbatim %}</pre>
                 </div>
             </div>
         </div>
@@ -68,43 +68,43 @@
             self.user.thumb = source.social_thumb;
         };
 
-        angular.module('JWTApp', ['satellizer'])
+        angular.module('KnoxApp', ['satellizer'])
           .config(function($authProvider) {
             $authProvider.facebook({
-              url: "{% url 'login_social_jwt_user' provider='facebook' %}",
+              url: "{% url 'login_social_knox_user' provider='facebook' %}",
               clientId: '295137440610143'
             });
             $authProvider.google({
-              url: "{% url 'login_social_jwt_user' provider='google-oauth2' %}",
+              url: "{% url 'login_social_knox_user' provider='google-oauth2' %}",
               clientId: '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com',
               redirectUri: window.location.origin + '/'
             });
             $authProvider.twitter({
-              url: "{% url 'login_social_jwt_user' provider='twitter' %}",
+              url: "{% url 'login_social_knox_user' provider='twitter' %}",
             });
-            $authProvider.authToken = 'JWT';
-            $authProvider.tokenPrefix = 'satellizer_jwt';  // to not collide with regular token auth
-          }).controller('LoginJWTCtrl', function($scope, $auth, $http) {
+            $authProvider.authToken = 'Knox';
+            $authProvider.tokenPrefix = 'satellizer_knox';  // to not collide with regular token auth
+          }).controller('LoginKnoxCtrl', function($scope, $auth, $http) {
             self = this;
 
             self.user = {};
             set_user();
             if ($auth.getToken()){
-                $http.get('{% url "current_user_jwt" %}').then(function(response){
+                $http.get('{% url "current_user_knox" %}').then(function(response){
                     set_user(response);
                 });
             }
 
-            self.jwtPayload = $auth.getPayload();
+            self.knoxPayload = $auth.getPayload();
 
             $scope.authenticate = function(provider) {
                 $auth.authenticate(provider).then(function(response){
                     $auth.setToken(response.data.token);
                     set_user(response);
-                    self.jwtPayload = $auth.getPayload();
+                    self.knoxPayload = $auth.getPayload();
                 }).catch(function(data) {
-                    var err_msg = "Something went wrong, maybe you haven't installed 'djangorestframework-jwt'?";
-                    console.log(data)
+                    var err_msg = "Something went wrong, maybe you haven't installed 'django-rest-knox'?";
+                    console.log(data);
                     console.log(err_msg);
                     alert(err_msg);
                 });
@@ -113,7 +113,7 @@
             $scope.logout = function(){
                 $auth.removeToken();
                 set_user();
-                self.jwtPayload = $auth.getPayload();
+                self.knoxPayload = $auth.getPayload();
             };
         });
 
