@@ -57,6 +57,7 @@ Quick start
             'rest_framework.authtoken',  # only if you use token authentication
             'social_django',  # django social auth
             'rest_social_auth',  # this package
+            'knox',  # Only if you use django-rest-knox
         )
 
     social auth settings, look [documentation](http://python-social-auth.readthedocs.io/en/latest/configuration/django.html) for more details
