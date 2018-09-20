@@ -20,3 +20,4 @@ htmlcov/
 settings_local.py
 .direnv/
 .envrc
+.mypy_cache/

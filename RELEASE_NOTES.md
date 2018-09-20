@@ -4,6 +4,10 @@ rest_social_auth release notes
 master
 ------
 
+v1.4.0
+------
+- Add django-rest-knox support
+
 v1.3.1
 ------
 - Fix Django 2.0 support
