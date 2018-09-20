@@ -71,3 +71,19 @@ class JWTSerializer(TokenSerializer):
 
 class UserJWTSerializer(JWTSerializer, UserSerializer):
     pass
+
+
+class KnoxSerializer(TokenSerializer):
+    def get_token(self, obj):
+        try:
+            from knox.models import AuthToken
+        except ImportError:
+            warnings.warn('django-rest-knox must be installed for Knox authentication', ImportWarning)
+            raise
+
+        token = AuthToken.objects.create(obj)
+        return token
+
+
+class UserKnoxSerializer(KnoxSerializer, UserSerializer):
+    pass

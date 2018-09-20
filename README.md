@@ -18,6 +18,7 @@ Requirements
 - social-auth-core (>=1.7.0, <2.0)
 - social-auth-app-django (>=2.1, <3.0)
 - [optional] djangorestframework-jwt (>=1.7.2)
+- [optional] django-rest-knox (>=3.2.0)
 
 Release notes
 -------------
@@ -56,6 +57,7 @@ Quick start
             'rest_framework.authtoken',  # only if you use token authentication
             'social_django',  # django social auth
             'rest_social_auth',  # this package
+            'knox',  # Only if you use django-rest-knox
         )
 
     social auth settings, look [documentation](http://python-social-auth.readthedocs.io/en/latest/configuration/django.html) for more details
@@ -92,6 +94,10 @@ Quick start
     4.3 [jwt authentication](http://getblimp.github.io/django-rest-framework-jwt/)
 
         url(r'^api/login/', include('rest_social_auth.urls_jwt')),
+
+    4.4 [knox authentication](https://github.com/James1345/django-rest-knox/)
+
+        url(r'^api/login/', include('rest_social_auth.urls_knox')),
 
 5. You are ready to login users
 
@@ -163,6 +169,16 @@ Quick start
         See [JWT.io](http://jwt.io/) for details.
 
         To use it, [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt) must be installed.
+
+    5.4 knox authentication
+
+    - POST /api/login/social/knox/
+    - POST /api/login/social/knox_user/
+
+        Similar to jwt/token authentication, but token is a Django Rest Knox Token.
+
+        To use it, [django-rest-knox](https://github.com/James1345/django-rest-knox/) must be installed.
+
 
     User model is taken from [`settings.AUTH_USER_MODEL`](https://docs.djangoproject.com/en/dev/topics/auth/customizing/#substituting-a-custom-user-model).
 
@@ -455,3 +471,4 @@ Contributors
 - Olle Vidner, [ovidner](https://github.com/ovidner)
 - MounirMesselmeni, [MounirMesselmeni](https://github.com/MounirMesselmeni)
 - Tuomas Virtanen, [katajakasa](https://github.com/katajakasa)
+- Jeremy Storer, [storerjeremy](https://github.com/storerjeremy)
