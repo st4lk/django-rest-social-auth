@@ -447,12 +447,8 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
         python manage.py runserver
 
 Example project already contains facebook, google and twitter app ids and secrets.
-These apps are configured to work only with restsocialexample.com domain (localhost is not supported by some providers).
-So, to play with it, define in your [hosts](http://en.wikipedia.org/wiki/Hosts_\(file\)) file this domain as localhost:
-
-    127.0.0.1       restsocialexample.com
-
-And visit http://restsocialexample.com:8000/
+These apps are configured to work only with http://127.0.0.1:8000/ domain. Google and Facebook providers support http://localhost:8000/ as well. But Twitter only support 127.0.0.1.
+So, to play with it, visit http://127.0.0.1:8000/
 
 Example project uses [satellizer](https://github.com/sahat/satellizer) angularjs module.
 
