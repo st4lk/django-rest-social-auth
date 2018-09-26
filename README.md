@@ -30,12 +30,12 @@ Motivation
 ----------
 
 To have a resource, that will do very simple thing:
-take the oauth code from social provider (for example facebook)
+take the [oauth code](https://tools.ietf.org/html/rfc6749#section-1.3.1) from social provider (for example facebook)
 and return the authenticated user.
 That's it.
 
 I can't find such util for [django rest framework](http://www.django-rest-framework.org/).
-There are packages (for example [django-rest-auth](https://github.com/Tivix/django-rest-auth)), that take access_token, not the code.
+There are packages (for example [django-rest-auth](https://github.com/Tivix/django-rest-auth)), that take access_token, not the [code](https://tools.ietf.org/html/rfc6749#section-1.3.1).
 Also, i've used to work with awesome library [python-social-auth](https://github.com/omab/python-social-auth),
 so it will be nice to use it again (now it is split into [social-core](https://github.com/python-social-auth/social-core) and [social-app-django](https://github.com/python-social-auth/social-app-django)). In fact, most of the work is done by this package.
 Current util brings a little help to integrate django-rest-framework and python-social-auth.
