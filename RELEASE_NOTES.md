@@ -4,6 +4,16 @@ rest_social_auth release notes
 master
 ------
 
+v1.5.0
+------
+- Update minimal required version of social-auth-app-django to 3.1.0
+- Minor updates in readme
+- Add Django 2.1 support
+- Drop Django 1.10 support
+- Drop Python 3.4 support
+
+Issues: #70
+
 v1.4.0
 ------
 - Add django-rest-knox support

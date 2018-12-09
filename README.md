@@ -12,11 +12,11 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (2.7, 3.4, 3.5, 3.6)
-- django (1.10, 1.11, 2.0)
+- python (2.7, 3.5, 3.6)
+- django (1.11, 2.0, 2.1)
 - djangorestframework (>=3.1, <4.0)
 - social-auth-core (>=1.7.0, <2.0)
-- social-auth-app-django (>=2.1, <3.0)
+- social-auth-app-django (>=3.1, <4.0)
 - [optional] djangorestframework-jwt (>=1.7.2)
 - [optional] django-rest-knox (>=3.2.0)
 
@@ -426,25 +426,36 @@ Example
 
 There is an [example project](https://github.com/st4lk/django-rest-social-auth/tree/master/example_project).
 
-- make sure you have rest-social-auth installed
-
-        pip install rest-social-auth
-
 - clone repo
 
-        git clone https://github.com/st4lk/django-rest-social-auth.git
+    ```bash
+    git clone https://github.com/st4lk/django-rest-social-auth.git
+    ```
 
 - step in example_project/
 
-        cd django-rest-social-auth/example_project
+    ```bash
+    cd django-rest-social-auth/example_project
+    ```
 
 - create database (sqlite3)
 
-        python manage.py migrate
+    ```bash
+    PYTHONPATH='../' python manage.py migrate
+    ```
+
+    Note:
+    <sub><sup>You can avoid `PYTHONPATH='../'` if you install the package locally:</sup></sub>
+    <sub><sup>`pip install rest-social-auth` or `python setup.py install`.</sup></sub>
+    <sub><sup>
+    But to my mind the PYTHONPATH prefix is more useful. No need to install anything and code of rest-social-auth will be always up-to-date, even if you change source code.
+    </sup></sub>
 
 - run development server
 
-        python manage.py runserver
+    ```bash
+    PYTHONPATH='../' python manage.py runserver
+    ```
 
 Example project already contains facebook, google and twitter app ids and secrets.
 These apps are configured to work only with http://127.0.0.1:8000/ domain. Google and Facebook providers support http://localhost:8000/ as well. But Twitter only support 127.0.0.1.
