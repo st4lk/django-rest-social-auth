@@ -11,19 +11,23 @@ def __read(fname):
         return ''
 
 
+if sys.argv[-1] == 'build':
+    os.system('python setup.py sdist')
+    os.system('python setup.py bdist_wheel')
+
+
 if sys.argv[-1] == 'publish':
     # TODO: Need python 3.4.6+, 3.5.3+, Python 3.6+ here, add a check
     # https://packaging.python.org/guides/migrating-to-pypi-org/#uploading
-    os.system('pandoc --from=markdown --to=rst --output=README.rst README.md')
-    os.system('pandoc --from=markdown --to=rst --output=RELEASE_NOTES.rst RELEASE_NOTES.md')
-    os.system('python setup.py sdist upload')
-    os.system('python setup.py bdist_wheel upload')
+    dists_to_upload = [
+        'dist/rest_social_auth-{0}.tar.gz'.format(__version__),
+        'dist/rest_social_auth-{0}-py2.py3-none-any.whl'.format(__version__),
+    ]
+    for dist in dists_to_upload:
+        print('Uploading {0}'.format(dist))
+        os.system('twine upload -r pypi {0}'.format(dist))
     sys.exit()
 
-if sys.argv[-1] == 'generate_rst':
-    os.system('pandoc --from=markdown --to=rst --output=README.rst README.md')
-    os.system('pandoc --from=markdown --to=rst --output=RELEASE_NOTES.rst RELEASE_NOTES.md')
-    sys.exit()
 
 if sys.argv[-1] == 'tag':
     print("Tagging the version on github:")
@@ -40,7 +44,8 @@ setup(
     author_email='alexevseev@gmail.com',
     version=__version__,
     description='Django rest framework resources for social auth',
-    long_description=__read('README.rst') + '\n\n' + __read('RELEASE_NOTES.rst'),
+    long_description=__read('README.md') + '\n\n' + __read('RELEASE_NOTES.md'),
+    long_description_content_type='text/markdown; charset=UTF-8',
     platforms=('Any'),
     packages=['rest_social_auth'],
     install_requires=install_requires,

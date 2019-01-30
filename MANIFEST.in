@@ -1,4 +1,3 @@
 include README.md
 include RELEASE_NOTES.md
-include README.rst
 include requirements.txt
