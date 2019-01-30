@@ -4,6 +4,12 @@ rest_social_auth release notes
 master
 ------
 
+v2.0.0
+------
+- Update social-auth-core dependency to at least 3.0.0
+
+Issues: #73
+
 v1.5.0
 ------
 - Update minimal required version of social-auth-app-django to 3.1.0
