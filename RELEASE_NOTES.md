@@ -4,6 +4,10 @@ rest_social_auth release notes
 master
 ------
 
+v2.0.2
+------
+- Make social-auth-core >=3.0 as mandatory dependency 
+
 v2.0.1
 ------
 - Minor update of pypi deployment process
