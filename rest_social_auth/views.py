@@ -29,7 +29,8 @@ from requests.exceptions import HTTPError
 from .serializers import (
     OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
     TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer,
-    KnoxSerializer, UserKnoxSerializer
+    KnoxSerializer, UserKnoxSerializer, SimpleJWTObtainSlidingSerializer,
+    SimpleJWTObtainPairSerializer
 )
 
 
@@ -255,3 +256,11 @@ class SocialKnoxOnlyAuthView(KnoxAuthMixin, BaseSocialAuthView):
 
 class SocialKnoxUserAuthView(KnoxAuthMixin, BaseSocialAuthView):
     serializer_class = UserKnoxSerializer
+
+
+class SocialSimpleJWTPairOnlyAuthView(BaseSocialAuthView):
+    serializer_class = SimpleJWTObtainPairSerializer
+
+
+class SocialSimpleJWTSlidingOnlyAuthView(BaseSocialAuthView):
+    serializer_class = SimpleJWTObtainSlidingSerializer

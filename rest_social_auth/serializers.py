@@ -87,3 +87,52 @@ class KnoxSerializer(TokenSerializer):
 
 class UserKnoxSerializer(KnoxSerializer, UserSerializer):
     pass
+
+
+class SimpleJWTBaseSerializer(serializers.Serializer):
+    def __init__(self, *args, **kwargs):
+        super(SimpleJWTBaseSerializer, self).__init__(*args, **kwargs)
+        if self.instance is not None:
+            self.token = self.get_token(self.instance)
+
+    @classmethod
+    def get_token_instance(cls, user):
+        raise NotImplementedError('Must implement `get_token` method for `SimpleJWTBaseSerializer` subclasses')
+
+
+class SimpleJWTObtainPairSerializer(SimpleJWTBaseSerializer):
+    access = serializers.SerializerMethodField()
+    refresh = serializers.SerializerMethodField()
+
+    @classmethod
+    def get_token_instance(cls, user):
+        try:
+            from rest_framework_simplejwt.tokens import RefreshToken
+        except ImportError:
+            warnings.warn('djangorestframework_simplejwt must be installed for JWT authentication',
+                          ImportWarning)
+            raise
+        return RefreshToken.for_user(user)
+
+    def get_access(self, _obj):
+        return str(self.token.access_token)
+
+    def get_refresh(self, _obj):
+        return str(self.token)
+
+
+class SimpleJWTObtainSlidingSerializer(SimpleJWTBaseSerializer):
+    token = serializers.SerializerMethodField()
+
+    @classmethod
+    def get_token_instance(cls, user):
+        try:
+            from rest_framework_simplejwt.tokens import SlidingToken
+        except ImportError:
+            warnings.warn('djangorestframework_simplejwt must be installed for JWT authentication',
+                          ImportWarning)
+            raise
+        return SlidingToken.for_user(user)
+
+    def get_token(self, _obj):
+        return str(self.token)
