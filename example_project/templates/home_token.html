@@ -67,11 +67,11 @@
           .config(function($authProvider) {
             $authProvider.facebook({
               url: "{% url 'login_social_token_user' provider='facebook' %}",
-              clientId: '295137440610143'
+              clientId: '{{ facebook_key }}'
             });
             $authProvider.google({
               url: "{% url 'login_social_token_user' provider='google-oauth2' %}",
-              clientId: '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com',
+              clientId: '{{ googleoauth2_key }}',
               redirectUri: window.location.origin + '/'
             });
             $authProvider.twitter({
