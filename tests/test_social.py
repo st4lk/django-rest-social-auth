@@ -1,5 +1,4 @@
 import json
-import logging
 try:
     from urlparse import parse_qsl, urlparse
 except ImportError:
@@ -12,6 +11,7 @@ try:
 except ImportError:
     from django.core.urlresolvers import reverse  # Django < 2.x
 from django.contrib.auth import get_user_model
+from django.test import modify_settings
 from django.test.utils import override_settings
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
@@ -23,10 +23,6 @@ from social_core.tests.backends.test_facebook import FacebookOAuth2Test
 from social_core.tests.backends.test_twitter import TwitterOAuth1Test
 
 from rest_social_auth import views
-from .utils import modify_settings
-
-
-l = logging.getLogger(__name__)
 
 
 # don't run third party tests
