@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^api/user/session/', views.UserSessionDetailView.as_view(), name="current_user_session"),
     url(r'^api/user/token/', views.UserTokenDetailView.as_view(), name="current_user_token"),
     url(r'^api/user/jwt/', views.UserSimpleJWTDetailView.as_view(), name="current_user_jwt"),
-    url(r'^api/user/jwt/', views.UserJWTOldDetailView.as_view(), name="current_user_jwt_old"),
+    url(r'^api/user/jwt-old/', views.UserJWTOldDetailView.as_view(), name="current_user_jwt_old"),
     url(r'^api/user/knox/', views.UserKnoxDetailView.as_view(), name="current_user_knox"),
 ]
 if django.VERSION >= (2, 0, 0):
