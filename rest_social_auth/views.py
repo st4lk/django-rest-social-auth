@@ -230,6 +230,11 @@ class SocialTokenUserAuthView(BaseSocialAuthView):
 
 class JWTAuthMixin(object):
     def get_authenticators(self):
+        warnings.warn(
+            'Support of djangorestframework-jwt will be removed in 3.0.0 version. '
+            'Use rest_framework_simplejwt instead.',
+            DeprecationWarning,
+        )
         try:
             from rest_framework_jwt.authentication import JSONWebTokenAuthentication
         except ImportError:

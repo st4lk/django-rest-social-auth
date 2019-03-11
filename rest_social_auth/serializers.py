@@ -46,11 +46,6 @@ class UserTokenSerializer(TokenSerializer, UserSerializer):
 class JWTSerializer(TokenSerializer):
 
     def get_token(self, obj):
-        warnings.warn(
-            DeprecationWarning,
-            'Support of djangorestframework-jwt will be removed in 3.0.0 version. '
-            'Use rest_framework_simplejwt instead.'
-        )
         try:
             from rest_framework_jwt.settings import api_settings
         except ImportError:
