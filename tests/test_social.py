@@ -255,6 +255,46 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         jwt_data = jwt_decode_handler(resp.data['token'])
         self.assertEqual(jwt_data['email'], self.email)
 
+    @modify_settings(**jwt_modify_settings)
+    @override_settings(SIMPLE_JWT={
+        'AUTH_TOKEN_CLASSES': (
+            'rest_framework_simplejwt.tokens.AccessToken',
+            'rest_framework_simplejwt.tokens.SlidingToken',
+        ),
+    })
+    def _check_login_social_simple_jwt_only(self, url, data, token_type):
+        try:
+            from rest_framework_simplejwt.authentication import JWTAuthentication
+        except ImportError:
+            return
+        resp = self.client.post(url, data)
+        self.assertEqual(resp.status_code, 200)
+        # check token valid
+        jwt_auth = JWTAuthentication()
+        token_instance = jwt_auth.get_validated_token(resp.data['token'])
+        self.assertEqual(token_instance['token_type'], token_type)
+
+    @modify_settings(**jwt_modify_settings)
+    @override_settings(SIMPLE_JWT={
+        'AUTH_TOKEN_CLASSES': (
+            'rest_framework_simplejwt.tokens.AccessToken',
+            'rest_framework_simplejwt.tokens.SlidingToken',
+        ),
+    })
+    def _check_login_social_simple_jwt_user(self, url, data, token_type):
+        try:
+            from rest_framework_simplejwt.authentication import JWTAuthentication
+        except ImportError:
+            return
+        resp = self.client.post(url, data)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['email'], self.email)
+        # check token valid
+        jwt_auth = JWTAuthentication()
+        token_instance = jwt_auth.get_validated_token(resp.data['token'])
+        self.assertEqual(token_instance['token_type'], token_type)
+        self.assertEqual(token_instance['email'], self.email)
+
     def _check_login_social_knox_only(self, url, data):
         try:
             from knox.auth import TokenAuthentication
@@ -328,7 +368,64 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
     def test_login_social_jwt_user_provider_in_url(self):
         self._check_login_social_jwt_user(
             reverse('login_social_jwt_user', kwargs={'provider': 'facebook'}),
-            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'})
+            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+        )
+
+    def test_login_social_simplejwt_pair_only(self):
+        self._check_login_social_simple_jwt_only(
+            reverse('login_social_simplejwt_pair'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            token_type='access',
+        )
+
+    def test_login_social_simplejwt_pair_only_provider_in_url(self):
+        self._check_login_social_simple_jwt_only(
+            reverse('login_social_simplejwt_pair', kwargs={'provider': 'facebook'}),
+            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            token_type='access',
+        )
+
+    def test_login_social_simplejwt_pair_user(self):
+        self._check_login_social_simple_jwt_user(
+            reverse('login_social_simplejwt_pair_user'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            token_type='access',
+        )
+
+    def test_login_social_simplejwt_pair_user_provider_in_url(self):
+        self._check_login_social_simple_jwt_user(
+            reverse('login_social_simplejwt_pair_user', kwargs={'provider': 'facebook'}),
+            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            token_type='access',
+        )
+
+    def test_login_social_simplejwt_sliding_only(self):
+        self._check_login_social_simple_jwt_only(
+            reverse('login_social_simplejwt_sliding'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            token_type='sliding',
+        )
+
+    def test_login_social_simplejwt_sliding_only_provider_in_url(self):
+        self._check_login_social_simple_jwt_only(
+            reverse('login_social_simplejwt_sliding', kwargs={'provider': 'facebook'}),
+            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            token_type='sliding',
+        )
+
+    def test_login_social_simplejwt_sliding_user(self):
+        self._check_login_social_simple_jwt_user(
+            reverse('login_social_simplejwt_sliding_user'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            token_type='sliding',
+        )
+
+    def test_login_social_simplejwt_sliding_user_provider_in_url(self):
+        self._check_login_social_simple_jwt_user(
+            reverse('login_social_simplejwt_sliding_user', kwargs={'provider': 'facebook'}),
+            data={'code': '3D52VoM1uiw94a1ETnGvYlCw'},
+            token_type='sliding',
+        )
 
     def test_login_social_knox_only(self):
         self._check_login_social_knox_only(
