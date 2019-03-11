@@ -1,11 +1,9 @@
-import logging
+from importlib import import_module
 import warnings
+
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import get_user_model
-
-
-l = logging.getLogger(__name__)
 
 
 class OAuth2InputSerializer(serializers.Serializer):
@@ -26,8 +24,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        exclude = ('is_staff', 'is_active', 'date_joined', 'password',
-                   'last_login', 'user_permissions', 'groups', 'is_superuser',)
+        exclude = (
+            'is_staff', 'is_active', 'date_joined', 'password', 'last_login', 'user_permissions',
+            'groups', 'is_superuser',
+        )
 
 
 class TokenSerializer(serializers.Serializer):
@@ -90,49 +90,69 @@ class UserKnoxSerializer(KnoxSerializer, UserSerializer):
 
 
 class SimpleJWTBaseSerializer(serializers.Serializer):
-    def __init__(self, *args, **kwargs):
-        super(SimpleJWTBaseSerializer, self).__init__(*args, **kwargs)
-        if self.instance is not None:
-            self.token = self.get_token(self.instance)
 
-    @classmethod
-    def get_token_instance(cls, user):
-        raise NotImplementedError('Must implement `get_token` method for `SimpleJWTBaseSerializer` subclasses')
+    jwt_token_class_name = None
+
+    def get_token_instance(self):
+        if not hasattr(self, '_jwt_token_instance'):
+            if self.jwt_token_class_name is None:
+                raise NotImplementedError('Must specify `jwt_token_class_name` property')
+            try:
+                tokens_module = import_module('rest_framework_simplejwt.tokens')
+            except ImportError:
+                warnings.warn(
+                    'djangorestframework_simplejwt must be installed for JWT authentication',
+                    ImportWarning,
+                )
+                raise
+            token_class = getattr(tokens_module, self.jwt_token_class_name)
+            user = self.instance
+            self._jwt_token_instance = token_class.for_user(user)
+            for key, value in self.get_token_payload(user).items():
+                self._jwt_token_instance[key] = value
+        return self._jwt_token_instance
+
+    def get_token_payload(self, user):
+        """
+        Payload defined here will be added to default mandatory payload.
+        Receive User instance in argument, returns dict.
+        """
+        return {}
 
 
-class SimpleJWTObtainPairSerializer(SimpleJWTBaseSerializer):
-    access = serializers.SerializerMethodField()
+class SimpleJWTPairSerializer(SimpleJWTBaseSerializer):
+    token = serializers.SerializerMethodField()
     refresh = serializers.SerializerMethodField()
 
-    @classmethod
-    def get_token_instance(cls, user):
-        try:
-            from rest_framework_simplejwt.tokens import RefreshToken
-        except ImportError:
-            warnings.warn('djangorestframework_simplejwt must be installed for JWT authentication',
-                          ImportWarning)
-            raise
-        return RefreshToken.for_user(user)
+    jwt_token_class_name = 'RefreshToken'
 
-    def get_access(self, _obj):
-        return str(self.token.access_token)
+    def get_token(self, obj):
+        return str(self.get_token_instance().access_token)
 
-    def get_refresh(self, _obj):
-        return str(self.token)
+    def get_refresh(self, obj):
+        return str(self.get_token_instance())
 
 
-class SimpleJWTObtainSlidingSerializer(SimpleJWTBaseSerializer):
+class UserSimplePairJWTSerializer(SimpleJWTPairSerializer, UserSerializer):
+
+    def get_token_payload(self, user):
+        payload = dict(UserSerializer(user).data)
+        payload.pop('id', None)
+        return payload
+
+
+class SimpleJWTSlidingSerializer(SimpleJWTBaseSerializer):
     token = serializers.SerializerMethodField()
 
-    @classmethod
-    def get_token_instance(cls, user):
-        try:
-            from rest_framework_simplejwt.tokens import SlidingToken
-        except ImportError:
-            warnings.warn('djangorestframework_simplejwt must be installed for JWT authentication',
-                          ImportWarning)
-            raise
-        return SlidingToken.for_user(user)
+    jwt_token_class_name = 'SlidingToken'
 
-    def get_token(self, _obj):
-        return str(self.token)
+    def get_token(self, obj):
+        return str(self.get_token_instance())
+
+
+class UserSimpleJWTSlidingSerializer(SimpleJWTSlidingSerializer, UserSerializer):
+
+    def get_token_payload(self, user):
+        payload = dict(UserSerializer(user).data)
+        payload.pop('id', None)
+        return payload

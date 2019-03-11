@@ -27,10 +27,19 @@ from rest_framework.permissions import AllowAny
 from requests.exceptions import HTTPError
 
 from .serializers import (
-    OAuth2InputSerializer, OAuth1InputSerializer, UserSerializer,
-    TokenSerializer, UserTokenSerializer, JWTSerializer, UserJWTSerializer,
-    KnoxSerializer, UserKnoxSerializer, SimpleJWTObtainSlidingSerializer,
-    SimpleJWTObtainPairSerializer
+    JWTSerializer,
+    KnoxSerializer,
+    OAuth1InputSerializer,
+    OAuth2InputSerializer,
+    SimpleJWTPairSerializer,
+    SimpleJWTSlidingSerializer,
+    TokenSerializer,
+    UserJWTSerializer,
+    UserKnoxSerializer,
+    UserSerializer,
+    UserSimpleJWTSlidingSerializer,
+    UserSimplePairJWTSerializer,
+    UserTokenSerializer,
 )
 
 
@@ -221,6 +230,11 @@ class SocialTokenUserAuthView(BaseSocialAuthView):
 
 class JWTAuthMixin(object):
     def get_authenticators(self):
+        warnings.warn(
+            'Support of djangorestframework-jwt will be removed in 3.0.0 version. '
+            'Use rest_framework_simplejwt instead.',
+            DeprecationWarning,
+        )
         try:
             from rest_framework_jwt.authentication import JSONWebTokenAuthentication
         except ImportError:
@@ -258,9 +272,31 @@ class SocialKnoxUserAuthView(KnoxAuthMixin, BaseSocialAuthView):
     serializer_class = UserKnoxSerializer
 
 
-class SocialSimpleJWTPairOnlyAuthView(BaseSocialAuthView):
-    serializer_class = SimpleJWTObtainPairSerializer
+class SimpleJWTAuthMixin(object):
+    def get_authenticators(self):
+        try:
+            from rest_framework_simplejwt.authentication import JWTAuthentication
+        except ImportError:
+            warnings.warn(
+                'django-rest-framework-simplejwt must be installed for JWT authentication',
+                ImportWarning,
+            )
+            raise
+
+        return [JWTAuthentication()]
 
 
-class SocialSimpleJWTSlidingOnlyAuthView(BaseSocialAuthView):
-    serializer_class = SimpleJWTObtainSlidingSerializer
+class SocialSimpleJWTPairOnlyAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
+    serializer_class = SimpleJWTPairSerializer
+
+
+class SocialSimpleJWTPairUserAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
+    serializer_class = UserSimplePairJWTSerializer
+
+
+class SocialSimpleJWTSlidingOnlyAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
+    serializer_class = SimpleJWTSlidingSerializer
+
+
+class SocialSimpleJWTSlidingUserAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
+    serializer_class = UserSimpleJWTSlidingSerializer

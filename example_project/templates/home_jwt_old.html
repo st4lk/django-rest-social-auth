@@ -2,11 +2,12 @@
 {% load staticfiles %}
 
 {% block content %}
-    <h3>Note! <a href="https://github.com/davesque/django-rest-framework-simplejwt">django-rest-framework-simplejwt</a> must be installed for this method</h3>
+    <h1>rest_framework_jwt is deprecated and will be dropped in next version! Use <a href="https://github.com/davesque/django-rest-framework-simplejwt">rest_framework_simplejwt</a> instead!</h1>
+    <h3>Note! <a href="http://getblimp.github.io/django-rest-framework-jwt/">djangorestframework-jwt</a> must be installed for this method</h3>
     <div ng-app="JWTApp">
         <div ng-controller="LoginJWTCtrl as ctrl">
             <div>
-                <h4>rest_framework_simplejwt.authentication.JWTAuthentication</h4>
+                <h4>rest_framework_jwt.authentication.JSONWebTokenAuthentication</h4>
                 <div><button ng-click="authenticate('facebook')">Login facebook (OAuth 2.0)</button></div>
                 <div><button ng-click="authenticate('google')">Login google (OAuth 2.0)</button></div>
                 <div><button ng-click="authenticate('twitter')">Login twitter (OAuth 1.0)*</button></div>
@@ -14,9 +15,6 @@
             </div>
             <div>
                 (*) Currently in case of OAuth 1.0 you still need to have session enabled, as python-social-auth will store some data in session between requests. Maybe in future versions of rest-social-auth this will be solved.
-            </div>
-            <div>
-                (**) In this example <a href="https://github.com/davesque/django-rest-framework-simplejwt#token-types">pair token</a> is used. With simplejwt you can use <a href="https://github.com/davesque/django-rest-framework-simplejwt#sliding-tokens">sliding token</a> as well.
             </div>
             <div>
                 <h2>JWT user data</h2>
@@ -74,26 +72,26 @@
         angular.module('JWTApp', ['satellizer'])
           .config(function($authProvider) {
             $authProvider.facebook({
-              url: "{% url 'login_social_simplejwt_pair_user' provider='facebook' %}",
+              url: "{% url 'login_social_jwt_user' provider='facebook' %}",
               clientId: '{{ facebook_key }}'
             });
             $authProvider.google({
-              url: "{% url 'login_social_simplejwt_pair_user' provider='google-oauth2' %}",
+              url: "{% url 'login_social_jwt_user' provider='google-oauth2' %}",
               clientId: '{{ googleoauth2_key }}',
               redirectUri: window.location.origin + '/'
             });
             $authProvider.twitter({
-              url: "{% url 'login_social_simplejwt_pair_user' provider='twitter' %}",
+              url: "{% url 'login_social_jwt_user' provider='twitter' %}",
             });
             $authProvider.authToken = 'JWT';
-            $authProvider.tokenPrefix = 'satellizer_simple_jwt';  // to not collide with regular token auth
+            $authProvider.tokenPrefix = 'satellizer_jwt';  // to not collide with regular token auth
           }).controller('LoginJWTCtrl', function($scope, $auth, $http) {
             self = this;
 
             self.user = {};
             set_user();
             if ($auth.getToken()){
-                $http.get('{% url "current_user_jwt" %}').then(function(response){
+                $http.get('{% url "current_user_jwt_old" %}').then(function(response){
                     set_user(response);
                 });
             }
@@ -106,7 +104,7 @@
                     set_user(response);
                     self.jwtPayload = $auth.getPayload();
                 }).catch(function(data) {
-                    var err_msg = "Something went wrong, maybe you haven't installed 'django-rest-framework-simplejwt'?";
+                    var err_msg = "Something went wrong, maybe you haven't installed 'djangorestframework-jwt'?";
                     console.log(data)
                     console.log(err_msg);
                     alert(err_msg);
