@@ -17,7 +17,7 @@ Requirements
 - djangorestframework (>=3.1, <4.0)
 - social-auth-core (>=3.0, <4.0)
 - social-auth-app-django (>=3.1, <4.0)
-- [optional] djangorestframework-jwt (>=1.7.2)
+- [optional] djangorestframework-simplejwt (>=4.0.0)
 - [optional] django-rest-knox (>=3.2.0)
 
 Release notes
@@ -85,19 +85,33 @@ Quick start
 
     4.1 [session authentication](http://www.django-rest-framework.org/api-guide/authentication/#sessionauthentication)
 
-        url(r'^api/login/', include('rest_social_auth.urls_session')),
+    ```python
+    url(r'^api/login/', include('rest_social_auth.urls_session')),
+    ```
 
     4.2 [token authentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication)
 
-        url(r'^api/login/', include('rest_social_auth.urls_token')),
+    ```python
+    url(r'^api/login/', include('rest_social_auth.urls_token')),
+    ```
 
-    4.3 [jwt authentication](http://getblimp.github.io/django-rest-framework-jwt/)
+    4.3 [jwt authentication](https://github.com/davesque/django-rest-framework-simplejwt)
 
-        url(r'^api/login/', include('rest_social_auth.urls_jwt')),
+    ```python
+    url(r'^api/login/', include('rest_social_auth.urls_jwt_pair')),
+    ```
+
+    or / and
+
+    ```python
+    url(r'^api/login/', include('rest_social_auth.urls_jwt_sliding')),
+    ```
 
     4.4 [knox authentication](https://github.com/James1345/django-rest-knox/)
 
-        url(r'^api/login/', include('rest_social_auth.urls_knox')),
+    ```python
+    url(r'^api/login/', include('rest_social_auth.urls_knox')),
+    ```
 
 5. You are ready to login users
 
@@ -161,14 +175,29 @@ Quick start
 
     5.3 jwt authentication
 
-    - POST /api/login/social/jwt/
-    - POST /api/login/social/jwt_user/
+    - POST /api/login/social/jwt-pair/
+    - POST /api/login/social/jwt-pair-user/
 
         Similar to token authentication, but token is JSON Web Token.
 
         See [JWT.io](http://jwt.io/) for details.
 
-        To use it, [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt) must be installed.
+        To use it, [django-rest-framework-simplejwt](https://github.com/davesque/django-rest-framework-simplejwt) must be installed.
+
+        For `jwt-pair`, the response will include additional "refresh" token:
+        ```json
+        {
+            "token": "...",
+            "refresh": "..."
+        }
+        ```
+
+        ##### Or sliding JWT token:
+
+    - POST /api/login/social/jwt-sliding/
+    - POST /api/login/social/jwt-sliding-user/
+
+        Check [docs of simplejwt](https://github.com/davesque/django-rest-framework-simplejwt#token-types) for pair/sliding token difference.
 
     5.4 knox authentication
 
