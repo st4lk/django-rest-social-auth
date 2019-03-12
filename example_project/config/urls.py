@@ -14,15 +14,15 @@ urlpatterns = [
 
     url(r'^api/login/', include('rest_social_auth.urls_session')),
     url(r'^api/login/', include('rest_social_auth.urls_token')),
-    url(r'^api/login/', include('rest_social_auth.urls_simplejwt_pair')),
-    url(r'^api/login/', include('rest_social_auth.urls_simplejwt_sliding')),
+    url(r'^api/login/', include('rest_social_auth.urls_jwt_pair')),
+    url(r'^api/login/', include('rest_social_auth.urls_jwt_sliding')),
     url(r'^api/login/', include('rest_social_auth.urls_jwt')),
     url(r'^api/login/', include('rest_social_auth.urls_knox')),
 
     url(r'^api/logout/session/$', views.LogoutSessionView.as_view(), name='logout_session'),
     url(r'^api/user/session/', views.UserSessionDetailView.as_view(), name="current_user_session"),
     url(r'^api/user/token/', views.UserTokenDetailView.as_view(), name="current_user_token"),
-    url(r'^api/user/jwt/', views.UserSimpleJWTDetailView.as_view(), name="current_user_jwt"),
+    url(r'^api/user/jwt/', views.UserJWTDetailView.as_view(), name="current_user_jwt"),
     url(r'^api/user/jwt-old/', views.UserJWTOldDetailView.as_view(), name="current_user_jwt_old"),
     url(r'^api/user/knox/', views.UserKnoxDetailView.as_view(), name="current_user_knox"),
 ]

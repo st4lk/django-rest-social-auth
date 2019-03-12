@@ -74,16 +74,16 @@
         angular.module('JWTApp', ['satellizer'])
           .config(function($authProvider) {
             $authProvider.facebook({
-              url: "{% url 'login_social_simplejwt_pair_user' provider='facebook' %}",
+              url: "{% url 'login_social_jwt_pair_user' provider='facebook' %}",
               clientId: '{{ facebook_key }}'
             });
             $authProvider.google({
-              url: "{% url 'login_social_simplejwt_pair_user' provider='google-oauth2' %}",
+              url: "{% url 'login_social_jwt_pair_user' provider='google-oauth2' %}",
               clientId: '{{ googleoauth2_key }}',
               redirectUri: window.location.origin + '/'
             });
             $authProvider.twitter({
-              url: "{% url 'login_social_simplejwt_pair_user' provider='twitter' %}",
+              url: "{% url 'login_social_jwt_pair_user' provider='twitter' %}",
             });
             $authProvider.authToken = 'JWT';
             $authProvider.tokenPrefix = 'satellizer_simple_jwt';  // to not collide with regular token auth

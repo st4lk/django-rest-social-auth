@@ -63,7 +63,7 @@ class UserJWTOldDetailView(JWTAuthMixin, BaseDetailView):
     pass
 
 
-class UserSimpleJWTDetailView(SimpleJWTAuthMixin, BaseDetailView):
+class UserJWTDetailView(SimpleJWTAuthMixin, BaseDetailView):
     pass
 
 
