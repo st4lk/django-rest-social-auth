@@ -10,6 +10,9 @@ env:
   - TOXENV=py36-django111
   - TOXENV=py36-django20
   - TOXENV=py36-django21
+  - TOXENV=py37-django111
+  - TOXENV=py37-django20
+  - TOXENV=py37-django21
   - TOXENV=py27-django111
 
 install: pip install --quiet tox
@@ -18,7 +21,7 @@ install: pip install --quiet tox
 script: tox
 
 after_script:
-    - if [ $TOXENV == "py36-django111" ]; then
+    - if [ $TOXENV == "py37-django111" ]; then
         pip install --quiet coveralls;
         coveralls;
       fi
@@ -30,3 +33,4 @@ addons:
     packages:
       - python3.5
       - python3.6
+      - python3.7
