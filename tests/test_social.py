@@ -73,6 +73,12 @@ jwt_modify_settings = dict(
     }
 )
 
+knox_modify_settings = dict(
+    INSTALLED_APPS={
+        'append': 'knox',
+    },
+)
+
 
 class RestSocialMixin(object):
     def setUp(self):
@@ -173,6 +179,7 @@ class TestSocialAuth1(APITestCase, BaseTwitterApiTestCase):
         })
         self.assertEqual(resp.status_code, 200)
 
+    @modify_settings(**knox_modify_settings)
     def test_login_social_oauth1_knox(self):
         """
         Currently oauth1 works only if session is enabled.
@@ -268,6 +275,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(token_instance['token_type'], token_type)
         self.assertEqual(token_instance['email'], self.email)
 
+    @modify_settings(**knox_modify_settings)
     def _check_login_social_knox_only(self, url, data):
         try:
             from knox.auth import TokenAuthentication
@@ -280,6 +288,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         user, auth_data = knox_auth.authenticate_credentials(resp.data['token'])
         self.assertEqual(user.email, self.email)
 
+    @modify_settings(**knox_modify_settings)
     def _check_login_social_knox_user(self, url, data):
         try:
             from knox.auth import TokenAuthentication
