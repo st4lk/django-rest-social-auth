@@ -4,6 +4,14 @@ rest_social_auth release notes
 master
 ------
 
+v2.1.0
+------
+- Use djangorestframework-simplejwt for JWT implementation
+- Deprecate djangorestframework-jwt
+- Add python3.7 support
+
+Issues: #74
+
 v2.0.2
 ------
 - Make social-auth-core >=3.0 as mandatory dependency 
