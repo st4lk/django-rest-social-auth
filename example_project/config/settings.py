@@ -124,6 +124,13 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 # DRF settings
 
+SIMPLE_JWT = {
+    'AUTH_TOKEN_CLASSES': (
+        'rest_framework_simplejwt.tokens.AccessToken',
+        'rest_framework_simplejwt.tokens.SlidingToken',
+    ),
+}
+
 # social auth settings
 # valid redirect domain for all apps: http://restsocialexample.com:8000/
 SOCIAL_AUTH_FACEBOOK_KEY = '295137440610143'

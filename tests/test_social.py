@@ -13,9 +13,12 @@ except ImportError:
 from django.contrib.auth import get_user_model
 from django.test import modify_settings
 from django.test.utils import override_settings
+from knox.auth import TokenAuthentication as KnoxTokenAuthentication
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from rest_framework_jwt.settings import api_settings as jwt_api_settings  # deprecated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from httpretty import HTTPretty
 from social_core.utils import module_member, parse_qs
 from social_core.backends.utils import load_backends
@@ -36,6 +39,7 @@ session_modify_settings = dict(
     INSTALLED_APPS={
         'remove': [
             'rest_framework.authtoken',
+            'knox',
         ]
     },
 )
@@ -44,7 +48,8 @@ session_modify_settings = dict(
 token_modify_settings = dict(
     INSTALLED_APPS={
         'remove': [
-            'django.contrib.sessions'
+            'django.contrib.sessions',
+            'knox',
         ]
     },
     MIDDLEWARE_CLASSES={
@@ -62,6 +67,7 @@ jwt_modify_settings = dict(
         'remove': [
             'django.contrib.sessions',
             'rest_framework.authtoken',
+            'knox',
         ]
     },
     MIDDLEWARE_CLASSES={
@@ -71,12 +77,6 @@ jwt_modify_settings = dict(
             'django.contrib.messages.middleware.MessageMiddleware',
         ],
     }
-)
-
-knox_modify_settings = dict(
-    INSTALLED_APPS={
-        'append': 'knox',
-    },
 )
 
 
@@ -163,11 +163,6 @@ class TestSocialAuth1(APITestCase, BaseTwitterApiTestCase):
         Probably it is possible to make it work without session, but
         it will be needed to change the logic in python-social-auth.
         """
-        try:
-            import rest_framework_jwt
-        except ImportError:
-            return
-        assert rest_framework_jwt is not None
         resp = self.client.post(
             reverse('login_social_jwt_user'), data={'provider': 'twitter'})
         self.assertEqual(resp.status_code, 200)
@@ -179,18 +174,12 @@ class TestSocialAuth1(APITestCase, BaseTwitterApiTestCase):
         })
         self.assertEqual(resp.status_code, 200)
 
-    @modify_settings(**knox_modify_settings)
     def test_login_social_oauth1_knox(self):
         """
         Currently oauth1 works only if session is enabled.
         Probably it is possible to make it work without session, but
         it will be needed to change the logic in python-social-auth.
         """
-        try:
-            import knox
-        except ImportError:
-            return
-        assert knox is not None
         resp = self.client.post(
             reverse('login_social_knox_user'), data={'provider': 'twitter'})
         self.assertEqual(resp.status_code, 200)
@@ -236,17 +225,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(token.user.email, self.email)
 
     @modify_settings(**jwt_modify_settings)
-    @override_settings(SIMPLE_JWT={
-        'AUTH_TOKEN_CLASSES': (
-            'rest_framework_simplejwt.tokens.AccessToken',
-            'rest_framework_simplejwt.tokens.SlidingToken',
-        ),
-    })
     def _check_login_social_jwt_only(self, url, data, token_type):
-        try:
-            from rest_framework_simplejwt.authentication import JWTAuthentication
-        except ImportError:
-            return
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         # check token valid
@@ -255,17 +234,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(token_instance['token_type'], token_type)
 
     @modify_settings(**jwt_modify_settings)
-    @override_settings(SIMPLE_JWT={
-        'AUTH_TOKEN_CLASSES': (
-            'rest_framework_simplejwt.tokens.AccessToken',
-            'rest_framework_simplejwt.tokens.SlidingToken',
-        ),
-    })
     def _check_login_social_jwt_user(self, url, data, token_type):
-        try:
-            from rest_framework_simplejwt.authentication import JWTAuthentication
-        except ImportError:
-            return
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['email'], self.email)
@@ -275,31 +244,21 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(token_instance['token_type'], token_type)
         self.assertEqual(token_instance['email'], self.email)
 
-    @modify_settings(**knox_modify_settings)
     def _check_login_social_knox_only(self, url, data):
-        try:
-            from knox.auth import TokenAuthentication
-        except ImportError:
-            return
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         # check token valid
-        knox_auth = TokenAuthentication()
-        user, auth_data = knox_auth.authenticate_credentials(resp.data['token'])
+        knox_auth = KnoxTokenAuthentication()
+        user, auth_data = knox_auth.authenticate_credentials(resp.data['token'].encode('utf8'))
         self.assertEqual(user.email, self.email)
 
-    @modify_settings(**knox_modify_settings)
     def _check_login_social_knox_user(self, url, data):
-        try:
-            from knox.auth import TokenAuthentication
-        except ImportError:
-            return
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['email'], self.email)
         # check token valid
-        knox_auth = TokenAuthentication()
-        user, auth_data = knox_auth.authenticate_credentials(resp.data['token'])
+        knox_auth = KnoxTokenAuthentication()
+        user, auth_data = knox_auth.authenticate_credentials(resp.data['token'].encode('utf8'))
         self.assertEqual(user.email, self.email)
 
     def test_login_social_session(self):
@@ -470,11 +429,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
 
     @modify_settings(**jwt_modify_settings)
     def _deprecated_check_login_social_jwt_only(self, url, data):
-        try:
-            from rest_framework_jwt.settings import api_settings
-        except ImportError:
-            return
-        jwt_decode_handler = api_settings.JWT_DECODE_HANDLER
+        jwt_decode_handler = jwt_api_settings.JWT_DECODE_HANDLER
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         # check token valid
@@ -483,11 +438,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
 
     @modify_settings(**jwt_modify_settings)
     def _deprecated_check_login_social_jwt_user(self, url, data):
-        try:
-            from rest_framework_jwt.settings import api_settings
-        except ImportError:
-            return
-        jwt_decode_handler = api_settings.JWT_DECODE_HANDLER
+        jwt_decode_handler = jwt_api_settings.JWT_DECODE_HANDLER
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['email'], self.email)

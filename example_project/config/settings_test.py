@@ -1,5 +1,7 @@
 " Settings for tests. "
-from .settings import *
+INSTALLED_APPS = []
+
+from .settings import *  # NOQA: E402
 
 # Databases
 DATABASES = {
@@ -8,3 +10,6 @@ DATABASES = {
         'NAME': ':memory:',
     }
 }
+
+if 'knox' not in INSTALLED_APPS:
+    INSTALLED_APPS += ('knox', )
