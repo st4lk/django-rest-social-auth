@@ -188,7 +188,7 @@ Quick start
                 "token": "68ded41d89f6a28da050f882998b2ea1decebbe0"
             }
 
-    5.3 jwt authentication (using django-rest-framework-simplejwt)
+    5.3 jwt authentication (using [django-rest-framework-simplejwt](https://github.com/davesque/django-rest-framework-simplejwt))
 
     - POST /api/login/social/jwt-pair/
     - POST /api/login/social/jwt-pair-user/
@@ -197,7 +197,7 @@ Quick start
 
         See [JWT.io](http://jwt.io/) for details.
 
-        To use it, [django-rest-framework-simplejwt](https://github.com/davesque/django-rest-framework-simplejwt) must be installed.
+        To use it, django-rest-framework-simplejwt must be installed.
 
         For `jwt-pair`, the response will include additional "refresh" token:
         ```json
@@ -216,12 +216,12 @@ Quick start
 
     Note: Sinse django-rest-framework-simplejwt doesn't support python 2.x, this APIs will work only with python 3.x.
 
-    5.3.1 jwt authentcation (using unmaintained django-rest-framework-jwt)
+    5.3.1 jwt authentcation (using unmaintained [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt))
 
     - POST /api/login/social/jwt/
     - POST /api/login/social/jwt_user/
 
-        To use it, [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt) must be installed.    
+        To use it, django-rest-framework-jwt must be installed.    
 
     Note: django-rest-framework-jwt package is not being maintained for a long time, therefore it is better to avoid using it. Current tool will drop support of it in next major version with high probability. But you may still want to use it if your project use python 2.7 or due to historical reasons.
 
