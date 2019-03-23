@@ -45,40 +45,49 @@ Quick start
 
 1. Install this package to your python distribution:
 
-        pip install rest-social-auth
+    ```bash
+    pip install rest-social-auth
+    ```
 
 2. Do the settings
 
+
     Install apps
 
-        INSTALLED_APPS = (
-            ...
-            'rest_framework',
-            'rest_framework.authtoken',  # only if you use token authentication
-            'social_django',  # django social auth
-            'rest_social_auth',  # this package
-            'knox',  # Only if you use django-rest-knox
-        )
+    ```python
+    INSTALLED_APPS = (
+        ...
+        'rest_framework',
+        'rest_framework.authtoken',  # only if you use token authentication
+        'social_django',  # django social auth
+        'rest_social_auth',  # this package
+        'knox',  # Only if you use django-rest-knox
+    )
+    ```
 
     social auth settings, look [documentation](http://python-social-auth.readthedocs.io/en/latest/configuration/django.html) for more details
 
-        SOCIAL_AUTH_FACEBOOK_KEY = 'your app client id'
-        SOCIAL_AUTH_FACEBOOK_SECRET = 'your app client secret'
-        SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # optional
-        SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}  # optional
+    ```python
+    SOCIAL_AUTH_FACEBOOK_KEY = 'your app client id'
+    SOCIAL_AUTH_FACEBOOK_SECRET = 'your app client secret'
+    SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # optional
+    SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}  # optional
 
 
-        AUTHENTICATION_BACKENDS = (
-            'social_core.backends.facebook.FacebookOAuth2',
-            # and maybe some others ...
-            'django.contrib.auth.backends.ModelBackend',
-        )
+    AUTHENTICATION_BACKENDS = (
+        'social_core.backends.facebook.FacebookOAuth2',
+        # and maybe some others ...
+        'django.contrib.auth.backends.ModelBackend',
+    )
+    ```
 
     Also look [optional settings](#settings) avaliable.
 
 3. Make sure everything is up do date
 
-        python manage.py migrate
+    ```bash
+    python manage.py migrate
+    ```
 
 
 4. Include rest social urls (choose at least one)
@@ -105,6 +114,12 @@ Quick start
 
     ```python
     url(r'^api/login/', include('rest_social_auth.urls_jwt_sliding')),
+    ```
+
+    4.3.1 [jwt authentication (deprecated)](http://getblimp.github.io/django-rest-framework-jwt/)
+
+    ```python
+    url(r'^api/login/', include('rest_social_auth.urls_jwt')),
     ```
 
     4.4 [knox authentication](https://github.com/James1345/django-rest-knox/)
@@ -173,7 +188,7 @@ Quick start
                 "token": "68ded41d89f6a28da050f882998b2ea1decebbe0"
             }
 
-    5.3 jwt authentication
+    5.3 jwt authentication (using [django-rest-framework-simplejwt](https://github.com/davesque/django-rest-framework-simplejwt))
 
     - POST /api/login/social/jwt-pair/
     - POST /api/login/social/jwt-pair-user/
@@ -182,7 +197,7 @@ Quick start
 
         See [JWT.io](http://jwt.io/) for details.
 
-        To use it, [django-rest-framework-simplejwt](https://github.com/davesque/django-rest-framework-simplejwt) must be installed.
+        To use it, django-rest-framework-simplejwt must be installed.
 
         For `jwt-pair`, the response will include additional "refresh" token:
         ```json
@@ -198,6 +213,17 @@ Quick start
     - POST /api/login/social/jwt-sliding-user/
 
         Check [docs of simplejwt](https://github.com/davesque/django-rest-framework-simplejwt#token-types) for pair/sliding token difference.
+
+    Note: Sinse django-rest-framework-simplejwt doesn't support python 2.x, this APIs will work only with python 3.x.
+
+    5.3.1 jwt authentcation (using unmaintained [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt))
+
+    - POST /api/login/social/jwt/
+    - POST /api/login/social/jwt_user/
+
+        To use it, django-rest-framework-jwt must be installed.    
+
+    Note: django-rest-framework-jwt package is not being maintained for a long time, therefore it is better to avoid using it. Current tool will drop support of it in next major version with high probability. But you may still want to use it if your project use python 2.7 or due to historical reasons.
 
     5.4 knox authentication
 
