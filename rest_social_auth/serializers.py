@@ -47,11 +47,12 @@ class KnoxSerializer(TokenSerializer):
     def get_token(self, obj):
         try:
             from knox.models import AuthToken
+            from knox.settings import knox_settings
         except ImportError:
             warnings.warn('django-rest-knox must be installed for Knox authentication', ImportWarning)
             raise
 
-        token = AuthToken.objects.create(obj)
+        instance, token = AuthToken.objects.create(obj,knox_settings.TOKEN_TTL)
         return token
 
 
