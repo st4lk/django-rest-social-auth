@@ -13,7 +13,7 @@ Requirements
 -----------
 
 - python (2.7, 3.5, 3.6, 3.7)
-- django (1.11, 2.0, 2.1)
+- django (1.11, 2.0, 2.1, 2.2)
 - djangorestframework (>=3.1, <4.0)
 - social-auth-core (>=3.0, <4.0)
 - social-auth-app-django (>=3.1, <4.0)
@@ -534,3 +534,6 @@ Contributors
 - MounirMesselmeni, [MounirMesselmeni](https://github.com/MounirMesselmeni)
 - Tuomas Virtanen, [katajakasa](https://github.com/katajakasa)
 - Jeremy Storer, [storerjeremy](https://github.com/storerjeremy)
+- Jeffrey de Lange, [jgadelange](https://github.com/jgadelange)
+- John Vandenberg, [jayvdb](https://github.com/jayvdb)
+- Anton_Datsik, [AntonDatsik](https://github.com/AntonDatsik)

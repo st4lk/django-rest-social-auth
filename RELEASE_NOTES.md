@@ -4,6 +4,13 @@ rest_social_auth release notes
 master
 ------
 
+v2.2.0
+------
+- Update license, use MIT
+- Add Django 2.2 support
+- Fix customer redirect URI for OAuth1
+- Cleanup knox integration
+
 v2.1.0
 ------
 - Use djangorestframework-simplejwt for JWT implementation
