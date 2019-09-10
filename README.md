@@ -214,7 +214,7 @@ Quick start
 
         Check [docs of simplejwt](https://github.com/davesque/django-rest-framework-simplejwt#token-types) for pair/sliding token difference.
 
-    Note: Sinse django-rest-framework-simplejwt doesn't support python 2.x, this APIs will work only with python 3.x.
+    Note: Since django-rest-framework-simplejwt doesn't support python 2.x, this APIs will work only with python 3.x.
 
     5.3.1 jwt authentcation (using unmaintained [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt))
 
