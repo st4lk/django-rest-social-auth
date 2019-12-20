@@ -1,3 +1,4 @@
+from django.http import HttpRequest
 from social_django.strategy import DjangoStrategy
 
 
@@ -21,3 +22,14 @@ class DRFStrategy(DjangoStrategy):
             return getattr(self.request, 'auth_data', {})
         else:
             return {}
+
+    def clean_authenticate_args(self, *args, **kwargs):
+        """Cleanup request argument if present, which is passed to
+        authenticate as for Django 1.11"""
+        if len(args) > 0 and (
+                isinstance(args[0], HttpRequest) or
+                isinstance(getattr(args[0], '_request', None), HttpRequest)  # rest_framework.request.Request
+        ):
+            print('123!!! clean_authenticate_args')
+            kwargs['request'], args = args[0], args[1:]
+        return args, kwargs

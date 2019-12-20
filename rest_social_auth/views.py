@@ -1,6 +1,8 @@
 import logging
 import warnings
 
+from rest_framework.exceptions import ParseError
+
 try:
     from urlparse import urlparse
 except ImportError:
@@ -17,7 +19,7 @@ from django.views.decorators.csrf import csrf_protect
 from social_django.utils import psa, STORAGE
 from social_django.views import _do_login as social_auth_login
 from social_core.backends.oauth import BaseOAuth1
-from social_core.utils import get_strategy, parse_qs, user_is_authenticated
+from social_core.utils import get_strategy, parse_qs, user_is_authenticated, partial_pipeline_data
 from social_core.exceptions import AuthException
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -42,9 +44,7 @@ from .serializers import (
     UserTokenSerializer,
 )
 
-
 l = logging.getLogger(__name__)
-
 
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
 DOMAIN_FROM_ORIGIN = getattr(settings, 'REST_SOCIAL_DOMAIN_FROM_ORIGIN', True)
@@ -83,7 +83,7 @@ class BaseSocialAuthView(GenericAPIView):
     oauth1_serializer_class_in = OAuth1InputSerializer
     oauth2_serializer_class_in = OAuth2InputSerializer
     serializer_class = None
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
 
     def oauth_v1(self):
         assert hasattr(self.request, 'backend'), 'Don\'t call this method before decorate_request'
@@ -224,12 +224,12 @@ class SocialSessionAuthView(BaseSocialAuthView):
 
 class SocialTokenOnlyAuthView(BaseSocialAuthView):
     serializer_class = TokenSerializer
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication,)
 
 
 class SocialTokenUserAuthView(BaseSocialAuthView):
     serializer_class = UserTokenSerializer
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication,)
 
 
 class KnoxAuthMixin(object):
@@ -267,6 +267,26 @@ class SimpleJWTAuthMixin(object):
 
 class SocialJWTPairOnlyAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
     serializer_class = JWTPairSerializer
+
+
+class SocialJWTCompletePairOnlyAuthView(SocialJWTPairOnlyAuthView):
+    @method_decorator(never_cache)
+    def post(self, request, *args, **kwargs):
+        input_data = self.get_serializer_in_data()
+        self.set_input_data(request, input_data)
+        decorate_request(request, self.get_provider_name(input_data))
+
+        partial = partial_pipeline_data(request.backend, request=request, *args, **kwargs)
+        if not partial:
+            raise ParseError()
+
+        user = request.backend.continue_pipeline(partial)
+        if isinstance(user, HttpResponse):
+            return user
+
+        resp_data = self.get_serializer(instance=user)
+        self.do_login(request.backend, user)
+        return Response(resp_data.data)
 
 
 class SocialJWTPairUserAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
