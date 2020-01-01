@@ -2,16 +2,14 @@ import logging
 import warnings
 
 try:
-    from urlparse import urlparse
+    from urllib.parse import urljoin, urlparse  # python 3x
 except ImportError:
-    # python 3
-    from urllib.parse import urlparse
+    from urlparse import urljoin, urlparse  # python 2x
 
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.encoding import iri_to_uri
-from django.utils.six.moves.urllib.parse import urljoin
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from social_django.utils import psa, STORAGE

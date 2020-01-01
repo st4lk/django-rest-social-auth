@@ -8,41 +8,24 @@ matrix:
     - python: 3.5
       env: TOXENV=py35-django111
     - python: 3.5
-      env: TOXENV=py35-django20
-    - python: 3.5
-      env: TOXENV=py35-django21
-    - python: 3.5
-      dist: xenial
-      sudo: true
       env: TOXENV=py35-django22
 
     - python: 3.6
       env: TOXENV=py36-django111
     - python: 3.6
-      env: TOXENV=py36-django20
-    - python: 3.6
-      env: TOXENV=py36-django21
-    - python: 3.6
-      dist: xenial
-      sudo: true
       env: TOXENV=py36-django22
+    - python: 3.6
+      env: TOXENV=py36-django30
 
     - python: 3.7
-      dist: xenial
-      sudo: true
-      env: TOXENV=py37-django20
+      env: TOXENV=py37-django111
     - python: 3.7
-      dist: xenial
-      sudo: true
-      env: TOXENV=py37-django21
-    - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=py37-django22
     - python: 3.7
-      dist: xenial
-      sudo: true
-      env: TOXENV=py37-django111
+      env: TOXENV=py37-django30
+
+    - python: 3.8
+      env: TOXENV=py38-django30
 
 install: pip install --quiet tox
 
@@ -50,7 +33,7 @@ install: pip install --quiet tox
 script: tox
 
 after_script:
-  - if [ $TOXENV == "py37-django111" ]; then
+  - if [ $TOXENV == "py37-django22" ]; then
       pip install --quiet coveralls;
       coveralls;
     fi
