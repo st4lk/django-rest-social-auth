@@ -5,7 +5,7 @@ master
 ------
 - Add Django 3.0 support
 - Add Python 3.8 support
-- Add Django 2.0, 2.1 support
+- Drop Django 2.0, 2.1 support
 - Fix facebook integration in example project: serve with fake TLS certificate
 
 Issues: #104, #106
