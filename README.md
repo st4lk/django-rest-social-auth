@@ -487,6 +487,13 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
     git clone https://github.com/st4lk/django-rest-social-auth.git
     ```
 
+- make sure all dependencies are installed
+
+    ```bash
+    pip install -r requirements.txt
+    pip install -r requirements_test.txt
+    ```
+
 - step in example_project/
 
     ```bash

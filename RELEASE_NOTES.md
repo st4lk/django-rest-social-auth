@@ -5,6 +5,8 @@ master
 ------
 - Fix facebook integration in example project: serve with fake TLS certificate
 
+Issues: #104
+
 v2.2.0
 ------
 - Update license, use MIT
