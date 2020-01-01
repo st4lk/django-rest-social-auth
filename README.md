@@ -2,7 +2,7 @@ Django REST social auth
 =======================
 
 [![Build Status](https://travis-ci.org/st4lk/django-rest-social-auth.svg?branch=master)](https://travis-ci.org/st4lk/django-rest-social-auth)
-[![Coverage Status](https://coveralls.io/repos/st4lk/django-rest-social-auth/badge.svg?branch=master)](https://coveralls.io/r/st4lk/django-rest-social-auth?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/st4lk/django-rest-social-auth/badge.svg?branch=master)](https://coveralls.io/github/st4lk/django-rest-social-auth?branch=master)
 [![Pypi version](https://img.shields.io/pypi/v/rest_social_auth.svg)](https://pypi.python.org/pypi/rest_social_auth)
 
 
@@ -506,7 +506,7 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
     PYTHONPATH='../' python manage.py migrate
     ```
 
-    Note:
+    <sub><sup>Note:</sup></sub>
     <sub><sup>You can avoid `PYTHONPATH='../'` if you install the package locally:</sup></sub>
     <sub><sup>`pip install rest-social-auth` or `python setup.py install`.</sup></sub>
     <sub><sup>
