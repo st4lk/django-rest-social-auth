@@ -12,8 +12,8 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (2.7, 3.5, 3.6, 3.7)
-- django (1.11, 2.0, 2.1, 2.2)
+- python (2.7, 3.5, 3.6, 3.7, 3.8)
+- django (1.11, 2.2, 3.0)
 - djangorestframework (>=3.1, <4.0)
 - social-auth-core (>=3.0, <4.0)
 - social-auth-app-django (>=3.1, <4.0)
@@ -527,6 +527,8 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
     In Chrome browser it can look like this:
     - step 1: [image](https://user-images.githubusercontent.com/1771042/71641969-90ab7280-2cd6-11ea-95ed-de4c6e123345.png)
     - step 2: [image](https://user-images.githubusercontent.com/1771042/71641970-91440900-2cd6-11ea-9275-f6c351ddc543.png)
+
+    More details [here](https://github.com/teddziuba/django-sslserver#browser-certificate-errors).
 
 Example project already contains facebook, google and twitter app ids and secrets.
 These apps are configured to work only with 127.0.0.1:8000 domain. Google and Facebook providers support localhost:8000 as well. But Twitter only support 127.0.0.1.
