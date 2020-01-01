@@ -519,7 +519,7 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
     PYTHONPATH='../' python manage.py runsslserver
     ```
 
-    `runsslservier` is used instead of built-in `runserver` to serve the project with TLS (aka SSL) certificate.
+    `runsslserver` is used instead of built-in `runserver` to serve the project with TLS (aka SSL) certificate.
     HTTPS is required by some social providers (facebook), without it they won't work.
     The certificate will not be trusted by your system - that is expected.
     Just tell your browser to proceed with this untrusted certificate - it is acceptable for development purposes.
