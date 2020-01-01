@@ -509,12 +509,22 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
 - run development server
 
     ```bash
-    PYTHONPATH='../' python manage.py runserver
+    PYTHONPATH='../' python manage.py runsslserver
     ```
 
+    `runsslservier` is used instead of built-in `runserver` to serve the project with TLS (aka SSL) certificate.
+    HTTPS is required by some social providers (facebook), without it they won't work.
+    The certificate will not be trusted by your system - that is expected.
+    Just tell your browser to proceed with this untrusted certificate - it is acceptable for development purposes.
+
+    In Chrome browser it can look like this:
+    - step 1: [image](https://user-images.githubusercontent.com/1771042/71641969-90ab7280-2cd6-11ea-95ed-de4c6e123345.png)
+    - step 2: [image](https://user-images.githubusercontent.com/1771042/71641970-91440900-2cd6-11ea-9275-f6c351ddc543.png)
+
 Example project already contains facebook, google and twitter app ids and secrets.
-These apps are configured to work only with http://127.0.0.1:8000/ domain. Google and Facebook providers support http://localhost:8000/ as well. But Twitter only support 127.0.0.1.
-So, to play with it, visit http://127.0.0.1:8000/
+These apps are configured to work only with 127.0.0.1:8000 domain. Google and Facebook providers support localhost:8000 as well. But Twitter only support 127.0.0.1.
+
+So, to play with it, visit https://127.0.0.1:8000/
 
 Example project uses [satellizer](https://github.com/sahat/satellizer) angularjs module.
 

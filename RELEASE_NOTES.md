@@ -3,6 +3,7 @@ rest_social_auth release notes
 
 master
 ------
+- Fix facebook integration in example project: serve with fake TLS certificate
 
 v2.2.0
 ------
