@@ -41,7 +41,7 @@ from .serializers import (
 )
 
 
-l = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
@@ -193,7 +193,7 @@ class BaseSocialAuthView(GenericAPIView):
             if not isinstance(error, AuthException) or LOG_AUTH_EXCEPTIONS:
                 self.log_exception(error)
         else:
-            l.error(error)
+            logger.error(error)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def log_exception(self, error):
@@ -202,11 +202,11 @@ class BaseSocialAuthView(GenericAPIView):
             try:
                 err_data = error.response.json()
             except (ValueError, AttributeError):
-                l.error(u'%s; %s', error, err_msg)
+                logger.error(u'%s; %s', error, err_msg)
             else:
-                l.error(u'%s; %s; %s', error, err_msg, err_data)
+                logger.error(u'%s; %s; %s', error, err_msg, err_data)
         else:
-            l.exception(u'%s; %s', error, err_msg)
+            logger.exception(u'%s; %s', error, err_msg)
 
 
 class SocialSessionAuthView(BaseSocialAuthView):
