@@ -1,6 +1,9 @@
 rest_social_auth release notes
 ==============================
 
+master
+------
+
 v3.0.0
 ------
 - Add Django 3.0 support
