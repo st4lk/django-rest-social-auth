@@ -1,7 +1,6 @@
 .PHONY: run build all run-example \
 		native-test
 
-# SHELL := /bin/bash
 PROJECT_PATH = /django_rest_social_auth
 PORT ?= 8000
 
