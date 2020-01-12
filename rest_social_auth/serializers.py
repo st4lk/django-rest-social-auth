@@ -48,7 +48,10 @@ class KnoxSerializer(TokenSerializer):
         try:
             from knox.models import AuthToken
         except ImportError:
-            warnings.warn('django-rest-knox must be installed for Knox authentication', ImportWarning)
+            warnings.warn(
+                'django-rest-knox must be installed for Knox authentication',
+                ImportWarning,
+            )
             raise
 
         token = AuthToken.objects.create(obj)

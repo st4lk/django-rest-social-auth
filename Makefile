@@ -66,8 +66,12 @@ native-run-example: native-migrate
 native-clean:
 	find . -path ./venv -prune | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs rm -rf
 
-native-test: native-install-all native-clean
+native-test: native-install-all native-clean native-lint
 	PYTHONPATH='example_project/' python -m pytest -Wignore $(TEST_ARGS)
+
+native-lint: native-install-all
+	flake8 .
+
 
 native-install-python-versions: .install-python-versions
 .install-python-versions: tox.ini

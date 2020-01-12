@@ -93,7 +93,8 @@ class TestSocialAuth2Token(APITestCase, BaseFacebookAPITestCase):
         self.user_data_body = json.dumps(user_data_body)
         self.do_rest_login()
         resp = self.client.post(
-            reverse('login_social_token'), data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'}
+            reverse('login_social_token'),
+            data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'},
         )
         self.assertEqual(resp.status_code, 400)
         self.assertIn('error', resp.data)
