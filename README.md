@@ -495,8 +495,8 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
     ```
 
     It is assumed, that you have:
-    - make
-    - Docker
+    - [make](https://www.gnu.org/software/make/)
+    - [docker](https://www.docker.com/)
 
 - open [https://127.0.0.1:8000/](https://127.0.0.1:8000/) in your browser
 
