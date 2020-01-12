@@ -1,5 +1,4 @@
-.PHONY: run build all run-example \
-		native-test
+.PHONY: run all test test_tox shell run-example native-test native-test-tox
 
 PROJECT_PATH = /django_rest_social_auth
 PORT ?= 8000
