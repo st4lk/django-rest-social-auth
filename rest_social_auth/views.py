@@ -88,7 +88,9 @@ class BaseSocialAuthView(GenericAPIView):
         return isinstance(self.request.backend, BaseOAuth1)
 
     def get_serializer_class_in(self):
-        return self.oauth1_serializer_class_in if self.oauth_v1() else self.oauth2_serializer_class_in
+        if self.oauth_v1():
+            return self.oauth1_serializer_class_in
+        return self.oauth2_serializer_class_in
 
     def get_serializer_in(self, *args, **kwargs):
         """
@@ -128,7 +130,8 @@ class BaseSocialAuthView(GenericAPIView):
             user = self.get_object()
         except (AuthException, HTTPError) as e:
             return self.respond_error(e)
-        if isinstance(user, HttpResponse):  # An error happened and pipeline returned HttpResponse instead of user
+        if isinstance(user, HttpResponse):
+            # error happened and pipeline returned HttpResponse instead of user
             return user
         resp_data = self.get_serializer(instance=user)
         self.do_login(request.backend, user)
@@ -235,7 +238,10 @@ class KnoxAuthMixin(object):
         try:
             from knox.auth import TokenAuthentication
         except ImportError:
-            warnings.warn('django-rest-knox must be installed for Knox authentication', ImportWarning)
+            warnings.warn(
+                'django-rest-knox must be installed for Knox authentication',
+                ImportWarning,
+            )
             raise
 
         return [TokenAuthentication()]

@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'social_django',
     'rest_social_auth',
     'sslserver',  # some social providers require https
-    # 'knox',  # For django-rest-knox
+    'knox',  # For django-rest-knox
 
     'users',
 )
@@ -147,7 +147,9 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     ]),
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = (
+    '976099811367-ihbmg1pfnniln9qgfacleiu41bhl3fqn.apps.googleusercontent.com'
+)
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'JaiLLvY1BK97TSy5_xcGWDhp'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', ]
 
