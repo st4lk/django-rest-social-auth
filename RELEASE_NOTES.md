@@ -3,6 +3,9 @@ rest_social_auth release notes
 
 master
 ------
+- Update supported version of django-rest-knox (>=4.0.0, <5.0.0). v4 has breaking changes.
+
+Issues: #110
 
 v3.0.0
 ------
