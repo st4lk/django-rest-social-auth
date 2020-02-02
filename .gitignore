@@ -21,3 +21,9 @@ settings_local.py
 .direnv/
 .envrc
 .mypy_cache/
+.build
+.install
+.install-test
+.install-optional
+.install-python-versions
+venv/

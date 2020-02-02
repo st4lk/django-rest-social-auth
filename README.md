@@ -2,8 +2,9 @@ Django REST social auth
 =======================
 
 [![Build Status](https://travis-ci.org/st4lk/django-rest-social-auth.svg?branch=master)](https://travis-ci.org/st4lk/django-rest-social-auth)
-[![Coverage Status](https://coveralls.io/repos/st4lk/django-rest-social-auth/badge.svg?branch=master)](https://coveralls.io/r/st4lk/django-rest-social-auth?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/st4lk/django-rest-social-auth/badge.svg?branch=master)](https://coveralls.io/github/st4lk/django-rest-social-auth?branch=master)
 [![Pypi version](https://img.shields.io/pypi/v/rest_social_auth.svg)](https://pypi.python.org/pypi/rest_social_auth)
+[![Downloads](https://pepy.tech/badge/rest-social-auth)](https://pepy.tech/project/rest-social-auth)
 
 
 OAuth signin with django rest framework.
@@ -12,13 +13,13 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (2.7, 3.5, 3.6, 3.7)
-- django (1.11, 2.0, 2.1, 2.2)
+- python (2.7, 3.5, 3.6, 3.7, 3.8)
+- django (1.11, 2.2, 3.0)
 - djangorestframework (>=3.1, <4.0)
 - social-auth-core (>=3.0, <4.0)
 - social-auth-app-django (>=3.1, <4.0)
 - [optional] djangorestframework-simplejwt (>=4.0.0)
-- [optional] django-rest-knox (>=3.2.0, <4.0.0)
+- [optional] django-rest-knox (>=4.0.0, <5.0.0)
 
 Release notes
 -------------
@@ -214,7 +215,7 @@ Quick start
 
         Check [docs of simplejwt](https://github.com/davesque/django-rest-framework-simplejwt#token-types) for pair/sliding token difference.
 
-    Note: Sinse django-rest-framework-simplejwt doesn't support python 2.x, this APIs will work only with python 3.x.
+    Note: Since django-rest-framework-simplejwt doesn't support python 2.x, this APIs will work only with python 3.x.
 
     5.3.1 jwt authentcation (using unmaintained [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt))
 
@@ -487,37 +488,47 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
     git clone https://github.com/st4lk/django-rest-social-auth.git
     ```
 
-- step in example_project/
+- run example project
 
     ```bash
-    cd django-rest-social-auth/example_project
+    make
     ```
 
-- create database (sqlite3)
+    It is assumed, that you have:
+    - [make](https://www.gnu.org/software/make/)
+    - [docker](https://www.docker.com/)
 
-    ```bash
-    PYTHONPATH='../' python manage.py migrate
-    ```
+- open [https://127.0.0.1:8000/](https://127.0.0.1:8000/) in your browser
 
-    Note:
-    <sub><sup>You can avoid `PYTHONPATH='../'` if you install the package locally:</sup></sub>
-    <sub><sup>`pip install rest-social-auth` or `python setup.py install`.</sup></sub>
-    <sub><sup>
-    But to my mind the PYTHONPATH prefix is more useful. No need to install anything and code of rest-social-auth will be always up-to-date, even if you change source code.
-    </sup></sub>
+    Note: `runsslserver` is used instead of built-in `runserver` to serve the project with TLS (aka SSL) certificate.
+    HTTPS is required by some social providers (facebook), without it they won't work.
+    The certificate will not be trusted by your system - that is expected.
+    Just tell your browser to proceed with this untrusted certificate - it is acceptable for development purposes.
 
-- run development server
+    In Chrome browser it can look like this:
+    - step 1: [image](https://user-images.githubusercontent.com/1771042/71641969-90ab7280-2cd6-11ea-95ed-de4c6e123345.png)
+    - step 2: [image](https://user-images.githubusercontent.com/1771042/71641970-91440900-2cd6-11ea-9275-f6c351ddc543.png)
 
-    ```bash
-    PYTHONPATH='../' python manage.py runserver
-    ```
+    More details [here](https://github.com/teddziuba/django-sslserver#browser-certificate-errors).
 
-Example project already contains facebook, google and twitter app ids and secrets.
-These apps are configured to work only with http://127.0.0.1:8000/ domain. Google and Facebook providers support http://localhost:8000/ as well. But Twitter only support 127.0.0.1.
-So, to play with it, visit http://127.0.0.1:8000/
+Facebook, Google and Twitter auth should work, all secret keys are already set.
 
 Example project uses [satellizer](https://github.com/sahat/satellizer) angularjs module.
 
+Development
+-----------
+
+Run tests locally
+
+```bash
+make test
+```
+
+Run tests in all enviroments (can take some time)
+
+```bash
+make test-tox
+```
 
 Contributors
 ------------

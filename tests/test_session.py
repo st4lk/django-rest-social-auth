@@ -108,7 +108,11 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
 
     @patch('rest_framework.views.APIView.permission_classes')
     def test_login_social_session_model_permission(self, m_permission_classes):
-        setattr(m_permission_classes, '__get__', lambda *args, **kwargs: (DjangoModelPermissionsOrAnonReadOnly, ))
+        setattr(
+            m_permission_classes,
+            '__get__',
+            lambda *args, **kwargs: (DjangoModelPermissionsOrAnonReadOnly,),
+        )
         self._check_login_social_session(
             reverse('login_social_session'),
             {'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})

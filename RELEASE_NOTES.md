@@ -3,6 +3,18 @@ rest_social_auth release notes
 
 master
 ------
+- Update supported version of django-rest-knox (>=4.0.0, <5.0.0). v4 has breaking changes.
+
+Issues: #110
+
+v3.0.0
+------
+- Add Django 3.0 support
+- Add Python 3.8 support
+- Drop Django 2.0, 2.1 support
+- Fix facebook integration in example project: serve with fake TLS certificate
+
+Issues: #104, #106
 
 v2.2.0
 ------

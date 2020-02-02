@@ -2,17 +2,15 @@ import logging
 import warnings
 
 try:
-    from urlparse import urlparse
-    from urllib import urlencode
+    from urllib.parse import urljoin, urlencode, urlparse  # python 3x
 except ImportError:
-    # python 3
-    from urllib.parse import urlparse, urlencode
+    from urllib import urlencode  # python 2x
+    from urlparse import urljoin, urlparse
 
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.encoding import iri_to_uri
-from django.utils.six.moves.urllib.parse import urljoin
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from social_django.utils import psa, STORAGE
@@ -44,7 +42,7 @@ from .serializers import (
 )
 
 
-l = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
@@ -91,7 +89,9 @@ class BaseSocialAuthView(GenericAPIView):
         return isinstance(self.request.backend, BaseOAuth1)
 
     def get_serializer_class_in(self):
-        return self.oauth1_serializer_class_in if self.oauth_v1() else self.oauth2_serializer_class_in
+        if self.oauth_v1():
+            return self.oauth1_serializer_class_in
+        return self.oauth2_serializer_class_in
 
     def get_serializer_in(self, *args, **kwargs):
         """
@@ -131,7 +131,8 @@ class BaseSocialAuthView(GenericAPIView):
             user = self.get_object()
         except (AuthException, HTTPError) as e:
             return self.respond_error(e)
-        if isinstance(user, HttpResponse):  # An error happened and pipeline returned HttpResponse instead of user
+        if isinstance(user, HttpResponse):
+            # error happened and pipeline returned HttpResponse instead of user
             return user
         resp_data = self.get_serializer(instance=user)
         self.do_login(request.backend, user)
@@ -209,7 +210,7 @@ class BaseSocialAuthView(GenericAPIView):
             if not isinstance(error, AuthException) or LOG_AUTH_EXCEPTIONS:
                 self.log_exception(error)
         else:
-            l.error(error)
+            logger.error(error)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def log_exception(self, error):
@@ -218,11 +219,11 @@ class BaseSocialAuthView(GenericAPIView):
             try:
                 err_data = error.response.json()
             except (ValueError, AttributeError):
-                l.error(u'%s; %s', error, err_msg)
+                logger.error(u'%s; %s', error, err_msg)
             else:
-                l.error(u'%s; %s; %s', error, err_msg, err_data)
+                logger.error(u'%s; %s; %s', error, err_msg, err_data)
         else:
-            l.exception(u'%s; %s', error, err_msg)
+            logger.exception(u'%s; %s', error, err_msg)
 
 
 class SocialSessionAuthView(BaseSocialAuthView):
@@ -251,7 +252,10 @@ class KnoxAuthMixin(object):
         try:
             from knox.auth import TokenAuthentication
         except ImportError:
-            warnings.warn('django-rest-knox must be installed for Knox authentication', ImportWarning)
+            warnings.warn(
+                'django-rest-knox must be installed for Knox authentication',
+                ImportWarning,
+            )
             raise
 
         return [TokenAuthentication()]
@@ -299,7 +303,7 @@ class SocialJWTSlidingUserAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
 class JWTAuthMixin(object):
     def get_authenticators(self):
         warnings.warn(
-            'Support of djangorestframework-jwt will be removed in 3.0.0 version. '
+            'Support of djangorestframework-jwt will be removed in 4.0.0 version. '
             'Use rest_framework_simplejwt instead.',
             DeprecationWarning,
         )

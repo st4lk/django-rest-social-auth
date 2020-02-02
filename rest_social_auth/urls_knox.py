@@ -13,4 +13,4 @@ urlpatterns = (
     url(r'^social/knox/(?:(?P<provider>[a-zA-Z0-9_-]+)/?)?$',
         views.SocialKnoxOnlyAuthView.as_view(),
         name='login_social_knox'),
-    )
+)
