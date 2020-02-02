@@ -2,9 +2,10 @@ import logging
 import warnings
 
 try:
-    from urllib.parse import urljoin, urlparse  # python 3x
+    from urllib.parse import urljoin, urlencode, urlparse  # python 3x
 except ImportError:
-    from urlparse import urljoin, urlparse  # python 2x
+    from urllib import urlencode  # python 2x
+    from urlparse import urljoin, urlparse
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -163,6 +164,19 @@ class BaseSocialAuthView(GenericAPIView):
         # session to do it.
         self.request.backend.REDIRECT_STATE = False
         self.request.backend.STATE_PARAMETER = False
+
+        if self.oauth_v1():
+            # Oauth1 uses sessions, in case of token authentication session store will be empty
+            backend = self.request.backend
+            session_token_name = backend.name + backend.UNATHORIZED_TOKEN_SUFIX
+            if not self.request.session.exists(session_token_name):
+                self.request.session[session_token_name] = [
+                    urlencode({
+                       backend.OAUTH_TOKEN_PARAMETER_NAME: backend.data.get(backend.OAUTH_TOKEN_PARAMETER_NAME),
+                       'oauth_token_secret': backend.data.get('oauth_token_secret')
+                    })
+                ]
+
         user = self.request.backend.complete(user=user)
         return user
 
