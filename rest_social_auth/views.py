@@ -170,10 +170,11 @@ class BaseSocialAuthView(GenericAPIView):
             backend = self.request.backend
             session_token_name = backend.name + backend.UNATHORIZED_TOKEN_SUFIX
             if not self.request.session.exists(session_token_name):
+                oauth1_tokrn_param = backend.data.get(backend.OAUTH_TOKEN_PARAMETER_NAME)
                 self.request.session[session_token_name] = [
                     urlencode({
-                       backend.OAUTH_TOKEN_PARAMETER_NAME: backend.data.get(backend.OAUTH_TOKEN_PARAMETER_NAME),
-                       'oauth_token_secret': backend.data.get('oauth_token_secret')
+                        backend.OAUTH_TOKEN_PARAMETER_NAME: oauth1_tokrn_param,
+                        'oauth_token_secret': backend.data.get('oauth_token_secret')
                     })
                 ]
 
