@@ -1,4 +1,4 @@
-from django.test import modify_settings
+from django.test import override_settings
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -7,33 +7,22 @@ from social_core.utils import parse_qs
 from .base import BaseFacebookAPITestCase, BaseTwitterApiTestCase
 
 
-jwt_simple_modify_settings = dict(
-    INSTALLED_APPS={
-        'remove': [
-            'django.contrib.sessions',
-            'rest_framework.authtoken',
-            'knox',
-        ]
-    },
-    MIDDLEWARE_CLASSES={
-        'remove': [
-            'django.contrib.sessions.middleware.SessionMiddleware',
-            'django.contrib.auth.middleware.AuthenticationMiddleware',
-            'django.contrib.messages.middleware.MessageMiddleware',
-        ],
-    }
+jwt_simple_override_settings = dict(
+    INSTALLED_APPS=[
+        'django.contrib.contenttypes',
+        'rest_framework',
+        'social_django',
+        'rest_social_auth',
+        'users',
+    ],
+    MIDDLEWARE=[],
 )
 
 
+@override_settings(**jwt_simple_override_settings)
 class TestSocialAuth1SimpleJWT(APITestCase, BaseTwitterApiTestCase):
 
-    @modify_settings(INSTALLED_APPS={'remove': ['rest_framework.authtoken', ]})
     def test_login_social_oauth1_jwt(self):
-        """
-        Currently oauth1 works only if session is enabled.
-        Probably it is possible to make it work without session, but
-        it will be needed to change the logic in python-social-auth.
-        """
         resp = self.client.post(
             reverse('login_social_jwt_user'), data={'provider': 'twitter'})
         self.assertEqual(resp.status_code, 200)
@@ -46,9 +35,9 @@ class TestSocialAuth1SimpleJWT(APITestCase, BaseTwitterApiTestCase):
         self.assertEqual(resp.status_code, 200)
 
 
+@override_settings(**jwt_simple_override_settings)
 class TestSocialAuth2SimpleJWT(APITestCase, BaseFacebookAPITestCase):
 
-    @modify_settings(**jwt_simple_modify_settings)
     def _check_login_social_simple_jwt_only(self, url, data, token_type):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
@@ -57,7 +46,6 @@ class TestSocialAuth2SimpleJWT(APITestCase, BaseFacebookAPITestCase):
         token_instance = jwt_auth.get_validated_token(resp.data['token'])
         self.assertEqual(token_instance['token_type'], token_type)
 
-    @modify_settings(**jwt_simple_modify_settings)
     def _check_login_social_simple_jwt_user(self, url, data, token_type):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)

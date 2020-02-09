@@ -1,6 +1,6 @@
 import json
 
-from django.test import modify_settings
+from django.test import override_settings
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
@@ -9,33 +9,25 @@ from social_core.utils import parse_qs
 from .base import BaseFacebookAPITestCase, BaseTwitterApiTestCase
 
 
-token_modify_settings = dict(
-    INSTALLED_APPS={
-        'remove': [
-            'django.contrib.sessions',
-            'knox',
-        ]
-    },
-    MIDDLEWARE_CLASSES={
-        'remove': [
-            'django.contrib.sessions.middleware.SessionMiddleware',
-            'django.contrib.auth.middleware.AuthenticationMiddleware',
-            'django.contrib.messages.middleware.MessageMiddleware',
-        ],
-    }
+token_override_settings = dict(
+    INSTALLED_APPS=[
+        'django.contrib.contenttypes',
+        'rest_framework',
+        'rest_framework.authtoken',
+        'social_django',
+        'rest_social_auth',
+        'users',
+    ],
+    MIDDLEWARE=[],
 )
 
 
+@override_settings(**token_override_settings)
 class TestSocialAuth1Token(APITestCase, BaseTwitterApiTestCase):
 
     def test_login_social_oauth1_token(self):
-        """
-        Currently oauth1 works only if session is enabled.
-        Probably it is possible to make it work without session, but
-        it will be needed to change the logic in python-social-auth.
-        """
-        resp = self.client.post(
-            reverse('login_social_token_user'), data={'provider': 'twitter'})
+        url = reverse('login_social_token_user')
+        resp = self.client.post(url, data={'provider': 'twitter'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data, parse_qs(self.request_token_body))
         resp = self.client.post(reverse('login_social_token_user'), data={
@@ -46,9 +38,9 @@ class TestSocialAuth1Token(APITestCase, BaseTwitterApiTestCase):
         self.assertEqual(resp.status_code, 200)
 
 
+@override_settings(**token_override_settings)
 class TestSocialAuth2Token(APITestCase, BaseFacebookAPITestCase):
 
-    @modify_settings(**token_modify_settings)
     def _check_login_social_token_user(self, url, data):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
@@ -58,7 +50,6 @@ class TestSocialAuth2Token(APITestCase, BaseFacebookAPITestCase):
         # check user is created
         self.assertEqual(token.user.email, self.email)
 
-    @modify_settings(**token_modify_settings)
     def _check_login_social_token_only(self, url, data):
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)

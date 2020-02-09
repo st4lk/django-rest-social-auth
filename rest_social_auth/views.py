@@ -166,20 +166,31 @@ class BaseSocialAuthView(GenericAPIView):
         self.request.backend.STATE_PARAMETER = False
 
         if self.oauth_v1():
-            # Oauth1 uses sessions, in case of token authentication session store will be empty
-            backend = self.request.backend
-            session_token_name = backend.name + backend.UNATHORIZED_TOKEN_SUFIX
-            if not self.request.session.exists(session_token_name):
-                oauth1_tokrn_param = backend.data.get(backend.OAUTH_TOKEN_PARAMETER_NAME)
-                self.request.session[session_token_name] = [
-                    urlencode({
-                        backend.OAUTH_TOKEN_PARAMETER_NAME: oauth1_tokrn_param,
-                        'oauth_token_secret': backend.data.get('oauth_token_secret')
-                    })
-                ]
+            self.save_token_param_in_session()
 
         user = self.request.backend.complete(user=user)
         return user
+
+    def save_token_param_in_session(self):
+        """
+        Save token param in strategy's session.
+        This method will allow to use token auth with OAuth1 even if session is not enabled in
+        django settings (social_core expects that session is enabled).
+        """
+        backend = self.request.backend
+        session_token_name = backend.name + backend.UNATHORIZED_TOKEN_SUFIX
+        session = self.request.strategy.session
+        if (
+            (isinstance(session, dict) and session_token_name not in session) or
+            not session.exists(session_token_name)
+        ):
+            oauth1_token_param = backend.data.get(backend.OAUTH_TOKEN_PARAMETER_NAME)
+            session[session_token_name] = [
+                urlencode({
+                    backend.OAUTH_TOKEN_PARAMETER_NAME: oauth1_token_param,
+                    'oauth_token_secret': backend.data.get('oauth_token_secret')
+                })
+            ]
 
     def do_login(self, backend, user):
         """
