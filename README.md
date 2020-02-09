@@ -330,10 +330,6 @@ OAuth 1.0a workflow with rest-social-auth
 
 This flow is the same as described in [satellizer](https://github.com/sahat/satellizer#-login-with-oauth-10). This angularjs module is used in example project.
 
-#### Note
-If you use token (or jwt) authentication and OAuth 1.0, then you still need 'django.contrib.sessions' app (it is not required for OAuth 2.0 and token authentication).
-This is because python-social-auth will store some data in session between requests to OAuth 1.0 provider.
-
 
 rest-social-auth purpose
 ------------------------
