@@ -4,6 +4,7 @@ rest_social_auth release notes
 master
 ------
 - Update supported version of django-rest-knox (>=4.0.0, <5.0.0). v4 has breaking changes.
+- Allow to use token auth with OAuth1 without django session enabled
 
 Issues: #110
 

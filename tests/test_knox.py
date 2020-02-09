@@ -1,3 +1,4 @@
+from django.test import override_settings
 from django.urls import reverse
 from knox.auth import TokenAuthentication as KnoxTokenAuthentication
 from rest_framework.test import APITestCase
@@ -6,14 +7,24 @@ from social_core.utils import parse_qs
 from .base import BaseFacebookAPITestCase, BaseTwitterApiTestCase
 
 
+knox_override_settings = dict(
+    INSTALLED_APPS=[
+        'django.contrib.contenttypes',
+        'rest_framework',
+        'social_django',
+        'rest_social_auth',
+        'knox',  # For django-rest-knox
+        'users',
+    ],
+    MIDDLEWARE=[
+    ],
+)
+
+
+@override_settings(**knox_override_settings)
 class TestSocialAuth1Knox(APITestCase, BaseTwitterApiTestCase):
 
     def test_login_social_oauth1_knox(self):
-        """
-        Currently oauth1 works only if session is enabled.
-        Probably it is possible to make it work without session, but
-        it will be needed to change the logic in python-social-auth.
-        """
         resp = self.client.post(
             reverse('login_social_knox_user'), data={'provider': 'twitter'})
         self.assertEqual(resp.status_code, 200)
@@ -26,6 +37,7 @@ class TestSocialAuth1Knox(APITestCase, BaseTwitterApiTestCase):
         self.assertEqual(resp.status_code, 200)
 
 
+@override_settings(**knox_override_settings)
 class TestSocialAuth2Knox(APITestCase, BaseFacebookAPITestCase):
 
     def _check_login_social_knox_only(self, url, data):
