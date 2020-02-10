@@ -9,11 +9,8 @@
                 <h4>knox.auth.TokenAuthentication</h4>
                 <div><button ng-click="authenticate('facebook')">Login facebook (OAuth 2.0)</button></div>
                 <div><button ng-click="authenticate('google')">Login google (OAuth 2.0)</button></div>
-                <div><button ng-click="authenticate('twitter')">Login twitter (OAuth 1.0)*</button></div>
+                <div><button ng-click="authenticate('twitter')">Login twitter (OAuth 1.0)</button></div>
                 <div><button ng-click="logout()">Logout knox</button></div>
-            </div>
-            <div>
-                (*) Currently in case of OAuth 1.0 you still need to have session enabled, as python-social-auth will store some data in session between requests. Maybe in future versions of rest-social-auth this will be solved.
             </div>
             <div>
                 <h2>Knox user data</h2>

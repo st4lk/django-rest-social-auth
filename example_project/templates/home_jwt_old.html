@@ -10,11 +10,8 @@
                 <h4>rest_framework_jwt.authentication.JSONWebTokenAuthentication</h4>
                 <div><button ng-click="authenticate('facebook')">Login facebook (OAuth 2.0)</button></div>
                 <div><button ng-click="authenticate('google')">Login google (OAuth 2.0)</button></div>
-                <div><button ng-click="authenticate('twitter')">Login twitter (OAuth 1.0)*</button></div>
+                <div><button ng-click="authenticate('twitter')">Login twitter (OAuth 1.0)</button></div>
                 <div><button ng-click="logout()">Logout jwt</button></div>
-            </div>
-            <div>
-                (*) Currently in case of OAuth 1.0 you still need to have session enabled, as python-social-auth will store some data in session between requests. Maybe in future versions of rest-social-auth this will be solved.
             </div>
             <div>
                 <h2>JWT user data</h2>
