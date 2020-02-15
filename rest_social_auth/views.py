@@ -315,7 +315,7 @@ class SocialJWTSlidingUserAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
 class JWTAuthMixin(object):
     def get_authenticators(self):
         warnings.warn(
-            'Support of djangorestframework-jwt will be removed in 4.0.0 version. '
+            'Support of djangorestframework-jwt will be removed in 5.0.0 version. '
             'Use rest_framework_simplejwt instead.',
             DeprecationWarning,
         )
