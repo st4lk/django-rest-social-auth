@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_protect
 from social_django.utils import psa, STORAGE
 from social_django.views import _do_login as social_auth_login
 from social_core.backends.oauth import BaseOAuth1
-from social_core.utils import get_strategy, parse_qs, user_is_authenticated
+from social_core.utils import get_strategy, parse_qs, user_is_authenticated, setting_name
 from social_core.exceptions import AuthException
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -48,10 +48,11 @@ logger = logging.getLogger(__name__)
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
 DOMAIN_FROM_ORIGIN = getattr(settings, 'REST_SOCIAL_DOMAIN_FROM_ORIGIN', True)
 LOG_AUTH_EXCEPTIONS = getattr(settings, 'REST_SOCIAL_LOG_AUTH_EXCEPTIONS', True)
+STRATEGY = getattr(settings, setting_name('STRATEGY'), 'rest_social_auth.strategy.DRFStrategy')
 
 
 def load_strategy(request=None):
-    return get_strategy('rest_social_auth.strategy.DRFStrategy', STORAGE, request)
+    return get_strategy(STRATEGY, STORAGE, request)
 
 
 @psa(REDIRECT_URI, load_strategy=load_strategy)
