@@ -435,6 +435,12 @@ Settings
 
     When `False` will not log social auth authentication exceptions.
 
+- `SOCIAL_AUTH_STRATEGY`
+
+    Default: `'rest_social_auth.strategy.DRFStrategy'`
+
+    Override [strategy](https://python-social-auth.readthedocs.io/en/latest/strategies.html) for python-social-auth.
+
 
 Customization
 -------------
@@ -544,3 +550,4 @@ Contributors
 - Jeffrey de Lange, [jgadelange](https://github.com/jgadelange)
 - John Vandenberg, [jayvdb](https://github.com/jayvdb)
 - Anton_Datsik, [AntonDatsik](https://github.com/AntonDatsik)
+- Netizen29, [Netizen29](https://github.com/Netizen29)

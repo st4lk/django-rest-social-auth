@@ -1,6 +1,10 @@
 rest_social_auth release notes
 ==============================
 
+v4.1.0
+------
+- Allow to specify custom strategy for python-social-auth
+
 v4.0.0
 ------
 - Update supported version of django-rest-knox (>=4.0.0, <5.0.0). v4 has breaking changes.
