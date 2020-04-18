@@ -213,10 +213,9 @@ class BaseSocialAuthView(GenericAPIView):
         return manual_redirect_uri
 
     def get_provider_name(self, input_data):
-        if 'provider' in input_data:
-            return input_data['provider']
-        else:
-            return self.kwargs.get('provider')
+        if self.kwargs.get('provider'):
+            return self.kwargs['provider']
+        return input_data.get('provider')
 
     def respond_error(self, error):
         if isinstance(error, Exception):

@@ -244,7 +244,7 @@ Quick start
     This redirect_uri must be equal in front-end request and in back-end request.
     Back-end will not do any redirect in fact.
 
-    It is also possible to specify provider in url, not in request body.
+    It is also possible to specify provider in URL, not in request body.
     Just append it to the url:
 
         POST /api/login/social/session/facebook/
@@ -254,6 +254,9 @@ Quick start
         {
             "code": "AQBPBBTjbdnehj51"
         }
+
+    Provider defined in URL has higher priority than provider in body.
+    If both are specified - provider will be taken from URL.
 
 
 OAuth 2.0 workflow with rest-social-auth
