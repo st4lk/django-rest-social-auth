@@ -1,6 +1,12 @@
 rest_social_auth release notes
 ==============================
 
+master
+------
+- Take provider name from URL first
+
+Issues: #121
+
 v4.1.0
 ------
 - Allow to specify custom strategy for python-social-auth
