@@ -1,7 +1,7 @@
 rest_social_auth release notes
 ==============================
 
-master
+v4.2.0
 ------
 - Take provider name from URL first
 
