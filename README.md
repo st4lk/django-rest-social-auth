@@ -96,37 +96,37 @@ Quick start
     4.1 [session authentication](http://www.django-rest-framework.org/api-guide/authentication/#sessionauthentication)
 
     ```python
-    url(r'^api/login/', include('rest_social_auth.urls_session')),
+    path('api/login/', include('rest_social_auth.urls_session')),
     ```
 
     4.2 [token authentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication)
 
     ```python
-    url(r'^api/login/', include('rest_social_auth.urls_token')),
+    path('api/login/', include('rest_social_auth.urls_token')),
     ```
 
     4.3 [jwt authentication](https://github.com/davesque/django-rest-framework-simplejwt)
 
     ```python
-    url(r'^api/login/', include('rest_social_auth.urls_jwt_pair')),
+    path('api/login/', include('rest_social_auth.urls_jwt_pair')),
     ```
 
     or / and
 
     ```python
-    url(r'^api/login/', include('rest_social_auth.urls_jwt_sliding')),
+    path('api/login/', include('rest_social_auth.urls_jwt_sliding')),
     ```
 
     4.3.1 [jwt authentication (deprecated)](http://getblimp.github.io/django-rest-framework-jwt/)
 
     ```python
-    url(r'^api/login/', include('rest_social_auth.urls_jwt')),
+    path('api/login/', include('rest_social_auth.urls_jwt')),
     ```
 
     4.4 [knox authentication](https://github.com/James1345/django-rest-knox/)
 
     ```python
-    url(r'^api/login/', include('rest_social_auth.urls_knox')),
+    path('api/login/', include('rest_social_auth.urls_knox')),
     ```
 
 5. You are ready to login users
@@ -458,7 +458,7 @@ To do it
 
 - define your own url:
 
-        url(r'^api/login/social/$', MySocialView.as_view(), name='social_login'),
+        path('api/login/social/$', MySocialView.as_view(), name='social_login'),
 
 - define your serializer
 
