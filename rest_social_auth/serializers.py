@@ -12,7 +12,7 @@ user_fields = set([field.name for field in User._meta.get_fields()])
 fields_to_exclude = {'is_staff', 'is_active', 'date_joined', 'password', 'last_login',
                      'user_permissions', 'groups', 'is_superuser'}
 fields_to_exclude &= user_fields
-fields_to_exclude = list(fields_to_exclude)
+fields_to_exclude = tuple(fields_to_exclude)
 
 
 class OAuth2InputSerializer(serializers.Serializer):
