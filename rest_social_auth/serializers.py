@@ -6,6 +6,15 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 
+# Finding fields to be excluded from User Serializer
+User = get_user_model()
+user_fields = set([field.name for field in User._meta.get_fields()])
+fields_to_exclude = {'is_staff', 'is_active', 'date_joined', 'password', 'last_login',
+                     'user_permissions', 'groups', 'is_superuser'}
+fields_to_exclude &= user_fields
+fields_to_exclude = tuple(fields_to_exclude)
+
+
 class OAuth2InputSerializer(serializers.Serializer):
 
     provider = serializers.CharField(required=False)
@@ -24,10 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        exclude = (
-            'is_staff', 'is_active', 'date_joined', 'password', 'last_login', 'user_permissions',
-            'groups', 'is_superuser',
-        )
+        exclude = fields_to_exclude
 
 
 class TokenSerializer(serializers.Serializer):
