@@ -27,13 +27,11 @@ from requests.exceptions import HTTPError
 
 from .serializers import (
     JWTPairSerializer,
-    JWTSerializer,
     JWTSlidingSerializer,
     KnoxSerializer,
     OAuth1InputSerializer,
     OAuth2InputSerializer,
     TokenSerializer,
-    UserJWTSerializer,
     UserJWTSlidingSerializer,
     UserKnoxSerializer,
     UserJWTPairSerializer,
@@ -309,29 +307,3 @@ class SocialJWTSlidingOnlyAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
 
 class SocialJWTSlidingUserAuthView(SimpleJWTAuthMixin, BaseSocialAuthView):
     serializer_class = UserJWTSlidingSerializer
-
-
-# Deprecated views
-class JWTAuthMixin(object):
-    def get_authenticators(self):
-        warnings.warn(
-            'Support of djangorestframework-jwt will be removed in 5.0.0 version. '
-            'Use rest_framework_simplejwt instead.',
-            DeprecationWarning,
-        )
-        try:
-            from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-        except ImportError:
-            warnings.warn('djangorestframework-jwt must be installed for JWT authentication',
-                          ImportWarning)
-            raise
-
-        return [JSONWebTokenAuthentication()]
-
-
-class SocialJWTOnlyAuthView(JWTAuthMixin, BaseSocialAuthView):
-    serializer_class = JWTSerializer
-
-
-class SocialJWTUserAuthView(JWTAuthMixin, BaseSocialAuthView):
-    serializer_class = UserJWTSerializer

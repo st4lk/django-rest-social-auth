@@ -1,6 +1,7 @@
 .PHONY: run all test test_tox shell run-example native-test native-test-tox
 
-PROJECT_PATH = /django_rest_social_auth
+PROJECT_PATH_DOCKER = /django_rest_social_auth
+PROJECT_PATH_NATIVE = "."
 PORT ?= 8000
 
 # ---------------------------
@@ -21,7 +22,7 @@ rebuild:
 run: build
 	docker run -it --rm --name django-rest-social-auth \
 		-p $(PORT):$(PORT) \
-		-v $(PWD):$(PROJECT_PATH)/ \
+		-v $(PWD):$(PROJECT_PATH_DOCKER)/ \
 		st4lk/django-rest-social-auth "$(COMMAND)"
 
 run-example:
@@ -77,12 +78,12 @@ native-lint: native-install-all
 
 native-install-python-versions: .install-python-versions
 .install-python-versions: tox.ini
-	curl https://pyenv.run | PYENV_ROOT=$(PROJECT_PATH)/.pyenv bash || echo '-- pyenv already setup, skipping --\n'
-	PYENV_ROOT=$(PROJECT_PATH)/.pyenv $(PROJECT_PATH)/.pyenv/bin/pyenv install -s 2.7.17
-	PYENV_ROOT=$(PROJECT_PATH)/.pyenv $(PROJECT_PATH)/.pyenv/bin/pyenv install -s 3.5.9
-	PYENV_ROOT=$(PROJECT_PATH)/.pyenv $(PROJECT_PATH)/.pyenv/bin/pyenv install -s 3.6.10
-	PYENV_ROOT=$(PROJECT_PATH)/.pyenv $(PROJECT_PATH)/.pyenv/bin/pyenv install -s 3.8.1
-	pyenv global system 2.7.17 3.5.9 3.6.10 3.8.1
+	curl https://pyenv.run | PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv bash || echo '-- pyenv already setup, skipping --\n'
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.5.9
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.6.10
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.7.7
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.8.2
+	pyenv global system 3.5.9 3.6.10 3.7.7 3.8.2
 	touch $@
 
 native-test-tox: native-install-python-versions native-clean

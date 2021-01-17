@@ -24,10 +24,10 @@ class TestSocialAuth1SimpleJWT(APITestCase, BaseTwitterApiTestCase):
 
     def test_login_social_oauth1_jwt(self):
         resp = self.client.post(
-            reverse('login_social_jwt_user'), data={'provider': 'twitter'})
+            reverse('login_social_jwt_pair'), data={'provider': 'twitter'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data, parse_qs(self.request_token_body))
-        resp = self.client.post(reverse('login_social_jwt_user'), data={
+        resp = self.client.post(reverse('login_social_jwt_pair'), data={
             'provider': 'twitter',
             'oauth_token': 'foobar',
             'oauth_verifier': 'overifier'

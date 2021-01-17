@@ -1,10 +1,6 @@
-try:
-    from urlparse import parse_qsl, urlparse
-except ImportError:
-    # python 3
-    from urllib.parse import parse_qsl, urlparse
+from unittest import mock
+from urllib.parse import parse_qsl, urlparse
 
-from mock import patch
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.test import modify_settings
@@ -106,7 +102,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
         url_params = dict(parse_qsl(urlparse(HTTPretty.latest_requests[0].path).query))
         self.assertEqual('http://manualdomain.com/', url_params['redirect_uri'])
 
-    @patch('rest_framework.views.APIView.permission_classes')
+    @mock.patch('rest_framework.views.APIView.permission_classes')
     def test_login_social_session_model_permission(self, m_permission_classes):
         setattr(
             m_permission_classes,

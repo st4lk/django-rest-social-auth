@@ -13,12 +13,12 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (2.7, 3.5, 3.6, 3.7, 3.8)
-- django (1.11, 2.2, 3.0)
-- djangorestframework (>=3.1, <4.0)
+- python (3.5, 3.6, 3.7, 3.8)
+- django (2.2, 3.0, 3.1)
+- djangorestframework (>=3.9, <4.0)
 - social-auth-core (>=3.0, <4.0)
 - social-auth-app-django (>=3.1, <4.0)
-- [optional] djangorestframework-simplejwt (>=4.0.0)
+- [optional] djangorestframework-simplejwt (>=4.4.0)
 - [optional] django-rest-knox (>=4.0.0, <5.0.0)
 
 Release notes
@@ -215,16 +215,7 @@ Quick start
 
         Check [docs of simplejwt](https://github.com/davesque/django-rest-framework-simplejwt#token-types) for pair/sliding token difference.
 
-    Note: Since django-rest-framework-simplejwt doesn't support python 2.x, this APIs will work only with python 3.x.
-
-    5.3.1 jwt authentcation (using unmaintained [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt))
-
-    - POST /api/login/social/jwt/
-    - POST /api/login/social/jwt_user/
-
-        To use it, django-rest-framework-jwt must be installed.    
-
-    Note: django-rest-framework-jwt package is not being maintained for a long time, therefore it is better to avoid using it. Current tool will drop support of it in next major version with high probability. But you may still want to use it if your project use python 2.7 or due to historical reasons.
+        Note. `django-rest-framework-simplejwt` doesn't work on and python3.6
 
     5.4 knox authentication
 
