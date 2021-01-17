@@ -216,12 +216,17 @@ class BaseSocialAuthView(GenericAPIView):
         return input_data.get('provider')
 
     def respond_error(self, error):
+        message = error if isinstance(error, str) else ''
         if isinstance(error, Exception):
             if not isinstance(error, AuthException) or LOG_AUTH_EXCEPTIONS:
                 self.log_exception(error)
+                try:
+                    message = error.response.json()['error']['message']
+                except KeyError:
+                    pass
         else:
             logger.error(error)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=message, status=status.HTTP_400_BAD_REQUEST)
 
     def log_exception(self, error):
         err_msg = error.args[0] if error.args else ''
