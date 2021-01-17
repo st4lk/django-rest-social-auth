@@ -13,12 +13,12 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (2.7, 3.5, 3.6, 3.7, 3.8)
-- django (1.11, 2.2, 3.0)
-- djangorestframework (>=3.1, <4.0)
+- python (3.5, 3.6, 3.7, 3.8)
+- django (2.2, 3.0, 3.1)
+- djangorestframework (>=3.9, <4.0)
 - social-auth-core (>=3.0, <4.0)
 - social-auth-app-django (>=3.1, <4.0)
-- [optional] djangorestframework-simplejwt (>=4.0.0)
+- [optional] djangorestframework-simplejwt (>=4.4.0)
 - [optional] django-rest-knox (>=4.0.0, <5.0.0)
 
 Release notes
@@ -214,6 +214,8 @@ Quick start
     - POST /api/login/social/jwt-sliding-user/
 
         Check [docs of simplejwt](https://github.com/davesque/django-rest-framework-simplejwt#token-types) for pair/sliding token difference.
+
+        Note. `django-rest-framework-simplejwt` doesn't work on and python3.6
 
     5.4 knox authentication
 
