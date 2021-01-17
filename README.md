@@ -117,12 +117,6 @@ Quick start
     url(r'^api/login/', include('rest_social_auth.urls_jwt_sliding')),
     ```
 
-    4.3.1 [jwt authentication (deprecated)](http://getblimp.github.io/django-rest-framework-jwt/)
-
-    ```python
-    url(r'^api/login/', include('rest_social_auth.urls_jwt')),
-    ```
-
     4.4 [knox authentication](https://github.com/James1345/django-rest-knox/)
 
     ```python
@@ -215,14 +209,14 @@ Quick start
 
         Check [docs of simplejwt](https://github.com/davesque/django-rest-framework-simplejwt#token-types) for pair/sliding token difference.
 
-        Note. `django-rest-framework-simplejwt` doesn't work on and python3.6
+        Note. `django-rest-framework-simplejwt` doesn't work on python3.6
 
     5.4 knox authentication
 
     - POST /api/login/social/knox/
     - POST /api/login/social/knox_user/
 
-        Similar to jwt/token authentication, but token is a Django Rest Knox Token.
+        Similar to token authentication, but token is Django Rest Knox Token.
 
         To use it, [django-rest-knox](https://github.com/James1345/django-rest-knox/) must be installed.
 
