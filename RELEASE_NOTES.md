@@ -1,6 +1,18 @@
 rest_social_auth release notes
 ==============================
 
+v5.0.0
+------
+- Update user serializer: exclude field only if it was defined in customer user model
+- Include error message from social provider into HTTP response of API
+- Use `path()` django function instead of deprecated `url()`
+- Drop support of Django 1.11
+- Drop support of Python 2.7
+- Drop support of deprecated `djangorestframework-jwt` dependency
+- Add support of Django 3.1
+
+Issues: #137
+
 v4.2.0
 ------
 - Take provider name from URL first

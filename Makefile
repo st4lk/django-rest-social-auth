@@ -83,7 +83,7 @@ native-install-python-versions: .install-python-versions
 	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.6.10
 	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.7.7
 	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.8.2
-	pyenv global system 3.5.9 3.6.10 3.7.7 3.8.2
+	$(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv global system 3.5.9 3.6.10 3.7.7 3.8.2
 	touch $@
 
 native-test-tox: native-install-python-versions native-clean

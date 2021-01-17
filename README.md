@@ -539,3 +539,6 @@ Contributors
 - John Vandenberg, [jayvdb](https://github.com/jayvdb)
 - Anton_Datsik, [AntonDatsik](https://github.com/AntonDatsik)
 - Netizen29, [Netizen29](https://github.com/Netizen29)
+- Dipendra Raj Panta, [Dipendra Raj Panta](https://github.com/Mr-DRP)
+- JD, [JD](https://github.com/jd-0001)
+- Harsh Patel, [Harsh Patel](https://github.com/eelectronn)
