@@ -27,3 +27,4 @@ settings_local.py
 .install-optional
 .install-python-versions
 venv/
+.pyenv/

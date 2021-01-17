@@ -215,17 +215,6 @@ Quick start
 
         Check [docs of simplejwt](https://github.com/davesque/django-rest-framework-simplejwt#token-types) for pair/sliding token difference.
 
-    Note: Since django-rest-framework-simplejwt doesn't support python 2.x, this APIs will work only with python 3.x.
-
-    5.3.1 jwt authentcation (using unmaintained [django-rest-framework-jwt](https://github.com/GetBlimp/django-rest-framework-jwt))
-
-    - POST /api/login/social/jwt/
-    - POST /api/login/social/jwt_user/
-
-        To use it, django-rest-framework-jwt must be installed.    
-
-    Note: django-rest-framework-jwt package is not being maintained for a long time, therefore it is better to avoid using it. Current tool will drop support of it in next major version with high probability. But you may still want to use it if your project use python 2.7 or due to historical reasons.
-
     5.4 knox authentication
 
     - POST /api/login/social/knox/
