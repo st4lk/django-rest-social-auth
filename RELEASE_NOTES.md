@@ -1,6 +1,10 @@
 rest_social_auth release notes
 ==============================
 
+v5.0.1
+------
+- Expect error without response during error handling
+
 v5.0.0
 ------
 - Update user serializer: exclude field only if it was defined in customer user model
