@@ -30,7 +30,7 @@ matrix:
     - python: 3.9
       env: TOXENV=py39-django31
 
-install: pip install --quiet tox
+install: pip install --quiet --upgrade pip tox
 
 # command to run tests
 script: tox
