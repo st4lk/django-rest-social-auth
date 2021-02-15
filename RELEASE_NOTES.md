@@ -1,6 +1,14 @@
 rest_social_auth release notes
 ==============================
 
+v6.0.0
+------
+- Add support of social-auth-core==4.0
+- Add support of social-auth-app-django==4.0
+- Drop support of Python 3.5
+- Drop support of social-auth-core<4.0
+- Drop support of social-auth-app-django<4.0
+
 v5.0.1
 ------
 - Expect error without response during error handling

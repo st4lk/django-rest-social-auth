@@ -13,11 +13,11 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (3.5, 3.6, 3.7, 3.8)
+- python (3.6, 3.7, 3.8, 3.9)
 - django (2.2, 3.0, 3.1)
 - djangorestframework (>=3.9, <4.0)
-- social-auth-core (>=3.0, <4.0)
-- social-auth-app-django (>=3.1, <4.0)
+- social-auth-core (>=4.0, <5.0)
+- social-auth-app-django (>=4.0, <5.0)
 - [optional] djangorestframework-simplejwt (>=4.4.0)
 - [optional] django-rest-knox (>=4.0.0, <5.0.0)
 
@@ -539,6 +539,7 @@ Contributors
 - John Vandenberg, [jayvdb](https://github.com/jayvdb)
 - Anton_Datsik, [AntonDatsik](https://github.com/AntonDatsik)
 - Netizen29, [Netizen29](https://github.com/Netizen29)
-- Dipendra Raj Panta, [Dipendra Raj Panta](https://github.com/Mr-DRP)
-- JD, [JD](https://github.com/jd-0001)
-- Harsh Patel, [Harsh Patel](https://github.com/eelectronn)
+- Dipendra Raj Panta, [Mr-DRP](https://github.com/Mr-DRP)
+- JD, [jd-0001](https://github.com/jd-0001)
+- Harsh Patel, [eelectronn](https://github.com/eelectronn)
+- Devid, [sevdog](https://github.com/sevdog)
