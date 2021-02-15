@@ -1,5 +1,5 @@
 pytest-django==4.1.0
-httpretty==0.9.6
-unittest2==1.0.1
-django-sslserver>=0.20
-flake8==3.7.9
+httpretty==1.0.5
+unittest2==1.1.0
+django-sslserver>=0.22
+flake8==3.8.4

@@ -1,7 +1,7 @@
 " Settings for tests. "
 INSTALLED_APPS = []
 
-from .settings import *  # NOQA: F401, F403
+from .settings import *  # NOQA: E402, F401, F403
 
 # Databases
 DATABASES = {
