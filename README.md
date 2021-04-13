@@ -543,3 +543,4 @@ Contributors
 - JD, [jd-0001](https://github.com/jd-0001)
 - Harsh Patel, [eelectronn](https://github.com/eelectronn)
 - Devid, [sevdog](https://github.com/sevdog)
+- Anton Yakovlev, [sputnik5459](https://github.com/sputnik5459)

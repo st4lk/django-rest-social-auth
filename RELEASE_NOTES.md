@@ -1,6 +1,10 @@
 rest_social_auth release notes
 ==============================
 
+v6.0.1
+------
+- Fix processing error from social provider #144
+
 v6.0.0
 ------
 - Add support of social-auth-core==4.0
