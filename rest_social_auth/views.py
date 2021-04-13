@@ -222,8 +222,12 @@ class BaseSocialAuthView(GenericAPIView):
                 self.log_exception(error)
                 if hasattr(error, 'response'):
                     try:
-                        message = error.response.json()['error']['message']
-                    except KeyError:
+                        message = error.response.json()['error']
+                        if isinstance(message, dict) and 'message' in message:
+                            message = message['message']
+                        elif isinstance(message, list) and len(message):
+                            message = message[0]
+                    except (KeyError, TypeError):
                         pass
         else:
             logger.error(error)
