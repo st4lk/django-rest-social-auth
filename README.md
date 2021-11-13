@@ -523,6 +523,12 @@ make test-tox
 Contributors
 ------------
 
+Thanks to all contributors!
+
+<a href="https://github.com/st4lk/django-rest-social-auth/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=st4lk/django-rest-social-auth" />
+</a>
+
 - Alexey Evseev, [st4lk](https://github.com/st4lk)
 - James Keys, [skolsuper](https://github.com/skolsuper)
 - Aaron Abbott, [aabmass](https://github.com/aabmass)
