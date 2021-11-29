@@ -1,26 +1,28 @@
-from django.conf.urls import include, url
+from django.conf.urls import include, re_path
 from django.contrib import admin
 
 from users import views
 
 urlpatterns = [
-    url(r'^$', views.HomeSessionView.as_view(), name='home'),
-    url(r'^session/$', views.HomeSessionView.as_view(), name='home_session'),
-    url(r'^token/$', views.HomeTokenView.as_view(), name='home_token'),
-    url(r'^jwt/$', views.HomeJWTView.as_view(), name='home_jwt'),
-    url(r'^knox/$', views.HomeKnoxView.as_view(), name='home_knox'),
+    re_path(r'^$', views.HomeSessionView.as_view(), name='home'),
+    re_path(r'^session/$', views.HomeSessionView.as_view(), name='home_session'),
+    re_path(r'^token/$', views.HomeTokenView.as_view(), name='home_token'),
+    re_path(r'^jwt/$', views.HomeJWTView.as_view(), name='home_jwt'),
+    re_path(r'^knox/$', views.HomeKnoxView.as_view(), name='home_knox'),
 
-    url(r'^api/login/', include('rest_social_auth.urls_session')),
-    url(r'^api/login/', include('rest_social_auth.urls_token')),
-    url(r'^api/login/', include('rest_social_auth.urls_jwt_pair')),
-    url(r'^api/login/', include('rest_social_auth.urls_jwt_sliding')),
-    url(r'^api/login/', include('rest_social_auth.urls_knox')),
+    re_path(r'^api/login/', include('rest_social_auth.urls_session')),
+    re_path(r'^api/login/', include('rest_social_auth.urls_token')),
+    re_path(r'^api/login/', include('rest_social_auth.urls_jwt_pair')),
+    re_path(r'^api/login/', include('rest_social_auth.urls_jwt_sliding')),
+    re_path(r'^api/login/', include('rest_social_auth.urls_knox')),
 
-    url(r'^api/logout/session/$', views.LogoutSessionView.as_view(), name='logout_session'),
-    url(r'^api/user/session/', views.UserSessionDetailView.as_view(), name="current_user_session"),
-    url(r'^api/user/token/', views.UserTokenDetailView.as_view(), name="current_user_token"),
-    url(r'^api/user/jwt/', views.UserJWTDetailView.as_view(), name="current_user_jwt"),
-    url(r'^api/user/knox/', views.UserKnoxDetailView.as_view(), name="current_user_knox"),
+    re_path(r'^api/logout/session/$', views.LogoutSessionView.as_view(), name='logout_session'),
+    re_path(r'^api/user/session/',
+            views.UserSessionDetailView.as_view(),
+            name="current_user_session"),
+    re_path(r'^api/user/token/', views.UserTokenDetailView.as_view(), name="current_user_token"),
+    re_path(r'^api/user/jwt/', views.UserJWTDetailView.as_view(), name="current_user_jwt"),
+    re_path(r'^api/user/knox/', views.UserKnoxDetailView.as_view(), name="current_user_knox"),
 
-    url(r'^admin/', admin.site.urls),
+    re_path(r'^admin/', admin.site.urls),
 ]
