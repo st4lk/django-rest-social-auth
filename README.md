@@ -14,10 +14,10 @@ Requirements
 -----------
 
 - python (3.6, 3.7, 3.8, 3.9)
-- django (2.2, 3.0, 3.1)
+- django (2.2, 3.0, 3.1, 3.2)
 - djangorestframework (>=3.9, <4.0)
 - social-auth-core (>=4.0, <5.0)
-- social-auth-app-django (>=4.0, <5.0)
+- social-auth-app-django (>=5.0, <6.0)
 - [optional] djangorestframework-simplejwt (>=4.4.0)
 - [optional] django-rest-knox (>=4.0.0, <5.0.0)
 
@@ -550,3 +550,4 @@ Thanks to all contributors!
 - Harsh Patel, [eelectronn](https://github.com/eelectronn)
 - Devid, [sevdog](https://github.com/sevdog)
 - Anton Yakovlev, [sputnik5459](https://github.com/sputnik5459)
+- Olivér Kecskeméty, [KOliver94](https://github.com/KOliver94)

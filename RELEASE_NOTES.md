@@ -1,6 +1,12 @@
 rest_social_auth release notes
 ==============================
 
+v7.0.0
+------
+- Add support of social-auth-app-django==5.x
+- Add support of Django 3.2
+- Drop support of social-auth-app-django<5.0
+
 v6.0.1
 ------
 - Fix processing error from social provider #144
