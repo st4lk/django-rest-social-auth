@@ -12,7 +12,7 @@ from social_django.utils import psa, STORAGE
 from social_django.views import _do_login as social_auth_login
 from social_core.backends.oauth import BaseOAuth1
 from social_core.utils import get_strategy, parse_qs, user_is_authenticated, setting_name
-from social_core.exceptions import AuthException
+from social_core.exceptions import AuthException, SocialAuthBaseException
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -215,15 +215,19 @@ class BaseSocialAuthView(GenericAPIView):
         if isinstance(error, Exception):
             if not isinstance(error, AuthException) or LOG_AUTH_EXCEPTIONS:
                 self.log_exception(error)
-                if hasattr(error, 'response'):
-                    try:
-                        message = error.response.json()['error']
-                        if isinstance(message, dict) and 'message' in message:
-                            message = message['message']
-                        elif isinstance(message, list) and len(message):
-                            message = message[0]
-                    except (KeyError, TypeError):
-                        pass
+            if hasattr(error, 'response'):
+                try:
+                    message = error.response.json()['error']
+                    if isinstance(message, dict) and 'message' in message:
+                        message = message['message']
+                    elif isinstance(message, list) and len(message):
+                        message = message[0]
+                except (KeyError, TypeError):
+                    pass
+            # As a fallback, if no valid message was captured, covert the exception
+            # to string because most of the social-core exceptions implement a valid conversion.
+            if isinstance(error, SocialAuthBaseException) and not message:
+                message = str(error)
         else:
             logger.error(error)
         return Response(data=message, status=status.HTTP_400_BAD_REQUEST)
