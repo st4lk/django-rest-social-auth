@@ -16,7 +16,7 @@ def save_avatar(strategy, details, user=None, *args, **kwargs):
         if 'facebook' in backend_name:
             if 'id' in response:
                 social_thumb = (
-                    'http://graph.facebook.com/{0}/picture?type=normal'
+                    'http://graph.facebook.com/{}/picture?type=normal'
                 ).format(response['id'])
         elif 'twitter' in backend_name and response.get('profile_image_url'):
             social_thumb = response['profile_image_url']

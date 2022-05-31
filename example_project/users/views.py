@@ -16,7 +16,7 @@ class HomeSessionView(TemplateView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
-        return super(HomeSessionView, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 class HomeTokenView(TemplateView):

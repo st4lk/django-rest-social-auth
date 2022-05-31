@@ -16,7 +16,7 @@ for attr in (attr for attr in dir(TwitterOAuth1Test) if attr.startswith('test_')
     delattr(TwitterOAuth1Test, attr)
 
 
-class RestSocialMixin(object):
+class RestSocialMixin:
     def setUp(self):
         HTTPretty.enable(allow_net_connect=False)
         Backend = module_member(self.backend_path)

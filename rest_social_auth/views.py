@@ -148,7 +148,7 @@ class BaseSocialAuthView(GenericAPIView):
             if origin:
                 relative_path = urlparse(self.request.backend.redirect_uri).path
                 url = urlparse(origin)
-                origin_scheme_host = "%s://%s" % (url.scheme, url.netloc)
+                origin_scheme_host = f"{url.scheme}://{url.netloc}"
                 location = urljoin(origin_scheme_host, relative_path)
                 self.request.backend.redirect_uri = iri_to_uri(location)
         is_authenticated = user_is_authenticated(user)
@@ -239,11 +239,11 @@ class BaseSocialAuthView(GenericAPIView):
             try:
                 err_data = error.response.json()
             except (ValueError, AttributeError):
-                logger.error(u'%s; %s', error, err_msg)
+                logger.error(f'{error}; {err_msg}')
             else:
-                logger.error(u'%s; %s; %s', error, err_msg, err_data)
+                logger.error(f'{error}; {err_msg}; {err_data}')
         else:
-            logger.exception(u'%s; %s', error, err_msg)
+            logger.exception(f'{error}; {err_msg}')
 
 
 class SocialSessionAuthView(BaseSocialAuthView):
@@ -254,7 +254,7 @@ class SocialSessionAuthView(BaseSocialAuthView):
 
     @method_decorator(csrf_protect)  # just to be sure csrf is not disabled
     def post(self, request, *args, **kwargs):
-        return super(SocialSessionAuthView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class SocialTokenOnlyAuthView(BaseSocialAuthView):
@@ -267,7 +267,7 @@ class SocialTokenUserAuthView(BaseSocialAuthView):
     authentication_classes = (TokenAuthentication, )
 
 
-class KnoxAuthMixin(object):
+class KnoxAuthMixin:
     def get_authenticators(self):
         try:
             from knox.auth import TokenAuthentication
@@ -289,7 +289,7 @@ class SocialKnoxUserAuthView(KnoxAuthMixin, BaseSocialAuthView):
     serializer_class = UserKnoxSerializer
 
 
-class SimpleJWTAuthMixin(object):
+class SimpleJWTAuthMixin:
     def get_authenticators(self):
         try:
             from rest_framework_simplejwt.authentication import JWTAuthentication
