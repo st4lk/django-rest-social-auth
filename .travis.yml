@@ -4,31 +4,13 @@ dist: bionic
 matrix:
   include:
     - python: 3.7
-      env: TOXENV=py37-django22
-    - python: 3.7
-      env: TOXENV=py37-django30
-    - python: 3.7
-      env: TOXENV=py37-django31
-    - python: 3.7
       env: TOXENV=py37-django32
 
-    - python: 3.8
-      env: TOXENV=py38-django22
-    - python: 3.8
-      env: TOXENV=py38-django30
-    - python: 3.8
-      env: TOXENV=py38-django31
     - python: 3.8
       env: TOXENV=py38-django32
     - python: 3.8
       env: TOXENV=py38-django40
 
-    - python: 3.9
-      env: TOXENV=py39-django22
-    - python: 3.9
-      env: TOXENV=py39-django30
-    - python: 3.9
-      env: TOXENV=py39-django31
     - python: 3.9
       env: TOXENV=py39-django32
     - python: 3.9
@@ -45,7 +27,7 @@ install: pip install --quiet --upgrade pip tox
 script: tox
 
 after_script:
-  - if [ $TOXENV == "py37-django22" ]; then
+  - if [ $TOXENV == "py310-django40" ]; then
       pip install --quiet coveralls;
       coveralls;
     fi
