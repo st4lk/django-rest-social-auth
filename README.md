@@ -13,7 +13,7 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (3.6, 3.7, 3.8, 3.9, 3.10)
+- python (3.7, 3.8, 3.9, 3.10)
 - django (2.2, 3.0, 3.1, 3.2)
 - djangorestframework (>=3.9, <4.0)
 - social-auth-core (>=4.0, <5.0)
