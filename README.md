@@ -18,7 +18,7 @@ Requirements
 - djangorestframework (>=3.9, <4.0)
 - social-auth-core (>=4.0, <5.0)
 - social-auth-app-django (>=5.0, <6.0)
-- [optional] djangorestframework-simplejwt (>=4.4.0)
+- [optional] djangorestframework-simplejwt (>=5.0.0)
 - [optional] django-rest-knox (>=4.0.0, <5.0.0)
 
 Release notes
