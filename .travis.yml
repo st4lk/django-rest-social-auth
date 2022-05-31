@@ -1,4 +1,5 @@
 language: python
+dist: bionic
 
 matrix:
   include:
@@ -29,6 +30,9 @@ matrix:
       env: TOXENV=py39-django30
     - python: 3.9
       env: TOXENV=py39-django31
+
+    - python: 3.10
+      env: TOXENV=py310-django32
 
 install: pip install --quiet --upgrade pip tox
 
