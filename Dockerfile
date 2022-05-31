@@ -1,11 +1,11 @@
 # Base image
-FROM python:3.7.6
+FROM python:3.10.4
 
 RUN set -eux; \
     apt-get update; \
     apt-get install -y gosu; \
     rm -rf /var/lib/apt/lists/*; \
-# verify that the binary works
+    # verify that the binary works
     gosu nobody true
 
 
