@@ -18,7 +18,7 @@ for attr in (attr for attr in dir(TwitterOAuth1Test) if attr.startswith('test_')
 
 class RestSocialMixin(object):
     def setUp(self):
-        HTTPretty.enable()
+        HTTPretty.enable(allow_net_connect=False)
         Backend = module_member(self.backend_path)
         self.strategy = views.load_strategy()
         self.backend = Backend(self.strategy, redirect_uri=self.complete_url)
@@ -50,6 +50,7 @@ class BaseFacebookAPITestCase(RestSocialMixin, FacebookOAuth2Test):
     def do_rest_login(self):
         start_url = self.backend.start().url
         self.auth_handlers(start_url)
+        self.pre_complete_callback(start_url)
 
 
 class BaseTwitterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
@@ -58,3 +59,4 @@ class BaseTwitterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
         self.request_token_handler()
         start_url = self.backend.start().url
         self.auth_handlers(start_url)
+        self.pre_complete_callback(start_url)
