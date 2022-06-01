@@ -1,18 +1,13 @@
 import logging
 import warnings
 
-try:
-    from urllib.parse import urljoin, urlencode, urlparse  # python 3x
-except ImportError:
-    from urllib import urlencode  # python 2x
-    from urlparse import urljoin, urlparse
-
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.encoding import iri_to_uri
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
+from urllib.parse import urljoin, urlencode, urlparse
 from social_django.utils import psa, STORAGE
 from social_django.views import _do_login as social_auth_login
 from social_core.backends.oauth import BaseOAuth1
