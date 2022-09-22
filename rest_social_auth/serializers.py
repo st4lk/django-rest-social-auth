@@ -104,7 +104,7 @@ class JWTPairSerializer(JWTBaseSerializer):
     token = serializers.SerializerMethodField()
     refresh = serializers.SerializerMethodField()
 
-    jwt_token_class_name = 'RefreshToken'
+    jwt_token_class_name = 'rest_framework_simplejwt.tokens.RefreshToken'
 
     def get_token(self, obj):
         return str(self.get_token_instance().access_token)
@@ -124,7 +124,7 @@ class UserJWTPairSerializer(JWTPairSerializer, UserSerializer):
 class JWTSlidingSerializer(JWTBaseSerializer):
     token = serializers.SerializerMethodField()
 
-    jwt_token_class_name = 'SlidingToken'
+    jwt_token_class_name = 'rest_framework_simplejwt.tokens.SlidingToken'
 
     def get_token(self, obj):
         return str(self.get_token_instance())
