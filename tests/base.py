@@ -6,6 +6,14 @@ from social_core.tests.backends.test_facebook import FacebookOAuth2Test
 from social_core.tests.backends.test_twitter import TwitterOAuth1Test
 from social_core.utils import module_member
 
+from social_core.tests.models import (
+    TestAssociation,
+    TestCode,
+    TestNonce,
+    TestUserSocialAuth,
+    User,
+)
+
 from rest_social_auth import views
 
 
@@ -18,16 +26,21 @@ for attr in (attr for attr in dir(TwitterOAuth1Test) if attr.startswith('test_')
 
 class RestSocialMixin(object):
     def setUp(self):
-        HTTPretty.enable()
+        HTTPretty.enable(allow_net_connect=False)
         Backend = module_member(self.backend_path)
         self.strategy = views.load_strategy()
         self.backend = Backend(self.strategy, redirect_uri=self.complete_url)
-        self.name = self.backend.name.upper().replace('-', '_')
+        self.name = self.backend.name.upper().replace("-", "_")
         self.complete_url = self.strategy.build_absolute_uri(
             self.raw_complete_url.format(self.backend.name)
         )
         backends = (self.backend_path, )
         load_backends(backends, force_load=True)
+        User.reset_cache()
+        TestUserSocialAuth.reset_cache()
+        TestNonce.reset_cache()
+        TestAssociation.reset_cache()
+        TestCode.reset_cache()
 
         user_data_body = json.loads(self.user_data_body)
         self.email = 'example@mail.com'
@@ -37,12 +50,18 @@ class RestSocialMixin(object):
         self.do_rest_login()
 
     def tearDown(self):
+
         HTTPretty.disable()
         HTTPretty.reset()
         self.backend = None
         self.strategy = None
         self.name = None
         self.complete_url = None
+        User.reset_cache()
+        TestUserSocialAuth.reset_cache()
+        TestNonce.reset_cache()
+        TestAssociation.reset_cache()
+        TestCode.reset_cache()
 
 
 class BaseFacebookAPITestCase(RestSocialMixin, FacebookOAuth2Test):
@@ -50,6 +69,7 @@ class BaseFacebookAPITestCase(RestSocialMixin, FacebookOAuth2Test):
     def do_rest_login(self):
         start_url = self.backend.start().url
         self.auth_handlers(start_url)
+        self.pre_complete_callback(start_url)
 
 
 class BaseTwitterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
@@ -58,3 +78,4 @@ class BaseTwitterApiTestCase(RestSocialMixin, TwitterOAuth1Test):
         self.request_token_handler()
         start_url = self.backend.start().url
         self.auth_handlers(start_url)
+        self.pre_complete_callback(start_url)
