@@ -25,4 +25,4 @@ jobs:
 
     - name: Run lint
       run: |
-        pre-commit make native-lint
+        make native-lint
