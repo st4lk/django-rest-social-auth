@@ -16,7 +16,7 @@ Requirements
 - python (3.6, 3.7, 3.8, 3.9)
 - django (2.2, 3.2)
 - djangorestframework (>=3.9, <4.0)
-- social-auth-core (>=4.0, <5.0)
+- social-auth-core (>=4.3, <5.0)
 - social-auth-app-django (>=5.0, <6.0)
 - [optional] djangorestframework-simplejwt (>=4.4.0)
 - [optional] django-rest-knox (>=4.0.0, <5.0.0)
