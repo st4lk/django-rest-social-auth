@@ -33,6 +33,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip wheel
         make native-install-all
+        python -m pip install tox
 
     - name: Test with tox
       run: tox -e "py${PYTHON_VERSION/\./}"
