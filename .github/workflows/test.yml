@@ -53,6 +53,7 @@ jobs:
         [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] coverage-lcov
 
   coveralls:
+    runs-on: ubuntu-latest
     steps:
     - name: Coveralls
       uses: coverallsapp/github-action@master
