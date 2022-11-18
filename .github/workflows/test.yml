@@ -39,3 +39,8 @@ jobs:
       run: |
         echo "Running py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}" 
         tox -e "py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}"
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
