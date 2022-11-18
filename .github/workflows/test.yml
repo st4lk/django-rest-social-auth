@@ -54,6 +54,7 @@ jobs:
 
   coveralls:
     runs-on: ubuntu-latest
+    needs: test
     steps:
     - name: Coveralls
       uses: coverallsapp/github-action@master
