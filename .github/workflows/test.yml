@@ -49,8 +49,8 @@ jobs:
 
     - name: Convert coverage report to lcov
       run: |
-        [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] pip install coverage-lcov
-        [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] coverage-lcov
+        [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] && pip install coverage-lcov
+        [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] && coverage-lcov
 
   coveralls:
     runs-on: ubuntu-latest
