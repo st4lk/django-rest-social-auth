@@ -11,11 +11,8 @@ jobs:
     strategy:
       matrix:
         python-version:
-        - '3.7'
-        - '3.8'
         - '3.9'
         django-version:
-        - '22'
         - '32'
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
@@ -36,7 +33,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip wheel
         make native-install-all
-        python -m pip install tox
+        python -m pip install tox coverage
 
     - name: Test with tox
-      run: tox -e "py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}"
+      run: |
+      echo "Running py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}" 
+      tox -e "py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}"
