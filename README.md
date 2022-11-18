@@ -1,7 +1,8 @@
 Django REST social auth
 =======================
 
-![Build Status](https://github.com/st4lk/django-rest-social-auth/workflows/Lint/badge.svg)
+![Build Status](https://github.com/st4lk/django-rest-social-auth/workflows/Lint/badge.svg?branch=master)
+![Build Status](https://github.com/st4lk/django-rest-social-auth/workflows/Tests/badge.svg?branch=master)
 [![Pypi version](https://img.shields.io/pypi/v/rest_social_auth.svg)](https://pypi.python.org/pypi/rest_social_auth)
 [![Downloads](https://pepy.tech/badge/rest-social-auth)](https://pepy.tech/project/rest-social-auth)
 
@@ -13,7 +14,7 @@ Requirements
 -----------
 
 - python (3.6, 3.7, 3.8, 3.9)
-- django (2.2, 3.0, 3.1, 3.2)
+- django (2.2, 3.2)
 - djangorestframework (>=3.9, <4.0)
 - social-auth-core (>=4.0, <5.0)
 - social-auth-app-django (>=5.0, <6.0)
