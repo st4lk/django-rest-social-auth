@@ -1,6 +1,11 @@
 rest_social_auth release notes
 ==============================
 
+master
+------
+- Drop support of Python 3.6
+- Drop support of Django 3.0, 3.1
+
 v7.0.0
 ------
 - Add support of social-auth-app-django==5.x
