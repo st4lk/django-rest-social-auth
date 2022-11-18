@@ -37,5 +37,5 @@ jobs:
 
     - name: Test with tox
       run: |
-      echo "Running py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}" 
-      tox -e "py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}"
+        echo "Running py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}" 
+        tox -e "py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}"
