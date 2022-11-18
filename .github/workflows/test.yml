@@ -46,3 +46,15 @@ jobs:
       run: |
         echo "Running py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}" 
         tox -e "py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}"
+
+    - name: Convert coverage report to lcov
+      run: |
+        [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] pip install coverage-lcov
+        [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] coverage-lcov
+
+  coveralls:
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: "lcov.info"
