@@ -28,3 +28,4 @@ settings_local.py
 .install-python-versions
 venv/
 .pyenv/
+lcov.info
