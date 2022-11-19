@@ -1,6 +1,6 @@
-from importlib import import_module
 import warnings
 
+from django.utils.module_loading import import_string
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -74,15 +74,18 @@ class JWTBaseSerializer(serializers.Serializer):
         if not hasattr(self, '_jwt_token_instance'):
             if self.jwt_token_class_name is None:
                 raise NotImplementedError('Must specify `jwt_token_class_name` property')
+            if '.' not in self.jwt_token_class_name:
+                # Maintain compatibility with class name without module path
+                module_path = 'rest_framework_simplejwt.tokens'
+                self.jwt_token_class_name = f'{module_path}.{self.jwt_token_class_name}'
             try:
-                tokens_module = import_module('rest_framework_simplejwt.tokens')
+                token_class = import_string(self.jwt_token_class_name)
             except ImportError:
                 warnings.warn(
                     'djangorestframework_simplejwt must be installed for JWT authentication',
                     ImportWarning,
                 )
                 raise
-            token_class = getattr(tokens_module, self.jwt_token_class_name)
             user = self.instance
             self._jwt_token_instance = token_class.for_user(user)
             for key, value in self.get_token_payload(user).items():
@@ -101,7 +104,7 @@ class JWTPairSerializer(JWTBaseSerializer):
     token = serializers.SerializerMethodField()
     refresh = serializers.SerializerMethodField()
 
-    jwt_token_class_name = 'RefreshToken'
+    jwt_token_class_name = 'rest_framework_simplejwt.tokens.RefreshToken'
 
     def get_token(self, obj):
         return str(self.get_token_instance().access_token)
@@ -121,7 +124,7 @@ class UserJWTPairSerializer(JWTPairSerializer, UserSerializer):
 class JWTSlidingSerializer(JWTBaseSerializer):
     token = serializers.SerializerMethodField()
 
-    jwt_token_class_name = 'SlidingToken'
+    jwt_token_class_name = 'rest_framework_simplejwt.tokens.SlidingToken'
 
     def get_token(self, obj):
         return str(self.get_token_instance())
