@@ -226,8 +226,8 @@ class BaseSocialAuthView(GenericAPIView):
                             message = message[0]
                     except (KeyError, TypeError):
                         pass
-                # As a fallback, if no valid message was captured, covert the exception
-                # to string because most of the social-core exceptions implement a valid conversion.
+                # As a fallback, if no valid message was captured, covert the exception to string
+                # because most of the social-core exceptions implement a valid conversion.
                 if isinstance(error, SocialAuthBaseException) and not message:
                     message = str(error)
         else:
@@ -244,7 +244,7 @@ class BaseSocialAuthView(GenericAPIView):
             else:
                 logger.error('%s; %s; %s', error, err_msg, err_data)
         else:
-            logger.exception('{%s}; {%s}', error, err_msag)
+            logger.exception('{%s}; {%s}', error, err_msg)
 
 
 class SocialSessionAuthView(BaseSocialAuthView):
