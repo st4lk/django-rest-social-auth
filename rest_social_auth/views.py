@@ -41,6 +41,7 @@ logger = logging.getLogger(__name__)
 REDIRECT_URI = getattr(settings, 'REST_SOCIAL_OAUTH_REDIRECT_URI', '/')
 DOMAIN_FROM_ORIGIN = getattr(settings, 'REST_SOCIAL_DOMAIN_FROM_ORIGIN', True)
 LOG_AUTH_EXCEPTIONS = getattr(settings, 'REST_SOCIAL_LOG_AUTH_EXCEPTIONS', True)
+VERBOSE_ERRORS = getattr(settings, 'REST_SOCIAL_VERBOSE_ERRORS', False)
 STRATEGY = getattr(settings, setting_name('STRATEGY'), 'rest_social_auth.strategy.DRFStrategy')
 
 
@@ -215,19 +216,20 @@ class BaseSocialAuthView(GenericAPIView):
         if isinstance(error, Exception):
             if not isinstance(error, AuthException) or LOG_AUTH_EXCEPTIONS:
                 self.log_exception(error)
-            if hasattr(error, 'response'):
-                try:
-                    message = error.response.json()['error']
-                    if isinstance(message, dict) and 'message' in message:
-                        message = message['message']
-                    elif isinstance(message, list) and len(message):
-                        message = message[0]
-                except (KeyError, TypeError):
-                    pass
-            # As a fallback, if no valid message was captured, covert the exception
-            # to string because most of the social-core exceptions implement a valid conversion.
-            if isinstance(error, SocialAuthBaseException) and not message:
-                message = str(error)
+            if VERBOSE_ERRORS:
+                if hasattr(error, 'response'):
+                    try:
+                        message = error.response.json()['error']
+                        if isinstance(message, dict) and 'message' in message:
+                            message = message['message']
+                        elif isinstance(message, list) and len(message):
+                            message = message[0]
+                    except (KeyError, TypeError):
+                        pass
+                # As a fallback, if no valid message was captured, covert the exception
+                # to string because most of the social-core exceptions implement a valid conversion.
+                if isinstance(error, SocialAuthBaseException) and not message:
+                    message = str(error)
         else:
             logger.error(error)
         return Response(data=message, status=status.HTTP_400_BAD_REQUEST)
@@ -242,7 +244,7 @@ class BaseSocialAuthView(GenericAPIView):
             else:
                 logger.error('%s; %s; %s', error, err_msg, err_data)
         else:
-            logger.exception(f'{error}; {err_msg}')
+            logger.exception('{%s}; {%s}', error, err_msag)
 
 
 class SocialSessionAuthView(BaseSocialAuthView):

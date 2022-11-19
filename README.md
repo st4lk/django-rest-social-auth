@@ -424,6 +424,12 @@ Settings
 
     When `False` will not log social auth authentication exceptions.
 
+- `REST_SOCIAL_VERBOSE_ERRORS`
+
+    Default: `False`
+
+    When `True` the API will return error message received from server. Can be potentially unsecure to turn it ON.
+
 - `SOCIAL_AUTH_STRATEGY`
 
     Default: `'rest_social_auth.strategy.DRFStrategy'`
