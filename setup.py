@@ -7,7 +7,7 @@ from rest_social_auth import __author__, __version__
 def __read(fname):
     try:
         return open(os.path.join(os.path.dirname(__file__), fname)).read()
-    except IOError:
+    except OSError:
         return ''
 
 
@@ -20,18 +20,18 @@ if sys.argv[-1] == 'publish':
     # TODO: Need python 3.4.6+, 3.5.3+, Python 3.6+ here, add a check
     # https://packaging.python.org/guides/migrating-to-pypi-org/#uploading
     dists_to_upload = [
-        'dist/rest_social_auth-{0}.tar.gz'.format(__version__),
-        'dist/rest_social_auth-{0}-py2.py3-none-any.whl'.format(__version__),
+        f'dist/rest_social_auth-{__version__}.tar.gz',
+        f'dist/rest_social_auth-{__version__}-py2.py3-none-any.whl',
     ]
     for dist in dists_to_upload:
-        print('Uploading {0}'.format(dist))
-        os.system('twine upload -r pypi {0}'.format(dist))
+        print(f'Uploading {dist}')
+        os.system(f'twine upload -r pypi {dist}')
     sys.exit()
 
 
 if sys.argv[-1] == 'tag':
     print("Tagging the version on github:")
-    os.system("git tag -a v%s -m 'version %s'" % (__version__, __version__))
+    os.system(f"git tag -a v{__version__} -m 'version {__version__}'")
     os.system("git push --tags")
     sys.exit()
 
@@ -61,10 +61,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Utilities',
     ],
 )
