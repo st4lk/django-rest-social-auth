@@ -5,6 +5,9 @@ master
 ------
 - Drop support of Python 3.6
 - Drop support of Django 3.0, 3.1
+- Add support of Django 4.1
+- Add support of Python 3.10
+- Allow customized implementations of djangorestframework-simplejwt token class
 
 v7.0.0
 ------
