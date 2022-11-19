@@ -3,6 +3,7 @@ Django REST social auth
 
 [![Lint](https://github.com/st4lk/django-rest-social-auth/actions/workflows/lint.yml/badge.svg?branch=master)](https://github.com/st4lk/django-rest-social-auth/actions/workflows/lint.yml?query=branch%3Amaster)
 [![Tests](https://github.com/st4lk/django-rest-social-auth/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/st4lk/django-rest-social-auth/actions/workflows/test.yml?query=branch%3Amaster)
+[![Coverage Status](https://coveralls.io/repos/github/st4lk/django-rest-social-auth/badge.svg?branch=master)](https://coveralls.io/github/st4lk/django-rest-social-auth?branch=master)
 [![Pypi version](https://img.shields.io/pypi/v/rest_social_auth.svg)](https://pypi.python.org/pypi/rest_social_auth)
 [![Downloads](https://pepy.tech/badge/rest-social-auth)](https://pepy.tech/project/rest-social-auth)
 
