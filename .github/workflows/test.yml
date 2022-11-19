@@ -47,11 +47,19 @@ jobs:
         echo "Running py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}" 
         tox -e "py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}"
 
-  coveralls:
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: run-${{ matrix.python-version }}-${{ matrix.django-version }}
+        parallel: true
+        path-to-lcov: "coverage.lcov"
+
+  finish:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: Push coverage to coveralls
+    - name: Coveralls Finished
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.github_token }}
