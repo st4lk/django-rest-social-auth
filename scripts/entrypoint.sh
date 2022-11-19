@@ -11,4 +11,4 @@ export PYENV_ROOT="${PROJECT_PATH}/.pyenv"
 export PATH="${PROJECT_PATH}/.pyenv/bin:${PATH}"
 
 cd ${PROJECT_PATH}
-gosu appuser $1
+$1

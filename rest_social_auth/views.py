@@ -1,18 +1,13 @@
 import logging
 import warnings
 
-try:
-    from urllib.parse import urljoin, urlencode, urlparse  # python 3x
-except ImportError:
-    from urllib import urlencode  # python 2x
-    from urlparse import urljoin, urlparse
-
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.encoding import iri_to_uri
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
+from urllib.parse import urljoin, urlencode, urlparse
 from social_django.utils import psa, STORAGE
 from social_django.views import _do_login as social_auth_login
 from social_core.backends.oauth import BaseOAuth1
@@ -148,7 +143,7 @@ class BaseSocialAuthView(GenericAPIView):
             if origin:
                 relative_path = urlparse(self.request.backend.redirect_uri).path
                 url = urlparse(origin)
-                origin_scheme_host = "%s://%s" % (url.scheme, url.netloc)
+                origin_scheme_host = f"{url.scheme}://{url.netloc}"
                 location = urljoin(origin_scheme_host, relative_path)
                 self.request.backend.redirect_uri = iri_to_uri(location)
         is_authenticated = user_is_authenticated(user)
@@ -239,11 +234,11 @@ class BaseSocialAuthView(GenericAPIView):
             try:
                 err_data = error.response.json()
             except (ValueError, AttributeError):
-                logger.error(u'%s; %s', error, err_msg)
+                logger.error('%s; %s', error, err_msg)
             else:
-                logger.error(u'%s; %s; %s', error, err_msg, err_data)
+                logger.error('%s; %s; %s', error, err_msg, err_data)
         else:
-            logger.exception(u'%s; %s', error, err_msg)
+            logger.exception(f'{error}; {err_msg}')
 
 
 class SocialSessionAuthView(BaseSocialAuthView):
@@ -254,7 +249,7 @@ class SocialSessionAuthView(BaseSocialAuthView):
 
     @method_decorator(csrf_protect)  # just to be sure csrf is not disabled
     def post(self, request, *args, **kwargs):
-        return super(SocialSessionAuthView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class SocialTokenOnlyAuthView(BaseSocialAuthView):
@@ -267,7 +262,7 @@ class SocialTokenUserAuthView(BaseSocialAuthView):
     authentication_classes = (TokenAuthentication, )
 
 
-class KnoxAuthMixin(object):
+class KnoxAuthMixin:
     def get_authenticators(self):
         try:
             from knox.auth import TokenAuthentication
@@ -289,7 +284,7 @@ class SocialKnoxUserAuthView(KnoxAuthMixin, BaseSocialAuthView):
     serializer_class = UserKnoxSerializer
 
 
-class SimpleJWTAuthMixin(object):
+class SimpleJWTAuthMixin:
     def get_authenticators(self):
         try:
             from rest_framework_simplejwt.authentication import JWTAuthentication
