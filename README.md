@@ -551,3 +551,4 @@ Thanks to all contributors!
 - Devid, [sevdog](https://github.com/sevdog)
 - Anton Yakovlev, [sputnik5459](https://github.com/sputnik5459)
 - Olivér Kecskeméty, [KOliver94](https://github.com/KOliver94)
+- vainu-arto, [vainu-arto](https://github.com/vainu-arto)
