@@ -47,17 +47,12 @@ jobs:
         echo "Running py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}" 
         tox -e "py${PYTHON_VERSION/\./}-django${DJANGO_VERSION}"
 
-    - name: Convert coverage report to lcov
-      run: |
-        [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] && pip install coverage-lcov
-        [[ ${{ matrix.python-version }} = 3.9 ]] && [[ ${{ matrix.django-version }} = 32 ]] && coverage-lcov
-
   coveralls:
-    runs-on: ubuntu-latest
     needs: test
+    runs-on: ubuntu-latest
     steps:
-    - name: Coveralls
+    - name: Push coverage to coveralls
       uses: coverallsapp/github-action@master
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: "lcov.info"
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
