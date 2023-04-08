@@ -19,9 +19,12 @@ jobs:
         django-version:
         - '32'
         - '41'
+        - '42'
         exclude:
           - python-version: '3.7'
             django-version: '41'
+          - python-version: '3.7'
+            django-version: '42'
           - python-version: '3.11'
             django-version: '32'
     env:
