@@ -13,14 +13,14 @@ def __read(fname):
 
 if sys.argv[-1] == 'build':
     os.system('python setup.py sdist')
-    os.system('python setup.py bdist_wheel')
+    os.system('python -m build --wheel')
 
 
 if sys.argv[-1] == 'publish':
     # TODO: Need python 3.4.6+, 3.5.3+, Python 3.6+ here, add a check
     # https://packaging.python.org/guides/migrating-to-pypi-org/#uploading
     dists_to_upload = [
-        f'dist/rest_social_auth-{__version__}.tar.gz',
+        # f'dist/rest_social_auth-{__version__}.tar.gz',
         f'dist/rest_social_auth-{__version__}-py2.py3-none-any.whl',
     ]
     for dist in dists_to_upload:
