@@ -163,7 +163,7 @@ class BaseSocialAuthView(GenericAPIView):
         if self.oauth_v1():
             self.save_token_param_in_session()
 
-        user = self.request.backend.complete(user=user)
+        user = self.request.backend.complete(user=user, request=self.request)
         return user
 
     def save_token_param_in_session(self):
