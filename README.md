@@ -559,4 +559,4 @@ Thanks to all contributors!
 - Anton Yakovlev, [sputnik5459](https://github.com/sputnik5459)
 - Olivér Kecskeméty, [KOliver94](https://github.com/KOliver94)
 - vainu-arto, [vainu-arto](https://github.com/vainu-arto)
-- Maxim De Clercq, [vainu-arto](https://github.com/maximdeclercq)
+- Maxim De Clercq, [maximdeclercq](https://github.com/maximdeclercq)
