@@ -1,6 +1,10 @@
 rest_social_auth release notes
 ==============================
 
+v8.3.0
+------
+- Pass request to authentication backend https://github.com/st4lk/django-rest-social-auth/pull/175
+
 v8.2.0
 ------
 - Add support of Django 5.0

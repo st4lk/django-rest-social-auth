@@ -560,3 +560,4 @@ Thanks to all contributors!
 - Olivér Kecskeméty, [KOliver94](https://github.com/KOliver94)
 - vainu-arto, [vainu-arto](https://github.com/vainu-arto)
 - Maxim De Clercq, [maximdeclercq](https://github.com/maximdeclercq)
+- alicegilli, [alicegilli](https://github.com/alicegilli)
