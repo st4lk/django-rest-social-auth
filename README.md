@@ -15,7 +15,7 @@ Requirements
 -----------
 
 - python (3.7, 3.8, 3.9, 3.10, 3.11, 3.12)
-- django (3.2, 4.1, 4.2, 5.0)
+- django (3.2, 4.1, 4.2, 5.0, 5.1)
 - djangorestframework (>=3.9, <4.0)
 - social-auth-core (>=4.3, <5.0)
 - social-auth-app-django (>=5.0, <6.0)
@@ -561,3 +561,4 @@ Thanks to all contributors!
 - vainu-arto, [vainu-arto](https://github.com/vainu-arto)
 - Maxim De Clercq, [maximdeclercq](https://github.com/maximdeclercq)
 - alicegilli, [alicegilli](https://github.com/alicegilli)
+- Jourdan Rodrigues, [jourdanrodrigues](https://github.com/jourdanrodrigues)
