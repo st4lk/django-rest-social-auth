@@ -10,26 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup Python
+      - name: Setup Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.9'
+          cache: 'pip'
+          cache-dependency-path: |
+            requirements.txt
+            requirements_optional.txt
+            requirements_test.txt
 
-       - name: Cache pip
-         uses: actions/cache@v3
-         with:
-           path: ~/.cache/pip
-           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
-           restore-keys: |
-             ${{ runner.os }}-pip-
+      - name: Install pre-commit
+        run: |
+          python -m pip install --upgrade pip wheel
+          make native-install-all
 
-    - name: Install pre-commit
-      run: |
-        python -m pip install --upgrade pip wheel
-        make native-install-all
-
-    - name: Run lint
-      run: |
-        make native-lint
+      - name: Run lint
+        run: make native-lint
