@@ -1,6 +1,12 @@
 rest_social_auth release notes
 ==============================
 
+v8.5.0
+------
+- Add support of Django 5.2
+
+Issues: #180
+
 v8.4.0
 ------
 - Add support of Django 5.1
