@@ -4,6 +4,7 @@ rest_social_auth release notes
 v8.5.0
 ------
 - Add support of Django 5.2
+- Drop support of Python 3.7, 3.8
 
 Issues: #180
 
