@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 from setuptools import setup
 from rest_social_auth import __author__, __version__
 
@@ -12,8 +13,12 @@ def __read(fname):
 
 
 if sys.argv[-1] == 'build':
-    os.system('python setup.py sdist')
-    os.system('python -m build --wheel')
+    shutil.rmtree('build', ignore_errors=True)
+    shutil.rmtree('dist',  ignore_errors=True)
+
+    # build both sdist and wheel in one go, using the PEP 517 frontend
+    os.system(f"{sys.executable} -m build --sdist --wheel")
+    sys.exit(0)
 
 
 if sys.argv[-1] == 'publish':
