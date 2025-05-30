@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'rest_social_auth',
     'sslserver',  # some social providers require https
     'knox',  # For django-rest-knox
+    'django_extensions',
 
     'users',
 )

@@ -62,7 +62,7 @@ native-migrate: native-install-all
 	PYTHONPATH='.' python example_project/manage.py migrate
 
 native-run-example: native-migrate
-	PYTHONPATH='.' python example_project/manage.py runsslserver 0.0.0.0:$(PORT)
+	PYTHONPATH='.' python example_project/manage.py runserver_plus --cert-file cert.crt 0.0.0.0:$(PORT)
 
 native-clean:
 	find . -path ./venv -prune | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs rm -rf
