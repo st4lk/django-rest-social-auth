@@ -19,6 +19,20 @@ token_override_settings = dict(
         'users',
     ],
     MIDDLEWARE=[],
+    SOCIAL_AUTH_PIPELINE=(
+        'users.social_pipeline.auto_logout',  # custom action
+        'social_core.pipeline.social_auth.social_details',
+        'social_core.pipeline.social_auth.social_uid',
+        'social_core.pipeline.social_auth.auth_allowed',
+        'users.social_pipeline.check_for_email',  # custom action
+        'social_core.pipeline.social_auth.social_user',
+        'social_core.pipeline.user.get_username',
+        'social_core.pipeline.user.create_user',
+        'social_core.pipeline.social_auth.associate_user',
+        'social_core.pipeline.social_auth.load_extra_data',
+        'social_core.pipeline.user.user_details',
+        'users.social_pipeline.save_avatar',  # custom action
+    ),
 )
 
 
@@ -42,6 +56,7 @@ class TestSocialAuth1Token(APITestCase, BaseTwitterApiTestCase):
 class TestSocialAuth2Token(APITestCase, BaseFacebookAPITestCase):
 
     def _check_login_social_token_user(self, url, data):
+        self.setup_api_mocks()
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['email'], self.email)
@@ -51,6 +66,7 @@ class TestSocialAuth2Token(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(token.user.email, self.email)
 
     def _check_login_social_token_only(self, url, data):
+        self.setup_api_mocks()
         resp = self.client.post(url, data)
         self.assertEqual(resp.status_code, 200)
         # check token exists
@@ -79,10 +95,15 @@ class TestSocialAuth2Token(APITestCase, BaseFacebookAPITestCase):
             data={'code': '3D52VoM1uiw94a1ETnGvYlCw'})
 
     def test_user_login_with_no_email(self):
+        # Modify user data to have no email BEFORE setting up the test
         user_data_body = json.loads(self.user_data_body)
         user_data_body['email'] = ''
         self.user_data_body = json.dumps(user_data_body)
+
+        # Set up mocks and do the rest login
         self.do_rest_login()
+        self.setup_api_mocks()
+
         resp = self.client.post(
             reverse('login_social_token'),
             data={'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'},
