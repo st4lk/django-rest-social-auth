@@ -4,6 +4,7 @@ rest_social_auth release notes
 v9.0.0
 ------
 - Add support of Django 5.2
+- Drop support of Django 3.2, 4.1
 - Drop support of Python 3.7, 3.8
 - Updated minimal required social-auth versions:
 	* social-auth-core (>=4.6.1, <5.0)
