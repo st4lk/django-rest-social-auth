@@ -14,11 +14,11 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (3.7, 3.8, 3.9, 3.10, 3.11, 3.12)
-- django (3.2, 4.1, 4.2, 5.0, 5.1)
+- python (3.9, 3.10, 3.11, 3.12)
+- django (4.2, 5.0, 5.1, 5.2)
 - djangorestframework (>=3.9, <4.0)
-- social-auth-core (>=4.3, <5.0)
-- social-auth-app-django (>=5.0, <6.0)
+- social-auth-core (>=4.6.1, <5.0)
+- social-auth-app-django (>=5.4.3, <6.0)
 - [optional] djangorestframework-simplejwt (>=5.0.0)
 - [optional] django-rest-knox (>=4.0.0, <5.0.0)
 
@@ -497,7 +497,7 @@ There is an [example project](https://github.com/st4lk/django-rest-social-auth/t
 
 - open [https://127.0.0.1:8000/](https://127.0.0.1:8000/) in your browser
 
-    Note: `runsslserver` is used instead of built-in `runserver` to serve the project with TLS (aka SSL) certificate.
+    Note: `runserver_plus` is used instead of built-in `runserver` to serve the project with TLS (aka SSL) certificate.
     HTTPS is required by some social providers (facebook), without it they won't work.
     The certificate will not be trusted by your system - that is expected.
     Just tell your browser to proceed with this untrusted certificate - it is acceptable for development purposes.
