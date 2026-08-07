@@ -1,4 +1,4 @@
-FROM python:3.10.4
+FROM python:3.13
 
 RUN mkdir -p /opt/runtime/
 ADD scripts/* /opt/runtime/

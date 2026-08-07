@@ -1,8 +1,7 @@
-pytest-django==4.5.2
-unittest2==1.1.0
+pytest-django==4.13.0
 django-extensions==4.1
-flake8==7.2.0
-responses==0.25.7
-typing_extensions==4.13.2
-Werkzeug==3.1.4
-pyOpenSSL==25.1.0
+flake8==7.3.0
+responses==0.26.2
+typing_extensions==4.16.0
+Werkzeug==3.1.8
+pyOpenSSL==26.4.0

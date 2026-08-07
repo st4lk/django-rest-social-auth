@@ -1,2 +1,2 @@
-django-rest-knox>=4.0.0,<5.0.0
+django-rest-knox>=5.1.0,<6.0.0
 djangorestframework-simplejwt>=5.0.0

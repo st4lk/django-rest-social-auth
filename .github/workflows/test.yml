@@ -11,23 +11,35 @@ jobs:
     strategy:
       matrix:
         python-version:
-        - '3.9'
         - '3.10'
         - '3.11'
         - '3.12'
+        - '3.13'
+        - '3.14'
         django-version:
-        - '42'
-        - '50'
+        - '52'
+        - '60'
+        - '61'
         exclude:
-          - python-version: '3.9'
-            django-version: '50'
+          # Django 6.0+ requires python 3.12+
+          - python-version: '3.10'
+            django-version: '60'
+          - python-version: '3.10'
+            django-version: '61'
+          - python-version: '3.11'
+            django-version: '60'
+          - python-version: '3.11'
+            django-version: '61'
+          # Django 5.2 doesn't support python 3.14
+          - python-version: '3.14'
+            django-version: '52'
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
       DJANGO_VERSION: ${{ matrix.django-version }}
       PYTHONUNBUFFERED: 1
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5

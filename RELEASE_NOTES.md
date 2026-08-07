@@ -1,6 +1,21 @@
 rest_social_auth release notes
 ==============================
 
+v10.0.0
+-------
+- Add support of social-auth-core 5.x and social-auth-app-django 6.x
+- Add support of Django 6.0, 6.1
+- Add support of Python 3.13, 3.14
+- Drop support of Django 4.2, 5.0, 5.1 (all EOL)
+- Drop support of Python 3.9
+- Updated required dependency versions:
+	* django (>=5.2)
+	* social-auth-core (>=5.0, <6.0)
+	* social-auth-app-django (>=6.0, <7.0)
+	* [optional] django-rest-knox (>=5.1.0, <6.0.0)
+
+Issues: #185
+
 v9.0.0
 ------
 - Add support of Django 5.2

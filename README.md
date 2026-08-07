@@ -14,13 +14,13 @@ OAuth signin with django rest framework.
 Requirements
 -----------
 
-- python (3.9, 3.10, 3.11, 3.12)
-- django (4.2, 5.0, 5.1, 5.2)
+- python (3.10, 3.11, 3.12, 3.13, 3.14)
+- django (5.2, 6.0, 6.1)
 - djangorestframework (>=3.9, <4.0)
-- social-auth-core (>=4.6.1, <5.0)
-- social-auth-app-django (>=5.4.3, <6.0)
+- social-auth-core (>=5.0, <6.0)
+- social-auth-app-django (>=6.0, <7.0)
 - [optional] djangorestframework-simplejwt (>=5.0.0)
-- [optional] django-rest-knox (>=4.0.0, <5.0.0)
+- [optional] django-rest-knox (>=5.1.0, <6.0.0)
 
 Release notes
 -------------

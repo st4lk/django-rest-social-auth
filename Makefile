@@ -79,11 +79,12 @@ native-lint: native-install-all
 native-install-python-versions: .install-python-versions
 .install-python-versions: tox.ini
 	curl https://pyenv.run | PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv bash || echo '-- pyenv already setup, skipping --\n'
-	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.7.7
-	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.8.2
-	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.9.7
-	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.10.4
-	$(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv global system 3.7.7 3.8.2 3.9.7 3.10.4
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.10.18
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.11.13
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.12.11
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.13.5
+	PYENV_ROOT=$(PROJECT_PATH_NATIVE)/.pyenv $(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv install -s 3.14.0
+	$(PROJECT_PATH_NATIVE)/.pyenv/bin/pyenv global system 3.10.18 3.11.13 3.12.11 3.13.5 3.14.0
 	touch $@
 
 native-test-tox: native-install-python-versions native-clean
