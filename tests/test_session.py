@@ -23,7 +23,7 @@ session_modify_settings = dict(
 )
 
 
-class TestSocialAuth1(APITestCase, BaseTwitterApiTestCase):
+class TestSocialAuth1(BaseTwitterApiTestCase, APITestCase):
 
     @modify_settings(**session_modify_settings)
     def test_login_social_oauth1_session(self):
@@ -39,7 +39,7 @@ class TestSocialAuth1(APITestCase, BaseTwitterApiTestCase):
         self.assertEqual(resp.status_code, 200)
 
 
-class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
+class TestSocialAuth2(BaseFacebookAPITestCase, APITestCase):
 
     @modify_settings(**session_modify_settings)
     def _check_login_social_session(self, url, data):
@@ -118,7 +118,7 @@ class TestSocialAuth2(APITestCase, BaseFacebookAPITestCase):
             {'provider': 'facebook', 'code': '3D52VoM1uiw94a1ETnGvYlCw'})
 
 
-class TestSocialAuth2Error(APITestCase, BaseFacebookAPITestCase):
+class TestSocialAuth2Error(BaseFacebookAPITestCase, APITestCase):
     access_token_status = 400
 
     def test_login_oauth_provider_error(self):
@@ -128,7 +128,7 @@ class TestSocialAuth2Error(APITestCase, BaseFacebookAPITestCase):
         self.assertEqual(resp.status_code, 400)
 
 
-class TestSocialAuth2HTTPError(APITestCase, BaseFacebookAPITestCase):
+class TestSocialAuth2HTTPError(BaseFacebookAPITestCase, APITestCase):
     access_token_status = 401
 
     def test_login_oauth_provider_http_error(self):

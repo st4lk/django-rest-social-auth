@@ -17,8 +17,8 @@ Requirements
 - python (3.10, 3.11, 3.12, 3.13, 3.14)
 - django (5.2, 6.0, 6.1)
 - djangorestframework (>=3.9, <4.0)
-- social-auth-core (>=5.0, <6.0)
-- social-auth-app-django (>=6.0, <7.0)
+- social-auth-core (>=6.2.0, <7.0)
+- social-auth-app-django (>=7.2.0, <8.0)
 - [optional] djangorestframework-simplejwt (>=5.0.0)
 - [optional] django-rest-knox (>=5.1.0, <6.0.0)
 
@@ -278,6 +278,22 @@ OAuth 2.0 workflow with rest-social-auth
     with data (form data or json)
 
         code=AQBPBBTjbdnehj51
+
+
+OpenID Connect
+--------------
+
+OpenID Connect backends (including OktaOpenIdConnect) require server-side state and
+nonce validation. Start authentication through the upstream backend, for example
+with a CSRF-protected POST to the `social:begin` view after including
+`social_django.urls`. Complete login by sending both `code` and `state` to the
+rest-social-auth endpoint using the same browser session cookie. Django session
+middleware and shared server-side session storage must be enabled for this flow,
+including when the endpoint returns a token or JWT. A frontend-only authorization
+redirect cannot establish the server-side nonce and will be rejected.
+
+When upgrading to v11, apply migrations with `python manage.py migrate` and restart
+in-progress login attempts. See the [upstream OIDC documentation](https://python-social-auth.readthedocs.io/en/latest/backends/oidc.html).
 
 
 OAuth 1.0a workflow with rest-social-auth

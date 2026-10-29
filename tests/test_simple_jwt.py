@@ -20,7 +20,7 @@ jwt_simple_override_settings = dict(
 
 
 @override_settings(**jwt_simple_override_settings)
-class TestSocialAuth1SimpleJWT(APITestCase, BaseTwitterApiTestCase):
+class TestSocialAuth1SimpleJWT(BaseTwitterApiTestCase, APITestCase):
 
     def test_login_social_oauth1_jwt(self):
         resp = self.client.post(
@@ -36,7 +36,7 @@ class TestSocialAuth1SimpleJWT(APITestCase, BaseTwitterApiTestCase):
 
 
 @override_settings(**jwt_simple_override_settings)
-class TestSocialAuth2SimpleJWT(APITestCase, BaseFacebookAPITestCase):
+class TestSocialAuth2SimpleJWT(BaseFacebookAPITestCase, APITestCase):
 
     def _check_login_social_simple_jwt_only(self, url, data, token_type):
         resp = self.client.post(url, data)

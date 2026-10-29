@@ -22,7 +22,7 @@ knox_override_settings = dict(
 
 
 @override_settings(**knox_override_settings)
-class TestSocialAuth1Knox(APITestCase, BaseTwitterApiTestCase):
+class TestSocialAuth1Knox(BaseTwitterApiTestCase, APITestCase):
 
     def test_login_social_oauth1_knox(self):
         resp = self.client.post(
@@ -38,7 +38,7 @@ class TestSocialAuth1Knox(APITestCase, BaseTwitterApiTestCase):
 
 
 @override_settings(**knox_override_settings)
-class TestSocialAuth2Knox(APITestCase, BaseFacebookAPITestCase):
+class TestSocialAuth2Knox(BaseFacebookAPITestCase, APITestCase):
 
     def _check_login_social_knox_only(self, url, data):
         resp = self.client.post(url, data)

@@ -1,6 +1,20 @@
 rest_social_auth release notes
 ==============================
 
+v11.0.0
+-------
+- Require social-auth-core >=6.2.0,<7.0 and social-auth-app-django >=7.2.0,<8.0
+- Allow the upstream fix for CVE-2026-115910 (OpenID Connect nonce session binding)
+- Preserve upstream state validation for OIDC backends
+- Replace imports of private upstream test fixtures with local API fixtures
+- Test against social-auth-core 6.2.0 and social-auth-app-django 7.2.0
+- After upgrading, apply social-auth-app-django migrations with `python manage.py migrate`.
+  In-progress OAuth2, OpenID and OpenID Connect logins must restart. OIDC login must
+  begin through the upstream backend in the same browser session used to complete it;
+  a frontend-only authorization redirect does not establish the required server-side nonce.
+
+Issues: #187
+
 v10.0.0
 -------
 - Add support of social-auth-core 5.x and social-auth-app-django 6.x
