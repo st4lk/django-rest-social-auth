@@ -75,3 +75,14 @@ class TestOpenIdConnect(APITestCase):
     def test_missing_state_is_rejected(self):
         self.data.pop('state')
         self.assertEqual(self.complete().status_code, 400)
+
+    @patch('rest_social_auth.views.VERBOSE_ERRORS', True)
+    def test_provider_error_is_returned_without_login(self):
+        responses.replace(
+            responses.POST, 'https://id.example.com/token', status=503,
+            json={'error': {'message': 'Identity provider temporarily unavailable'}},
+        )
+        response = self.complete()
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, 'The authentication provider is temporarily unavailable.')
+        self.assertFalse(any(call.request.url.endswith('/userinfo') for call in responses.calls))
