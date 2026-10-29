@@ -37,7 +37,7 @@ token_override_settings = dict(
 
 
 @override_settings(**token_override_settings)
-class TestSocialAuth1Token(APITestCase, BaseTwitterApiTestCase):
+class TestSocialAuth1Token(BaseTwitterApiTestCase, APITestCase):
 
     def test_login_social_oauth1_token(self):
         url = reverse('login_social_token_user')
@@ -53,7 +53,7 @@ class TestSocialAuth1Token(APITestCase, BaseTwitterApiTestCase):
 
 
 @override_settings(**token_override_settings)
-class TestSocialAuth2Token(APITestCase, BaseFacebookAPITestCase):
+class TestSocialAuth2Token(BaseFacebookAPITestCase, APITestCase):
 
     def _check_login_social_token_user(self, url, data):
         self.setup_api_mocks()

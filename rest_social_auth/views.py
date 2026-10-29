@@ -11,6 +11,7 @@ from urllib.parse import urljoin, urlencode, urlparse
 from social_django.utils import psa, STORAGE
 from social_django.views import _do_login as social_auth_login
 from social_core.backends.oauth import BaseOAuth1
+from social_core.backends.open_id_connect import OpenIdConnectAuth
 from social_core.utils import get_strategy, parse_qs, user_is_authenticated, setting_name
 from social_core.exceptions import AuthException, SocialAuthBaseException
 from rest_framework.generics import GenericAPIView
@@ -149,16 +150,11 @@ class BaseSocialAuthView(GenericAPIView):
                 self.request.backend.redirect_uri = iri_to_uri(location)
         is_authenticated = user_is_authenticated(user)
         user = is_authenticated and user or None
-        # skip checking state by setting following params to False
-        # it is responsibility of front-end to check state
-        # TODO: maybe create an additional resource, where front-end will
-        # store the state before making a call to oauth provider
-        # so server can save it in session and consequently check it before
-        # sending request to acquire access token.
-        # In case of token authentication we need a way to store an anonymous
-        # session to do it.
-        self.request.backend.REDIRECT_STATE = False
-        self.request.backend.STATE_PARAMETER = False
+        # OIDC requires the server-side state transaction to validate its nonce.
+        # Other providers retain the existing frontend-managed state workflow.
+        if not isinstance(self.request.backend, OpenIdConnectAuth):
+            self.request.backend.REDIRECT_STATE = False
+            self.request.backend.STATE_PARAMETER = False
 
         if self.oauth_v1():
             self.save_token_param_in_session()
